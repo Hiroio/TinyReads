@@ -25,6 +25,6 @@ struct SecondaryView: View {
 
 #Preview {
     SecondaryView()
-	 .environment(NavigationManager())
+	 .environment(NavigationManager.shared)
 	 .environment(ThemeManager())
 }

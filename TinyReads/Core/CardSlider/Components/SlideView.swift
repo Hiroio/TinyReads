@@ -113,5 +113,5 @@ struct SlideView: View {
   SlideView()
 	 .environment(CardSliderViewModel())
 	 .environment(ThemeManager())
-	 .environment(NavigationManager())
+	 .environment(NavigationManager.shared)
 }

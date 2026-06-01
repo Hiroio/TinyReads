@@ -11,7 +11,7 @@ import FirebaseCore
 
 @main
 struct TinyReadsApp: App {
-  @State private var navigationManager = NavigationManager()
+  @State private var navigationManager = NavigationManager.shared
   @State private var themeManager = ThemeManager()
   init(){
 	 FirebaseApp.configure()

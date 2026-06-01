@@ -52,6 +52,6 @@ struct CardView: View {
 
 #Preview {
   CardView(card: ReadCardModel.getForPreview())
-	 .environment(NavigationManager())
+	 .environment(NavigationManager.shared)
 	 .environment(ThemeManager())
 }

@@ -12,7 +12,7 @@ final class UserDefaultsManager {
 	 static let shared = UserDefaultsManager()
 
 	 private let selectedCategoriesKey = "selectedCategories"
-  private let selecterColorThemeKey = "selectedColorTheme"
+  private let selectedColorThemeKey = "selectedColorTheme"
 
 	 var selectedCategories: [String] {
 		  didSet {
@@ -22,7 +22,7 @@ final class UserDefaultsManager {
   
 	 var selectedColorTheme: AppTheme {
 		  didSet {
-			 UserDefaults.standard.set(selectedColorTheme.rawValue, forKey: selecterColorThemeKey)
+			 UserDefaults.standard.set(selectedColorTheme.rawValue, forKey: selectedColorThemeKey)
 		  }
 	 }
   
@@ -33,7 +33,7 @@ final class UserDefaultsManager {
 				forKey: selectedCategoriesKey
 		  ) as? [String] ?? []
 		
-		self.selectedColorTheme = AppTheme(rawValue: UserDefaults.standard.string(forKey: selecterColorThemeKey) ?? "") ?? .system
+		self.selectedColorTheme = AppTheme(rawValue: UserDefaults.standard.string(forKey: selectedColorThemeKey) ?? "") ?? .system
 	 }
 
 	 func toggleCategory(_ category: ReadCategories) {

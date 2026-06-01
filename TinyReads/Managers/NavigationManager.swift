@@ -16,10 +16,14 @@ enum SecondaryAppScreen{
 
 @Observable
 final class NavigationManager {
+  static let shared = NavigationManager()
+  
+  private init(){}
+  
   var screen: AppScreen = .main
   var secondary: SecondaryAppScreen? = nil
   
   var article: ReadCardModel? = nil
   
-  
+  var loading: Bool = false
 }

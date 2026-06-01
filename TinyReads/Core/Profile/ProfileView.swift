@@ -105,5 +105,5 @@ func statCard(title: String, value: Int) -> some View{
 #Preview {
     ProfileView()
 	 .environment(ThemeManager())
-	 .environment(NavigationManager())
+	 .environment(NavigationManager.shared)
 }

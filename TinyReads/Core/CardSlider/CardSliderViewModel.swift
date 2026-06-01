@@ -9,12 +9,15 @@ import Foundation
 
 
 @Observable
-class CardSliderViewModel{
+final class CardSliderViewModel{
   var cards: [ReadCardModel] = []
   var errorState: CardError? = .notReady
+  var loading: Bool = false
   
+  
+  let deckManager = ReadsDeckManager.shared
   init(){
-	 uploadTestCards()
+	 fetchCards()
   }
   
   
@@ -29,27 +32,35 @@ class CardSliderViewModel{
 }
 
 extension CardSliderViewModel{
-  func uploadTestCards(){
-	 guard let url = Bundle.main.url(forResource: "Ukraine_Philosophy", withExtension: "json") else {
-		  return
-	 }
+  
+	  func fetchCards(){
+		 errorState = .notReady
+		 guard deckManager.reads.isEmpty else {
+			self.cards = deckManager.reads
+      self.errorState = cards.isEmpty ? .notReady : nil
+			return
+		 }
 	 
-	 do {
-		let data = try Data(contentsOf: url)
-		let decodedData = try JSONDecoder().decode(RootReads.self, from: data)
-		self.cards = decodedData.reads
-		self.errorState = nil
-	 }catch{
-		errorState = .notFound
+	 Task{
+		defer { errorState = nil }
+		do{
+		  let cards = try await deckManager.fetchReadsCard()
+		  
+			  await MainActor.run {
+				 self.cards = cards
+          self.errorState = cards.isEmpty ? .notReady : nil
+			  }
+			}catch{
+			  errorState = .notFound
+		}
 	 }
   }
   
   
-  func onDismiss(_ id: String){
-	 guard let index = cards.firstIndex(where: {$0.id == id}) else { return }
-	 
-	 cards[index].isActive = false
-  }
+	  func onDismiss(_ id: String){
+		 deckManager.removeFromDeck(id)
+     cards = deckManager.reads
+	  }
 }
 
 
