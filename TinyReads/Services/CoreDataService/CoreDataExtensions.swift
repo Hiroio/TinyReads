@@ -12,6 +12,7 @@ extension ReadsEntity{
 	 self.id = read.id
 	 self.categoryId = read.categoryId
 	 self.languageCode = read.languageCode
+	 self.sortIndex = Int32(clamping: read.sortIndex)
 	 
 	 self.isLiked = read.isLiked
 	 self.isRead = read.isRead

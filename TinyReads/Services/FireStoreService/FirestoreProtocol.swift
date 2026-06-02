@@ -9,8 +9,8 @@ import Foundation
 
 protocol PublicReadsServiceProtocol {
   func fetchReads(
-    categoryIds: [String],
+    categoryProgress: [String: Int],
     languageCode: String,
-    limit: Int
+    limitPerCategory: Int
   ) async throws -> [ReadCardModel]
 }

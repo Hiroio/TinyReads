@@ -12,5 +12,6 @@
         <attribute name="savedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="skipCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="skippedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="sortIndex" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
 </model>

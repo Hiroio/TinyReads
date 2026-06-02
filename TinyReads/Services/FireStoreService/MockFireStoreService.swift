@@ -9,8 +9,17 @@ import Foundation
 
 
 class MockFireStoreService: PublicReadsServiceProtocol{
-  func fetchReads(categoryIds: [String], languageCode: String, limit: Int) async throws -> [ReadCardModel] {
-	 try uploadTestCards()
+  func fetchReads(
+    categoryProgress: [String: Int],
+    languageCode: String,
+    limitPerCategory: Int
+  ) async throws -> [ReadCardModel] {
+		 try uploadTestCards()
+      .filter { card in
+        guard let lastSortIndex = categoryProgress[card.categoryId] else { return false }
+        return card.languageCode == languageCode && card.sortIndex > lastSortIndex
+      }
+      .sorted { $0.sortIndex < $1.sortIndex }
   }
   
   

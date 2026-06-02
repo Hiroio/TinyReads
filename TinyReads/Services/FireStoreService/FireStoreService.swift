@@ -28,17 +28,47 @@ final class FireStoreService: PublicReadsServiceProtocol {
 extension FireStoreService{
 
   func fetchReads(
-    categoryIds: [String],
+    categoryProgress: [String: Int],
     languageCode: String,
-    limit: Int = 100
+    limitPerCategory: Int = 100
   ) async throws -> [ReadCardModel] {
-    guard !categoryIds.isEmpty else { return [] }
+    guard !categoryProgress.isEmpty else { return [] }
+	 let limit = 100 / categoryProgress.count
 
-    return try await readsCollection
+    return try await withThrowingTaskGroup(of: [ReadCardModel].self) { group in
+      for (categoryId, lastSortIndex) in categoryProgress {
+        group.addTask { [self] in
+          try await fetchReads(
+            categoryId: categoryId,
+            languageCode: languageCode,
+            afterSortIndex: lastSortIndex,
+            limit: Int(limit)
+          )
+        }
+      }
+
+      var reads: [ReadCardModel] = []
+
+      for try await categoryReads in group {
+        reads.append(contentsOf: categoryReads)
+      }
+
+      return reads
+    }
+  }
+
+  private func fetchReads(
+    categoryId: String,
+    languageCode: String,
+    afterSortIndex: Int,
+    limit: Int
+  ) async throws -> [ReadCardModel] {
+    try await readsCollection
       .whereField("languageCode", isEqualTo: languageCode)
-      .whereField("categoryId", in: categoryIds)
+      .whereField("categoryId", isEqualTo: categoryId)
       .whereField("isActive", isEqualTo: true)
-      .order(by: "sortIndex", descending: true)
+      .whereField("sortIndex", isGreaterThan: afterSortIndex)
+      .order(by: "sortIndex", descending: false)
       .limit(to: limit)
       .getDocumentsCustom()
   }

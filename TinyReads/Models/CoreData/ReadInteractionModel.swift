@@ -8,28 +8,31 @@
 import Foundation
 
 struct ReadInteractionModel: Identifiable, Codable {
-	 let id: String
-	 let categoryId: String
-	 let languageCode: String
-	 
-	 // status
-	 var isSaved: Bool
-	 var isRead: Bool
-	 var isLiked: Bool
-	 var isSkipped: Bool
-	 
-	 
-	 var savedAt: Date?
-	 var readAt: Date?
-	 var skippedAt: Date?
-	 
-	 var skipCount: Int
+  let id: String
+  let categoryId: String
+  let languageCode: String
+  let sortIndex: Int
+  
+  // status
+  var isSaved: Bool
+  var isRead: Bool
+  var isLiked: Bool
+  var isSkipped: Bool
   
   
-  init(id: String, categoryId: String, languageCode: String){
+  var savedAt: Date?
+  var readAt: Date?
+  var skippedAt: Date?
+  
+  var skipCount: Int
+  
+  
+  init(id: String, categoryId: String, languageCode: String, sortIndex: Int){
 	 self.id = id
 	 self.categoryId = categoryId
 	 self.languageCode = languageCode
+	 self.sortIndex = sortIndex
+	 
 	 
 	 self.isSaved = false
 	 self.isRead = false
@@ -48,41 +51,41 @@ struct ReadInteractionModel: Identifiable, Codable {
 
 // Mistakes if needed
 enum ReadInteractionModelError: Error {
-	 case missingId
-	 case missingCategoryId
-	 case missingLanguageCode
+  case missingId
+  case missingCategoryId
+  case missingLanguageCode
 }
 
 
 // Mapper for coreData.
 extension ReadInteractionModel {
-	 init(entity: ReadsEntity) throws {
-		  guard let id = entity.id else {
-				throw ReadInteractionModelError.missingId
-		  }
-
-		  guard let categoryId = entity.categoryId else {
-				throw ReadInteractionModelError.missingCategoryId
-		  }
-
-		  guard let languageCode = entity.languageCode else {
-				throw ReadInteractionModelError.missingLanguageCode
-		  }
-
-		  self.id = id
-		  self.categoryId = categoryId
-		  self.languageCode = languageCode
-
-		
-		  self.isSaved = entity.isSaved
-		  self.isRead = entity.isRead
-		  self.isLiked = entity.isLiked
-		  self.isSkipped = entity.isSkipped
-
-		  self.savedAt = entity.savedAt
-		  self.readAt = entity.readAt
-		  self.skippedAt = entity.skippedAt
-
-		  self.skipCount = Int(entity.skipCount)
+  init(entity: ReadsEntity) throws {
+	 guard let id = entity.id else {
+		throw ReadInteractionModelError.missingId
 	 }
+	 
+	 guard let categoryId = entity.categoryId else {
+		throw ReadInteractionModelError.missingCategoryId
+	 }
+	 
+	 guard let languageCode = entity.languageCode else {
+		throw ReadInteractionModelError.missingLanguageCode
+	 }
+	 
+	 self.id = id
+	 self.categoryId = categoryId
+	 self.languageCode = languageCode
+	 self.sortIndex = Int(entity.sortIndex)
+	 
+	 self.isSaved = entity.isSaved
+	 self.isRead = entity.isRead
+	 self.isLiked = entity.isLiked
+	 self.isSkipped = entity.isSkipped
+	 
+	 self.savedAt = entity.savedAt
+	 self.readAt = entity.readAt
+	 self.skippedAt = entity.skippedAt
+	 
+	 self.skipCount = Int(entity.skipCount)
+  }
 }

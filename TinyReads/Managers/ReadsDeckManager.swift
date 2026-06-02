@@ -21,41 +21,74 @@ final class ReadsDeckManager{
   
   init(firestore: PublicReadsServiceProtocol = FireStoreService.shared) {
 	 self.firestore = firestore
+	 loadInitialDeck()
   }
   
   
   var categories: [String] {
-	 userDefaults.selectedCategories
+//	 userDefaults.selectedCategories
+	 ReadCategories.allCases.map({$0.rawValue})
   }
-
-  private var fetchCategoryIds: [String] {
-    categories.isEmpty ? ReadCategories.allCases.map(\.rawValue) : categories
-  }
+  
 }
+
+//loadInitialDeck()
+//saveCard(_ card)
+//dismissCard(_ card)
+//markRead(_ card)
+
 
 // MARK: Functions
 extension ReadsDeckManager{
-  func fetchReadsCard() async throws -> [ReadCardModel]{
+//  Initialize Deck at start
+  func loadInitialDeck(){
+	 fetchInteractionReads()
+	 
+	 let filteredInteractions = filterInteractions()
+	 
+	 Task{
+		do{
+		  let reads = try await fetchReadsCard(categoryProgress: filteredInteractions)
+		  
+		  await MainActor.run{
+			 self.reads = reads
+		  }
+		}catch{
+		  print("Failed to load: \(error.localizedDescription)")
+		}
+	 }
+  }
+  
+//  Fetch from FireStore
+  func fetchReadsCard(categoryProgress: [String: Int]) async throws -> [ReadCardModel]{
 	 let cards = try await firestore.fetchReads(
-    categoryIds: fetchCategoryIds,
-    languageCode: "uk",
-    limit: 100
-   )
+		categoryProgress: categoryProgress,
+		languageCode: "uk",
+		limitPerCategory: 100
+	 )
 	 
 	 await MainActor.run{
-		self.reads = cards.shuffled()
+		self.reads = cards
 	 }
 	 return self.reads
   }
-
+  
+//	Fetch next cards
+  func fetchNextReadsCard() async throws -> [ReadCardModel] {
+	 fetchInteractionReads()
+	 return try await fetchReadsCard(categoryProgress: filterInteractions())
+  }
+  
+//  For Dismiss
   func removeFromDeck(_ id: String) {
-    guard let index = reads.firstIndex(where: { $0.id == id }) else { return }
-    reads[index].isActive = false
+	 guard let index = reads.firstIndex(where: { $0.id == id }) else { return }
+	 reads[index].isActive = false
   }
 }
 
 // MARK: CoreData
 extension ReadsDeckManager{
+//  Fetch cards from coreData
   func fetchInteractionReads() {
 	 let entities = coreDataManager.fetchReadsEntity()
 	 
@@ -65,7 +98,9 @@ extension ReadsDeckManager{
   /// saveCard (right swipe)
   @discardableResult
   func saveCard(_ card: ReadCardModel) -> Bool{
-	 var card = ReadInteractionModel(id: card.id, categoryId: card.categoryId, languageCode: card.languageCode)
+	 guard !readsInteractions.contains(where: {card.id == $0.id}) else { return true }
+	 
+	 var card = ReadInteractionModel(id: card.id, categoryId: card.categoryId, languageCode: card.languageCode, sortIndex: card.sortIndex)
 	 card.savedAt = Date.now
 	 card.isSaved = true
 	 
@@ -77,11 +112,27 @@ extension ReadsDeckManager{
   func dismissCard(_ card: ReadCardModel) -> Bool{
 	 guard !coreDataManager.markDismissed(card.id) else { return true }
 	 
-	 var newCard = ReadInteractionModel(id: card.id, categoryId: card.categoryId, languageCode: card.languageCode)
+	 var newCard = ReadInteractionModel(id: card.id, categoryId: card.categoryId, languageCode: card.languageCode, sortIndex: card.sortIndex)
 	 newCard.isSkipped = true
 	 newCard.skippedAt = .now
 	 newCard.skipCount += 1
 	 
 	 return coreDataManager.saveReadEntity(newCard)
+  }
+  
+  func filterInteractions() -> [String : Int] {
+	 guard !categories.isEmpty else { return [:] }
+	 
+	 var result = Dictionary(uniqueKeysWithValues: categories.map { ($0, 0) })
+	 
+	 guard !readsInteractions.isEmpty else { return result }
+	 
+	 readsInteractions.forEach { item in
+		if let currentMax = result[item.categoryId] {
+		  result[item.categoryId] = max(currentMax, item.sortIndex)
+		}
+	 }
+	 
+	 return result
   }
 }

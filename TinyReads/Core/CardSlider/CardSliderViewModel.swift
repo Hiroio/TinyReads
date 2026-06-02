@@ -11,7 +11,7 @@ import Foundation
 @Observable
 final class CardSliderViewModel{
   var cards: [ReadCardModel] = []
-  var errorState: CardError? = .notReady
+  var errorState: CardError?
   var loading: Bool = false
   
   
@@ -24,46 +24,134 @@ final class CardSliderViewModel{
   var dismissedCards: Int{
 	 cards.filter({!$0.isActive}).count
   }
-
+  
   var activeCards: [ReadCardModel] {
 	 cards.filter({$0.isActive})
   }
   
 }
 
+// MARK: Functions
 extension CardSliderViewModel{
-  
-	  func fetchCards(){
-		 errorState = .notReady
-		 guard deckManager.reads.isEmpty else {
-			self.cards = deckManager.reads
-      self.errorState = cards.isEmpty ? .notReady : nil
-			return
-		 }
+//  fetch
+  func fetchCards(){
+	 loading = true
+	 errorState = nil
+	 guard deckManager.reads.isEmpty else {
+		self.cards = deckManager.reads
+		self.errorState = errorState(for: cards)
+    self.loading = false
+		return
+	 }
 	 
 	 Task{
-		defer { errorState = nil }
 		do{
-		  let cards = try await deckManager.fetchReadsCard()
+		  defer {loading = false}
+		  let cards = try await deckManager.fetchNextReadsCard()
 		  
-			  await MainActor.run {
-				 self.cards = cards
-          self.errorState = cards.isEmpty ? .notReady : nil
-			  }
-			}catch{
-			  errorState = .notFound
+		  await MainActor.run {
+			 self.cards = cards
+			 self.errorState = self.errorState(for: cards)
+		  }
+		}catch{
+		  await MainActor.run {
+			 self.errorState = self.errorState(for: error)
+			 self.loading = false
+		  }
 		}
 	 }
   }
   
+  // Left Swipe
+  func onDismiss(_ id: String){
+	 guard let index = cards.firstIndex(where: { $0.id == id }) else { return }
+	 
+	 let card = cards[index]
+	 cards[index].isActive = false
+	 deckManager.removeFromDeck(id)
+	 deckManager.dismissCard(card)
+  }
   
-	  func onDismiss(_ id: String){
-		 deckManager.removeFromDeck(id)
-     cards = deckManager.reads
-	  }
+  // Right Swipe
+  func onSave(_ id: String){
+	 guard let index = cards.firstIndex(where: { $0.id == id }) else { return }
+	 
+	 let card = cards[index]
+	 cards[index].isActive = false
+	 deckManager.removeFromDeck(id)
+	 deckManager.saveCard(card)
+  }
+
+  private func errorState(for cards: [ReadCardModel]) -> CardError? {
+	 guard cards.isEmpty else { return nil }
+	 let lastSortIndex = deckManager.readsInteractions.map(\.sortIndex).max() ?? 0
+	 return lastSortIndex > 100 ? .cardNoLeft : .somethingWentWrong
+  }
+
+  private func errorState(for error: Error) -> CardError {
+	 if let urlError = error as? URLError {
+		switch urlError.code {
+		case .notConnectedToInternet, .networkConnectionLost, .cannotFindHost, .cannotConnectToHost, .timedOut:
+		  return .badInternetConnection
+		default:
+		  return .somethingWentWrong
+		}
+	 }
+
+	 let nsError = error as NSError
+	 if nsError.domain == NSURLErrorDomain {
+		return .badInternetConnection
+	 }
+
+	 return .somethingWentWrong
+  }
 }
 
 
 enum CardError: Error, LocalizedError{
-  case notFound, notReady
+  case badInternetConnection
+  case somethingWentWrong
+  case cardNoLeft
+
+  var title: String {
+	 switch self {
+	 case .badInternetConnection:
+		"Bad internet connection"
+	 case .somethingWentWrong:
+		"Something went wrong"
+	 case .cardNoLeft:
+		"No cards left"
+	 }
+  }
+
+  var subtitle: String {
+	 switch self {
+	 case .badInternetConnection:
+		"Check your connection and try again."
+	 case .somethingWentWrong:
+		"We could not prepare your reads right now."
+	 case .cardNoLeft:
+		"You reached the end of this shelf for now."
+	 }
+  }
+
+  var imageName: String {
+	 switch self {
+	 case .badInternetConnection:
+		"BadInternetConnection"
+	 case .somethingWentWrong:
+		"SomethingWentWrong"
+	 case .cardNoLeft:
+		"CardNoLeft"
+	 }
+  }
+
+  var buttonTitle: String {
+	 switch self {
+	 case .badInternetConnection, .somethingWentWrong:
+		"Try again"
+	 case .cardNoLeft:
+		"Load more"
+	 }
+  }
 }

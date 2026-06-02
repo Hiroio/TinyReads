@@ -19,6 +19,7 @@ struct TitleViewModifier: ViewModifier{
 		.fontDesign(.serif)
   }
 }
+
 struct SecondaryViewModifier: ViewModifier{
   @Environment(ThemeManager.self) var themeManager
   let weight: Font.Weight
@@ -26,6 +27,17 @@ struct SecondaryViewModifier: ViewModifier{
 	 content
 		.font(.footnote.weight(weight))
 		.foregroundStyle(themeManager.themeAssets.secondary)
+		.fontDesign(.serif)
+  }
+}
+
+struct AccentViewModifier: ViewModifier{
+  @Environment(ThemeManager.self) var themeManager
+  let weight: Font.Weight
+  func body(content: Content) -> some View {
+	 content
+		.font(.headline.weight(weight))
+		.foregroundStyle(themeManager.themeAssets.accent)
 		.fontDesign(.serif)
   }
 }
@@ -38,6 +50,10 @@ extension View{
   
   func secondary(weight: Font.Weight = .regular) -> some View{
 	 modifier(SecondaryViewModifier(weight: weight))
+  }
+  
+  func accent(weight: Font.Weight = .regular) -> some View{
+	 modifier(AccentViewModifier(weight: weight))
   }
 }
 

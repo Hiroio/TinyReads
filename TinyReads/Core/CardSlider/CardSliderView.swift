@@ -8,47 +8,25 @@
 import SwiftUI
 
 struct CardSliderView: View {
+  @Environment(ThemeManager.self) var themeManager
   @State private var vm = CardSliderViewModel()
   let color: AppThemeAssets
     var body: some View {
 		ZStack{
 		  color.background.ignoresSafeArea()
 		  VStack{
-			 if let error = vm.errorState{
-				switch error {
-				case .notFound:
-				  VStack{
-					 Text("Someting went wrong")
-						.title()
-					 
-					 Image("NotFound")
-						.resizable()
-						.scaledToFit()
-				  }
-				  .frame(maxWidth: .infinity, maxHeight: .infinity)
-				  .background(
-					 RoundedRectangle(cornerRadius: 5)
-						.fill(color.card)
-				  )
-				case .notReady:
-				  VStack{
-					 Text("The card preparing")
-						.title()
-					 
-					 Image("Test")
-						.resizable()
-						.scaledToFit()
-				  }
-				  .frame(maxWidth: .infinity, maxHeight: .infinity)
-				  .background(
-					 RoundedRectangle(cornerRadius: 5)
-						.fill(color.card)
-				  )
-				}
+			 if vm.loading{
+				LoadingView()
 			 }else{
-				VStack{
-				  SlideView()
-					 .environment(vm)
+				if let error = vm.errorState{
+				  CardErrorHandlingView(error: error) {
+					 vm.fetchCards()
+				  }
+				}else{
+				  VStack{
+					 SlideView()
+						.environment(vm)
+				  }
 				}
 			 }
 		  }
@@ -59,4 +37,5 @@ struct CardSliderView: View {
 
 #Preview {
   CardSliderView(color: .light)
+	 .environment(ThemeManager())
 }

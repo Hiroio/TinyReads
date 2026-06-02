@@ -15,14 +15,14 @@ struct TinyReadsApp: App {
   @State private var themeManager = ThemeManager()
   init(){
 	 FirebaseApp.configure()
-	 
+	 let _ = ReadsDeckManager.shared
 	 Task{
 		try? await FirebaseAuthService.shared.ensureAnonymousUser()
 	 }
   }
     var body: some Scene {
         WindowGroup {
-            MainView()
+            MainNavigationView()
 				.environment(navigationManager)
 				.environment(themeManager)
         }
