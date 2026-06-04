@@ -17,7 +17,8 @@ class MockFireStoreService: PublicReadsServiceProtocol{
 		 try uploadTestCards()
       .filter { card in
         guard let lastSortIndex = categoryProgress[card.categoryId] else { return false }
-        return card.languageCode == languageCode && card.sortIndex > lastSortIndex
+		  
+		  return card.languageCode == languageCode && card.sortIndex > lastSortIndex && card.sortIndex < (lastSortIndex + 1) + limitPerCategory
       }
       .sorted { $0.sortIndex < $1.sortIndex }
   }

@@ -16,18 +16,25 @@ final class ReadsDeckManager{
   var readsInteractions: [ReadInteractionModel] = []
   
   let firestore: PublicReadsServiceProtocol
-  let userDefaults = UserDefaultsManager.shared
+  let userDefaults: UserDefaultsManagerProtocol
   let coreDataManager = CoreDataService.shared
   
-  init(firestore: PublicReadsServiceProtocol = FireStoreService.shared) {
+  init(
+	 firestore: PublicReadsServiceProtocol = FireStoreService.shared,
+	 userDefaultsManager: UserDefaultsManagerProtocol = UserDefaultsManager.shared,
+	 autoLoad: Bool = true
+  ) {
 	 self.firestore = firestore
-	 loadInitialDeck()
+	 self.userDefaults = userDefaultsManager
+	 if autoLoad{
+		loadInitialDeck()
+	 }
   }
   
   
   var categories: [String] {
-//	 userDefaults.selectedCategories
-	 ReadCategories.allCases.map({$0.rawValue})
+	 userDefaults.selectedCategories
+//	 ReadCategories.allCases.map({$0.rawValue})
   }
   
 }
@@ -64,7 +71,7 @@ extension ReadsDeckManager{
 	 let cards = try await firestore.fetchReads(
 		categoryProgress: categoryProgress,
 		languageCode: "uk",
-		limitPerCategory: 100
+		limitPerCategory: 10 	
 	 )
 	 
 	 await MainActor.run{
@@ -123,14 +130,10 @@ extension ReadsDeckManager{
   func filterInteractions() -> [String : Int] {
 	 guard !categories.isEmpty else { return [:] }
 	 
-	 var result = Dictionary(uniqueKeysWithValues: categories.map { ($0, 0) })
+	 var result: [String : Int] = [:]
 	 
-	 guard !readsInteractions.isEmpty else { return result }
-	 
-	 readsInteractions.forEach { item in
-		if let currentMax = result[item.categoryId] {
-		  result[item.categoryId] = max(currentMax, item.sortIndex)
-		}
+	 for category in categories{
+		result[category] = readsInteractions.getMaxSortIndex(per: category)
 	 }
 	 
 	 return result

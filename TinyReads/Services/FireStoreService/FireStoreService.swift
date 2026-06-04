@@ -33,7 +33,6 @@ extension FireStoreService{
     limitPerCategory: Int = 100
   ) async throws -> [ReadCardModel] {
     guard !categoryProgress.isEmpty else { return [] }
-	 let limit = 100 / categoryProgress.count
 
     return try await withThrowingTaskGroup(of: [ReadCardModel].self) { group in
       for (categoryId, lastSortIndex) in categoryProgress {
@@ -42,7 +41,7 @@ extension FireStoreService{
             categoryId: categoryId,
             languageCode: languageCode,
             afterSortIndex: lastSortIndex,
-            limit: Int(limit)
+            limit: limitPerCategory
           )
         }
       }
