@@ -14,6 +14,8 @@ struct SecondaryView: View {
 		  switch navigationManager.secondary{
 		  case .profile:
 			 ProfileView()
+		  case .category:
+				CategoriesView(secondary: true)
 		  default:
 			 EmptyView()
 		  }

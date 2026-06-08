@@ -68,6 +68,7 @@ extension ReadsDeckManager{
   
 //  Fetch from FireStore
   func fetchReadsCard(categoryProgress: [String: Int]) async throws -> [ReadCardModel]{
+	 guard !categories.isEmpty else { throw URLError(.dataNotAllowed)}
 	 let cards = try await firestore.fetchReads(
 		categoryProgress: categoryProgress,
 		languageCode: "uk",

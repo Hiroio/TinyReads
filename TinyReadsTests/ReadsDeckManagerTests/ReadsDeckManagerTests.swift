@@ -145,7 +145,7 @@ extension ReadsDeckManagerTests{
 	 let last = sortedReads.last
 	 
 //	 Assert
-	 #expect(filter[philosophyCategory] == maxIndex)
+	 #expect(filter[philosophyCategory] == nextIndex)
 	 #expect(first?.sortIndex == nextIndex)
 	 #expect(last?.sortIndex == maxIndex + limitPerCategory)
 	 #expect(sortedReads.count == limitPerCategory)

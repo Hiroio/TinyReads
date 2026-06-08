@@ -35,7 +35,14 @@ struct CardErrorHandlingView: View {
 				  .multilineTextAlignment(.center)
 			 }
 			 Button {
-				retryAction()
+				switch error {
+				case .badInternetConnection:
+				  retryAction()
+				case .somethingWentWrong:
+				  retryAction()
+				case .cardNoLeft:
+				  NavigationManager.shared.secondary = .category
+				}
 			 } label: {
 				Text(error.buttonTitle)
 				  .accent(weight: .semibold)

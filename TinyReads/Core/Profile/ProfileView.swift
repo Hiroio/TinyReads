@@ -10,6 +10,7 @@ import SwiftUI
 struct ProfileView: View {
   @Environment(NavigationManager.self) var navigationManager
   @Environment(ThemeManager.self) var themeManager
+  @Environment(UserDefaultsManager.self) var userDefaultManager
   var body: some View {
 	 VStack(spacing: 15){
 		
@@ -24,20 +25,32 @@ struct ProfileView: View {
 				  .stroke(themeManager.themeAssets.border)
 			 )
 		  
-		  Text("Reader Card")
-			 .title()
-			 .frame(maxWidth: .infinity)
-			 .foregroundStyle(themeManager.themeAssets.primary)
-		  
-		  Button{
-			 withAnimation(.easeInOut){
-				navigationManager.secondary = nil
+		  VStack{
+			 Text("Reader Card")
+				.title()
+				.frame(maxWidth: .infinity)
+				.foregroundStyle(themeManager.themeAssets.primary)
+			
+			 VStack{
+				LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)){
+				  ForEach(userDefaultManager.selectedCategories, id: \.self){category in
+					 Text(category)
+						.secondary()
+				  }
+				}
+				Button{
+				  NavigationManager.shared.secondary = .category
+				}label: {
+				  Text("Change Categories")
+					 .accent()
+				}
 			 }
-		  }label:{
-		  Image(systemName: "xmark")
-			 .foregroundStyle(themeManager.themeAssets.accent)
 			 .padding(5)
-		}
+			 .background(
+				RoundedRectangle(cornerRadius: 10)
+				  .stroke(themeManager.themeAssets.border , lineWidth: 1)
+			 )
+		  }
 		}
 		
 		HStack{
@@ -51,31 +64,7 @@ struct ProfileView: View {
 			 .stroke(themeManager.themeAssets.border, lineWidth: 1)
 		)
 		
-		HStack(spacing: 0){
-		  ForEach(AppTheme.allCases, id: \.self){ item in
-			 let active = item == themeManager.appTheme
-			 let icon = active ? item.activeIcon : item.icon
-			 Button{
-				withAnimation(.easeInOut){
-				  themeManager.appTheme = item
-				}
-			 }label: {
-				Image(systemName: icon)
-				  .font(.headline)
-				  .foregroundStyle(themeManager.themeAssets.primary)
-				  .padding()
-				  .background(
-					 Rectangle()
-						.fill(active ? themeManager.themeAssets.border : .clear)
-				  )
-			 }
-		  }
-		}
-		.cornerRadius(10)
-		.background(
-		  RoundedRectangle(cornerRadius: 10)
-			 .stroke(themeManager.themeAssets.border ,lineWidth: 1)
-		)
+		ThemeSelectorView()
 	 }
 	 .padding()
 	 .background(
@@ -86,6 +75,18 @@ struct ProfileView: View {
 			 .stroke(themeManager.themeAssets.border, lineWidth: 1)
 			 .padding(10)
 		}
+	 )
+	 .overlay(
+		Button{
+		  withAnimation(.easeInOut){
+			 navigationManager.secondary = nil
+		  }
+		}label:{
+		Image(systemName: "xmark")
+		  .foregroundStyle(themeManager.themeAssets.accent)
+		  .padding()
+	 },
+		alignment: .topTrailing
 	 )
 	 .padding(.horizontal)
   }
@@ -106,4 +107,5 @@ func statCard(title: String, value: Int) -> some View{
     ProfileView()
 	 .environment(ThemeManager())
 	 .environment(NavigationManager.shared)
+	 .environment(UserDefaultsManager.shared)
 }

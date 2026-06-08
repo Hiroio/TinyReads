@@ -8,10 +8,11 @@
 import Foundation
 
 enum AppScreen{
-  case main, slide, archive, dismissed, categories, publicCategories
+  case main, slide, archive, dismissed, publicCategories
 }
 enum SecondaryAppScreen{
   case profile
+  case category
 }
 
 @Observable

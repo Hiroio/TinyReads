@@ -47,6 +47,7 @@ extension CardSliderViewModel{
 	 Task{
 		do{
 		  defer {loading = false}
+		  
 		  let cards = try await deckManager.fetchNextReadsCard()
 		  
 		  await MainActor.run {
@@ -60,6 +61,11 @@ extension CardSliderViewModel{
 		  }
 		}
 	 }
+  }
+  
+//  Reload cards
+  func reloadCards(){
+	 self.deckManager.loadInitialDeck()
   }
   
   // Left Swipe
@@ -93,6 +99,8 @@ extension CardSliderViewModel{
 		switch urlError.code {
 		case .notConnectedToInternet, .networkConnectionLost, .cannotFindHost, .cannotConnectToHost, .timedOut:
 		  return .badInternetConnection
+		case .dataNotAllowed:
+		  return .cardNoLeft
 		default:
 		  return .somethingWentWrong
 		}
@@ -151,7 +159,7 @@ enum CardError: Error, LocalizedError{
 	 case .badInternetConnection, .somethingWentWrong:
 		"Try again"
 	 case .cardNoLeft:
-		"Load more"
+		"Select Category"
 	 }
   }
 }

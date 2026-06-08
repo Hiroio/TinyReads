@@ -10,6 +10,10 @@ import SwiftUI
 struct CategoriesView: View {
   @Environment(UserDefaultsManager.self) var userDefaults
   @Environment(ThemeManager.self) var themeManager
+  let secondary: Bool
+  init(secondary: Bool = false){
+	 self.secondary = secondary
+  }
   var body: some View {
 		ZStack{
 		  let assets = themeManager.themeAssets
@@ -47,6 +51,20 @@ struct CategoriesView: View {
 				.padding(.horizontal)
 			 }
 		  }
+		  .overlay(
+				Button{
+				  NavigationManager.shared.secondary = nil
+				}label: {
+				  Image(systemName: "chevron.left")
+					 .font(.headline.weight(.light))
+					 .foregroundStyle(assets.primary)
+					 .padding(.horizontal)
+				}
+				  .opacity(secondary ? 1 : 0)
+				  .allowsHitTesting(secondary)
+				,
+				alignment: .topLeading
+		  )
 		}
     }
   
@@ -63,7 +81,7 @@ struct CategoriesView: View {
 }
 
 #Preview {
-    CategoriesView()
+    CategoriesView(secondary: true)
 	 .environment(ThemeManager())
 	 .environment(UserDefaultsManager.shared)
 }
