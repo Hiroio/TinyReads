@@ -107,3 +107,20 @@ extension CoreDataService{
 	 return try? viewContext.fetch(request).first
   }
 }
+
+//MARK: Archive
+extension CoreDataService {
+  func fetchSavedOrReaded() -> [ReadsEntity]{
+	 let request: NSFetchRequest<ReadsEntity> = NSFetchRequest(entityName: "ReadsEntity")
+	 let predicate = NSPredicate(format: "isRead == true || isSaved == true")
+	 request.predicate = predicate
+	 
+	 do{
+		let entities = try viewContext.fetch(request)
+		return entities
+	 }catch{
+		print("Failed to fetch entities: \(error.localizedDescription)")
+		return []
+	 }
+  }
+}

@@ -16,15 +16,14 @@ struct SlideView: View {
   var body: some View {
 	 let assets = themeManager.themeAssets
 	 ZStack{
-		let activeTwo = Array(vm.activeCards.prefix(2))
+		let activeTwo = Array(vm.cards.prefix(2))
 		
 		ForEach(activeTwo, id: \.id) { card in
-		  let isTopCard = card.id == vm.activeCards.first?.id
+		  let isTopCard = card.id == vm.cards.first?.id
 		  
-		  CardView(card: card)
-			 .padding(40)
+			  CardView(displayCard: card)
+			 .padding(20)
 			 .offset(x: isTopCard ? dragAmount / 2 : 0)
-		  //			 .rotationEffect(.degrees(isTopCard ? Double(dragAmount / 15) : 0))
 			 .scaleEffect(isTopCard ? 1.0 : backCardScale)
 			 .opacity(isTopCard ? 1.0 : backCardOpacity)
 			 .zIndex(isTopCard ? 2 : 1)
@@ -65,10 +64,14 @@ struct SlideView: View {
 				var transaction = Transaction()
 				transaction.disablesAnimations = true
 				
-				withTransaction(transaction) {
-				  vm.onDismiss(cardId)
-				  dragAmount = 0
-				}
+					withTransaction(transaction) {
+					  if width > 0 {
+						 vm.onSave(cardId)
+					  } else {
+						 vm.onDismiss(cardId)
+					  }
+					  dragAmount = 0
+					}
 			 }
 		  } else {
 			 withAnimation(.interactiveSpring()) {

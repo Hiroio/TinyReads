@@ -13,4 +13,6 @@ protocol PublicReadsServiceProtocol {
     languageCode: String,
     limitPerCategory: Int
   ) async throws -> [ReadCardModel]
+  
+  func fetchReads(ids: [String]) async throws -> [ReadCardModel]
 }

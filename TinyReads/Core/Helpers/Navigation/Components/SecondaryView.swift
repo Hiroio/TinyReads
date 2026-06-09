@@ -16,6 +16,8 @@ struct SecondaryView: View {
 			 ProfileView()
 		  case .category:
 				CategoriesView(secondary: true)
+		  case .archive:
+			 ArchiveView()
 		  default:
 			 EmptyView()
 		  }

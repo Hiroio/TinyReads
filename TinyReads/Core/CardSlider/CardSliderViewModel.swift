@@ -10,49 +10,43 @@ import Foundation
 
 @Observable
 final class CardSliderViewModel{
-  var cards: [ReadCardModel] = []
+  var cards: [DisplayReadCard] = []
   var errorState: CardError?
   var loading: Bool = false
-  
+  var deckMode: DeckMode = .freshOnly
   
   let deckManager = ReadsDeckManager.shared
   init(){
 	 fetchCards()
   }
   
-  
   var dismissedCards: Int{
-	 cards.filter({!$0.isActive}).count
-  }
-  
-  var activeCards: [ReadCardModel] {
-	 cards.filter({$0.isActive})
+	 cards.filter({$0.status != ReadCardDisplayStatus.fresh}).count
   }
   
 }
 
-// MARK: Functions
-extension CardSliderViewModel{
-//  fetch
-  func fetchCards(){
+// MARK: - Deck Loading
+extension CardSliderViewModel {
+  // Fetch cards
+  func fetchCards() {
 	 loading = true
 	 errorState = nil
 	 guard deckManager.reads.isEmpty else {
-		self.cards = deckManager.reads
+		syncCardsFromDeck()
 		self.errorState = errorState(for: cards)
-    self.loading = false
+		self.loading = false
 		return
 	 }
 	 
 	 Task{
 		do{
-		  defer {loading = false}
-		  
-		  let cards = try await deckManager.fetchNextReadsCard()
+		  try await deckManager.loadMoreReads()
 		  
 		  await MainActor.run {
-			 self.cards = cards
-			 self.errorState = self.errorState(for: cards)
+			 self.syncCardsFromDeck()
+			 self.errorState = self.errorState(for: self.cards)
+			 self.loading = false
 		  }
 		}catch{
 		  await MainActor.run {
@@ -63,37 +57,79 @@ extension CardSliderViewModel{
 	 }
   }
   
-//  Reload cards
-  func reloadCards(){
-	 self.deckManager.loadInitialDeck()
+  // Reload cards
+  func reloadCards() async {
+	 loading = true
+	 errorState = nil
+	 self.cards = []
+	 
+	 do{
+		try await self.deckManager.reloadForSelectedCategories()
+		
+		await MainActor.run {
+		  self.syncCardsFromDeck()
+		  self.errorState = self.errorState(for: self.cards)
+		  self.loading = false
+		}
+	 }catch{
+		await MainActor.run {
+		  self.errorState = self.errorState(for: error)
+		  self.loading = false
+		}
+	 }
+	 
   }
   
-  // Left Swipe
-  func onDismiss(_ id: String){
-	 guard let index = cards.firstIndex(where: { $0.id == id }) else { return }
+  // Sync UI cards from manager
+  private func syncCardsFromDeck() {
+	 switch deckMode{
+	 case .freshOnly:
+		cards = deckManager.freshDisplayReads
+	 case .repeatOld:
+		cards = deckManager.repeatDisplayReads.shuffled()
+	 }
+  }
+  
+  func changeDeckMode() {
+	 self.deckMode = deckMode == .freshOnly ? .repeatOld : .freshOnly
 	 
-	 let card = cards[index]
-	 cards[index].isActive = false
+	 syncCardsFromDeck()
+  }
+}
+
+// MARK: - Card Actions
+extension CardSliderViewModel {
+  // Left Swipe
+  func onDismiss(_ id: String) {
+	 guard let index = cards.firstIndex(where: { $0.id == id }) else { return }
+	  
+	 let card = cards[index].card
+	 cards.remove(at: index)
 	 deckManager.removeFromDeck(id)
 	 deckManager.dismissCard(card)
   }
   
   // Right Swipe
-  func onSave(_ id: String){
+  func onSave(_ id: String) {
 	 guard let index = cards.firstIndex(where: { $0.id == id }) else { return }
 	 
-	 let card = cards[index]
-	 cards[index].isActive = false
+	 let card = cards[index].card
+	 cards.remove(at: index)
 	 deckManager.removeFromDeck(id)
 	 deckManager.saveCard(card)
   }
+}
 
-  private func errorState(for cards: [ReadCardModel]) -> CardError? {
+// MARK: - Error Handling
+private extension CardSliderViewModel {
+  // Get empty deck error
+  private func errorState(for cards: [DisplayReadCard]) -> CardError? {
 	 guard cards.isEmpty else { return nil }
 	 let lastSortIndex = deckManager.readsInteractions.map(\.sortIndex).max() ?? 0
 	 return lastSortIndex > 100 ? .cardNoLeft : .somethingWentWrong
   }
 
+  // Get fetch error
   private func errorState(for error: Error) -> CardError {
 	 if let urlError = error as? URLError {
 		switch urlError.code {
@@ -160,6 +196,22 @@ enum CardError: Error, LocalizedError{
 		"Try again"
 	 case .cardNoLeft:
 		"Select Category"
+	 }
+  }
+}
+
+
+
+enum DeckMode {
+	 case freshOnly
+	 case repeatOld
+  
+  var image: String {
+	 switch self {
+	 case .freshOnly:
+		"newspaper"
+	 case .repeatOld:
+		"xmark.bin"
 	 }
   }
 }

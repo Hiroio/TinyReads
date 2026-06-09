@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ReadCardModel: Identifiable, Codable {
+nonisolated struct ReadCardModel: Identifiable, Codable {
 	 let id: String
 	 let translationGroupId: String
 	 let categoryId: String
@@ -23,7 +23,7 @@ struct ReadCardModel: Identifiable, Codable {
 }
 
 
-struct RootReads: Codable { let reads: [ReadCardModel] }
+nonisolated struct RootReads: Codable { let reads: [ReadCardModel] }
 
 
 extension ReadCardModel: Equatable {
@@ -48,4 +48,3 @@ extension ReadCardModel: Equatable {
 	 )
   }
 }
-

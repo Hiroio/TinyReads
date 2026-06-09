@@ -44,14 +44,15 @@ struct ReadsDeckManagerTests {
     }
   
   
-//  Testing if reads interaction contain few models then should return the max sor index in with filterInteractions()
-  @Test func test_filterInteraction_ReturnMaxSortIndexPerSelectedCategory_withItemsInInterectionReads_ShouldBeMaxIndex_FromReadInterection() {
+//  Testing if reads interaction contain few models then should return next sort index in filterInteractions()
+  @Test func test_filterInteraction_ReturnNextSortIndexPerSelectedCategory_withItemsInInterectionReads_ShouldBeNextIndex_FromReadInterection() {
 //	 Arrange
 	 var sut = makeSUT()
 	 
 	 let philosophyCategory = ReadCategories.philosophy.rawValue
 	 let psycologyCategory = ReadCategories.psychology.rawValue
 	 let maxIndex = 23
+	 let nextIndex = maxIndex + 1
 	 let categories = [philosophyCategory, psycologyCategory]
 	 let readInterection = [ReadInteractionModel(id: "", categoryId: philosophyCategory, languageCode: "", sortIndex: maxIndex)]
 	 
@@ -61,7 +62,7 @@ struct ReadsDeckManagerTests {
 	 let filter = sut.manager.filterInteractions()
 	 
 	 #expect(filter.keys.count == categories.count)
-	 #expect(filter[philosophyCategory] == maxIndex)
+	 #expect(filter[philosophyCategory] == nextIndex)
 	 #expect(filter[psycologyCategory] == 0)
   }
   
@@ -91,7 +92,7 @@ struct ReadsDeckManagerTests {
 	 
 //	 Assert2
 	 #expect(filter2.count == categories.count)
-	 #expect(filter2[philosophyCategory] == maxIndex)
+	 #expect(filter2[philosophyCategory] == maxIndex + 1)
 	 
   }
   
@@ -152,4 +153,3 @@ extension ReadsDeckManagerTests{
   }
   
 }
-
