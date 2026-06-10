@@ -18,6 +18,8 @@ struct SecondaryView: View {
 				CategoriesView(secondary: true)
 		  case .archive:
 			 ArchiveView()
+		  case .dismissed:
+			 DismissedView()
 		  default:
 			 EmptyView()
 		  }

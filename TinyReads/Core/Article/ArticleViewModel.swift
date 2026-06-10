@@ -11,23 +11,35 @@ import Foundation
 @Observable
 final class ArticleViewModel{
   var article: ReadCardModel
+  var interactionState: ReadCardDisplayStatus
   
   private let coreData: CoreDataService
   
-  init(article: ReadCardModel){
-	 self.article = article
+  init(article: ArticleRoute){
+	 self.article = article.article
 	 self.coreData = .shared
+	 self.interactionState = article.isAbleToInteract
   }
   
   
   func markAsRead() -> Bool{
 	 let interaction = ReadInteractionModel(readCard: article)
-	 return self.coreData.markRead(interaction)
+	 if self.coreData.markRead(interaction) {
+		self.interactionState = .read
+		return true
+	 }else{
+		return false
+	 }
   }
   
   func markAsDismiss() -> Bool{
 	 let interaction = ReadInteractionModel(readCard: article)
 	 
-	 return self.coreData.markDismissed(interaction)
+	 if self.coreData.markDismissed(interaction){
+		self.interactionState = .dismissed
+		return true
+	 }else{
+		return false
+	 }
   }
 }

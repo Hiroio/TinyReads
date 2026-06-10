@@ -13,6 +13,7 @@ enum AppScreen{
 enum SecondaryAppScreen{
   case profile
   case category
+  case dismissed
   case archive
 }
 

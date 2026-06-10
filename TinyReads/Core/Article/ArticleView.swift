@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct ArticleView: View {
+  @Environment(ThemeManager.self) var themeManager
   @State private var scrollUp: Bool = true
   @State private var vm: ArticleViewModel
   let onInteractionChanged: () -> ()
   init(article: ArticleRoute){
-	 self._vm = State(wrappedValue: ArticleViewModel(article: article.article))
+	 self._vm = State(wrappedValue: ArticleViewModel(article: article))
 	 self.onInteractionChanged = article.onInteractionChanged
   }
   var body: some View {
@@ -57,7 +58,8 @@ struct ArticleView: View {
 	 .onScrollGeometryChange(for: CGFloat.self) { geometry in
 		let offsetY = geometry.contentOffset.y
 			 let maxOffsetY = max(0, geometry.contentSize.height - geometry.containerSize.height)
-			 return min(max(offsetY, 0), maxOffsetY)
+			 let minOffsetY = min (0, geometry.contentSize.height)
+			 return min(max(offsetY, minOffsetY), maxOffsetY)
 	 } action: { oldValue, newValue in
 		let delta = newValue - oldValue
 			 guard abs(delta) > 2 else { return }
@@ -71,39 +73,26 @@ struct ArticleView: View {
 		}
 	 }
 	 .overlay(
+		ArticleBottomBar(scrollUp: scrollUp, onInteractionChanged: onInteractionChanged)
+		  .environment(vm),
+		alignment: .bottom
+	 )
+	 .overlay(
 		Group{
 		  if scrollUp{
-			 HStack{
-				Button{
-				  if vm.markAsDismiss(){
-					 onInteractionChanged()
-				  }
-				}label: {
-				  Image("DismissAction")
-					 .resizable()
-					 .scaledToFit()
-					 .frame(width: 65)
-					 .shadow(color: .red.opacity(0.8), radius: 3)
+			 Button{
+				withAnimation(){
+				  NavigationManager.shared.article = nil
 				}
-				Spacer()
-				Button{
-				  if vm.markAsRead(){
-					 onInteractionChanged()
-				  }
-				}label: {
-				  Image("ReadAction")
-					 .resizable()
-					 .scaledToFit()
-					 .frame(width: 65)
-					 .shadow(color: .green.opacity(0.6), radius: 3)
-				}
+			 }label:{
+				Image(systemName: "xmark")
+				  .font(.title2.weight(.medium))
+				  .padding(15)
+				  .foregroundStyle(themeManager.themeAssets.primary)
 			 }
-			 .padding(.horizontal)
-			 .transition(.move(edge: .top).combined(with: .opacity))
-			 .allowsHitTesting(scrollUp)
 		  }
 		},
-		alignment: .top
+		alignment: .topTrailing
 	 )
   }
 }
@@ -117,6 +106,6 @@ func TagCard(_ tag: String) -> some View{
 }
 
 #Preview {
-  ArticleView(article: .init(article: .getForPreview(), onInteractionChanged: {}))
+  ArticleView(article: .init(article: .getForPreview(), onInteractionChanged: {}, isAbleToInteract: .read))
 	 .environment(ThemeManager())
 }

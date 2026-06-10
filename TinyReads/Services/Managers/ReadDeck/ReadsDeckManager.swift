@@ -147,6 +147,7 @@ extension ReadsDeckManager {
 	 newCard.skipCount += 1
 	 
 	 let saved = coreDataManager.markDismissed(newCard)
+	 print("dismissed \(saved ? "yes" : "no")")
 	 if saved { fetchInteractionReads() }
 	 return saved
   }

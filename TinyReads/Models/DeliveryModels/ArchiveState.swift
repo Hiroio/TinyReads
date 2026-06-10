@@ -17,4 +17,13 @@ enum ArchiveState: String, CaseIterable, Identifiable {
   var text: String {
 	 self.rawValue.capitalized
   }
+  
+  var cardStatus: ReadCardDisplayStatus {
+	 switch self {
+	 case .saved:
+		  .archived
+	 case .read:
+		  .read
+	 }
+  }
 }

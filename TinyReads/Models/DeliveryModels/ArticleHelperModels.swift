@@ -10,4 +10,6 @@ import Foundation
 struct ArticleRoute {
   let article: ReadCardModel
   let onInteractionChanged: () -> Void
+  var isAbleToInteract: ReadCardDisplayStatus = .fresh
 }
+

@@ -86,6 +86,7 @@ extension CoreDataService{
 	 }
 	 
 	 entity.isRead = true
+	 entity.isSkipped = false
 	 entity.readAt = Date.now
 	 
 	 return self.save()
@@ -130,6 +131,19 @@ extension CoreDataService {
   func fetchSavedOrReaded() -> [ReadsEntity]{
 	 let request: NSFetchRequest<ReadsEntity> = NSFetchRequest(entityName: "ReadsEntity")
 	 let predicate = NSPredicate(format: "isRead == true || isSaved == true")
+	 request.predicate = predicate
+	 
+	 do{
+		let entities = try viewContext.fetch(request)
+		return entities
+	 }catch{
+		print("Failed to fetch entities: \(error.localizedDescription)")
+		return []
+	 }
+  }
+  func fetchDismissed() -> [ReadsEntity]{
+	 let request: NSFetchRequest<ReadsEntity> = NSFetchRequest(entityName: "ReadsEntity")
+	 let predicate = NSPredicate(format: "isSkipped == true")
 	 request.predicate = predicate
 	 
 	 do{
