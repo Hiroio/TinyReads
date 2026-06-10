@@ -25,7 +25,7 @@ final class NavigationManager {
   var screen: AppScreen = .main
   var secondary: SecondaryAppScreen? = nil
   
-  var article: ReadCardModel? = nil
+  var article: ArticleRoute? = nil
   
   var loading: Bool = false
 }

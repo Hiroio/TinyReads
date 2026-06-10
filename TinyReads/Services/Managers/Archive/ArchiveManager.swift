@@ -25,7 +25,7 @@ final class ArchiveManager{
   }
   
   var savedCards: [ReadInteractionModel]{
-	 cardsInteractions.filter({ $0.isSaved })
+	 cardsInteractions.filter({ $0.isSaved && $0.isRead == false })
   }
   
   var visibleCards: [ReadCardModel] {
@@ -86,4 +86,16 @@ extension ArchiveManager{
 	 return cards.filter { ids.contains($0.id) }
   }
   
+//  Change Interaction
+  func applyInteractionChange(_ id: String) {
+	 guard let newEntity = coreData.getSingleEntity(by: id) else { return }
+	 
+	 if let interaction = try? ReadInteractionModel(entity: newEntity){
+		if let index = cardsInteractions.firstIndex(where: { $0.id == interaction.id }) {
+		  cardsInteractions[index] = interaction
+		} else {
+		  cardsInteractions.append(interaction)
+		}
+	 }
+  }
 }

@@ -77,8 +77,13 @@ extension CoreDataService{
   
   /// mark read
   @discardableResult
-  func markRead(_ id: String) -> Bool{
-	 guard let entity = getSingleEntity(by: id) else {return false}
+  func markRead(_ read: ReadInteractionModel) -> Bool{
+	 let entity: ReadsEntity
+	 if let loadedEntity = getSingleEntity(by: read.id){
+		entity = loadedEntity
+	 } else {
+		entity = createNewEntity(read: read)
+	 }
 	 
 	 entity.isRead = true
 	 entity.readAt = Date.now
@@ -87,8 +92,13 @@ extension CoreDataService{
   }
   
   @discardableResult
-  func markDismissed(_ id: String) -> Bool{
-	 guard let entity = getSingleEntity(by: id) else {return false}
+  func markDismissed(_ read: ReadInteractionModel) -> Bool{
+	 let entity: ReadsEntity
+	 if let loadedEntity = getSingleEntity(by: read.id){
+		entity = loadedEntity
+	 } else {
+		entity = createNewEntity(read: read)
+	 }
 	 
 	 entity.isSkipped = true
 	 entity.skippedAt = .now
@@ -99,12 +109,19 @@ extension CoreDataService{
   
   
   /// get single entity (helper function)
-  private func getSingleEntity(by id: String) -> ReadsEntity?{
+  func getSingleEntity(by id: String) -> ReadsEntity?{
 	 let request: NSFetchRequest<ReadsEntity> = NSFetchRequest(entityName: "ReadsEntity")
 	 
 	 request.predicate = NSPredicate(format: "id == %@", id)
 	 
 	 return try? viewContext.fetch(request).first
+  }
+  
+  private func createNewEntity(read: ReadInteractionModel) -> ReadsEntity{
+	 let entity = ReadsEntity(context: viewContext)
+	 entity.update(from: read)
+	 
+	 return entity
   }
 }
 

@@ -22,7 +22,7 @@ struct ArchiveView: View {
 			 ScrollView{
 				LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
 				  ForEach(vm.reads){item in
-					 ArchiveCard(read: item)
+					 ArchiveCard(read: item){vm.onInteractionChange(item.id)}
 				  }
 				}
 			 }
@@ -47,6 +47,6 @@ struct ArchiveView: View {
 }
 
 #Preview {
-    ArchiveView()
+  ArchiveView()
 	 .environment(ThemeManager())
 }

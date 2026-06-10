@@ -141,14 +141,12 @@ extension ReadsDeckManager {
   /// dismissCard (left swipe)
   @discardableResult
   func dismissCard(_ card: ReadCardModel) -> Bool{
-	 guard !coreDataManager.markDismissed(card.id) else { return true }
-	 
 	 var newCard = ReadInteractionModel(id: card.id, categoryId: card.categoryId, languageCode: card.languageCode, sortIndex: card.sortIndex)
 	 newCard.isSkipped = true
 	 newCard.skippedAt = .now
 	 newCard.skipCount += 1
 	 
-	 let saved = coreDataManager.saveReadEntity(newCard)
+	 let saved = coreDataManager.markDismissed(newCard)
 	 if saved { fetchInteractionReads() }
 	 return saved
   }
@@ -189,8 +187,8 @@ private extension ReadsDeckManager {
 	 guard let interaction = interactionsById[read.id] else { return .fresh }
 	 
 	 if interaction.isRead { return .read }
-	 if interaction.isSkipped { return .dismissed }
 	 if interaction.isSaved { return .archived }
+	 if interaction.isSkipped { return .dismissed }
 	 
 	 return .fresh
   }

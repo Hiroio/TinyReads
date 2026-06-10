@@ -48,6 +48,11 @@ extension ArchiveViewModel{
 	 syncCardsFromManager()
   }
   
+  func onInteractionChange(_ id: String) {
+	 archiveManager.applyInteractionChange(id)
+	 syncCardsFromManager()
+  }
+  
 //  FOR PREVIEW
   func preview(){
 	 let reads = ReadCardModel.getForPreview()

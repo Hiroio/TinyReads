@@ -8,7 +8,7 @@
 import Foundation
 
 struct ReadInteractionModel: Identifiable, Codable {
-  let id: String
+  var id: String
   let categoryId: String
   let languageCode: String
   let sortIndex: Int
@@ -87,5 +87,25 @@ extension ReadInteractionModel {
 	 self.skippedAt = entity.skippedAt
 	 
 	 self.skipCount = Int(entity.skipCount)
+  }
+  
+  
+  init(readCard: ReadCardModel){
+	 self.id = readCard.id
+	 self.categoryId = readCard.categoryId
+	 self.languageCode = readCard.languageCode
+	 self.sortIndex = readCard.sortIndex
+	 
+	 
+	 self.isSaved = false
+	 self.isRead = false
+	 self.isLiked = false
+	 self.isSkipped = false
+	 
+	 self.savedAt = nil
+	 self.readAt = nil
+	 self.skippedAt = nil
+	 
+	 self.skipCount = 0
   }
 }

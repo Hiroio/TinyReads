@@ -31,7 +31,9 @@ struct CardView: View {
 		.padding(30)
 		
 		Button{
-		  navigationManager.article = card
+//		  TODO: OnIntercationChanged
+		  let article = ArticleRoute(article: card, onInteractionChanged: {})
+		  navigationManager.article = article
 		}label:{
 		  Text("Read")
 			 .font(.largeTitle.weight(.light))

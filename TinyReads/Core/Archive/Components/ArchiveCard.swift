@@ -10,25 +10,33 @@ import SwiftUI
 struct ArchiveCard: View {
   @Environment(ThemeManager.self) var themeManager
   let read: ReadCardModel
+  let onInteractionChanged: () -> Void
     var body: some View {
-		VStack{
-		  Text(read.title)
-			 .secondary()
-			 .multilineTextAlignment(.center)
-			 .frame(maxWidth: .infinity, maxHeight: .infinity)
-			 .aspectRatio(1, contentMode: .fit)
-			 .background(
-				Image("backGroundCard")
-				  .resizable()
-				  .scaledToFit()
-			 )
-			 .allowsTightening(true)
+		Button{
+		  let article = ArticleRoute(article: read) {
+			 onInteractionChanged()
+		  }
+		  NavigationManager.shared.article = article
+		}label: {
+		  VStack{
+			 Text(read.title)
+				.secondary()
+				.multilineTextAlignment(.center)
+				.frame(maxWidth: .infinity, maxHeight: .infinity)
+				.aspectRatio(1, contentMode: .fit)
+				.background(
+				  Image("backGroundCard")
+					 .resizable()
+					 .scaledToFit()
+				)
+				.allowsTightening(true)
 			 
+		  }
 		}
     }
 }
 
 #Preview {
-  ArchiveCard(read: .getForPreview())
+  ArchiveCard(read: .getForPreview()){}
 	 .environment(ThemeManager())
 }
