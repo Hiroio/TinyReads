@@ -113,6 +113,18 @@ extension ReadsDeckManager {
 	 guard let index = reads.firstIndex(where: { $0.id == id }) else { return }
 	 reads[index].isActive = false
   }
+  
+  // Update a single interaction after Article actions
+  func applyInteractionChange(_ id: String) {
+	 guard let entity = coreDataManager.getSingleEntity(by: id) else { return }
+	 guard let interaction = try? ReadInteractionModel(entity: entity) else { return }
+	 
+	 if let index = readsInteractions.firstIndex(where: { $0.id == interaction.id }) {
+		readsInteractions[index] = interaction
+	 } else {
+		readsInteractions.append(interaction)
+	 }
+  }
 }
 
 // MARK: - CoreData

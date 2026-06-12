@@ -131,4 +131,114 @@ enum AppThemeAssets {
 		"backcard_black_tight"
 	 }
   }
+  
+  var savedCard: String{
+	 switch self {
+	 case .light:
+		"SavedCard"
+	 case .dark:
+		"SavedCardDark"
+	 }
+  }
+  var dismissedCard: String{
+	 switch self {
+	 case .light:
+		"DismissedBack"
+	 case .dark:
+		"DismissedBackDark"
+	 }
+  }
+  
+  var readerCard: String{
+	 switch self {
+	 case .light:
+		"ReaderCard"
+	 case .dark:
+		"ReaderCardDark"
+	 }
+  }
+  
+  var backSmallCard: String{
+	 switch self {
+	 case .light:
+		"backGroundCard"
+	 case .dark:
+		"backGroundCardDark"
+	 }
+  }
+  
+  var languageAction: String{
+	 switch self {
+	 case .light:
+		"LanguageActionIcon"
+	 case .dark:
+		"LanguageActionIconDark"
+	 }
+  }
+  
+  var categorieAction: String{
+	 switch self {
+	 case .light:
+		"ThemeActionIcon"
+	 case .dark:
+		"ThemeActionIconDark"
+	 }
+  }
+  
+  var themeAction: String{
+	 switch self {
+	 case .light:
+		"ThemeActionIcon"
+	 case .dark:
+		"ThemeActionIconDark"
+	 }
+  }
+  
+  
+  
+  
+  var navigationProfile: String{
+	 switch self {
+	 case .light:
+		"nav_profile_light"
+	 case .dark:
+		"nav_profile_dark"
+	 }
+  }
+  
+  var navigationSkipped: String{
+	 switch self {
+	 case .light:
+		"nav_skipped_light"
+	 case .dark:
+		"nav_skipped_dark"
+	 }
+  }
+  
+  var navigationArchive: String{
+	 switch self {
+	 case .light:
+		"nav_archive_light"
+	 case .dark:
+		"nav_archive_dark"
+	 }
+  }
+  
+  var navigationExplore: String{
+	 switch self {
+	 case .light:
+		"nav_explore_light"
+	 case .dark:
+		"nav_explore_dark"
+	 }
+  }
+  
+  var navigationCategories: String{
+	 switch self {
+	 case .light:
+		"nav_categories_light"
+	 case .dark:
+		"nav_categories_dark"
+	 }
+  }
 }

@@ -11,97 +11,88 @@ struct ProfileView: View {
   @Environment(NavigationManager.self) var navigationManager
   @Environment(ThemeManager.self) var themeManager
   @Environment(UserDefaultsManager.self) var userDefaultManager
+  @State private var profileActionCard: ProfileActionBarEnum? = nil
+  @State private var vm = ProfileViewModel()
+  
   var body: some View {
-	 VStack(spacing: 15){
-		
-		HStack(alignment: .top){
-		  Image("ProfileImage")
-			 .resizable()
-			 .scaledToFit()
-			 .frame(width: 105)
-			 .cornerRadius(10)
-			 .background(
-				RoundedRectangle(cornerRadius: 10)
-				  .stroke(themeManager.themeAssets.border)
-			 )
+	 ZStack{
+		VStack(spacing: 0){
 		  
-		  VStack{
-			 Text("Reader Card")
-				.title()
-				.frame(maxWidth: .infinity)
-				.foregroundStyle(themeManager.themeAssets.primary)
-			
+		  HStack(alignment: .top){
+			 Image("ProfileImage")
+				.resizable()
+				.scaledToFit()
+				.frame(width: 135)
+			 
 			 VStack{
-				LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)){
-				  ForEach(userDefaultManager.selectedCategories, id: \.self){category in
-					 Text(category)
-						.secondary()
-				  }
-				}
-				Button{
-				  NavigationManager.shared.secondary = .category
-				}label: {
-				  Text("Change Categories")
-					 .accent()
-				}
+				Text("Reader Card")
+				  .title()
+				  .frame(maxWidth: .infinity)
+				  .foregroundStyle(themeManager.themeAssets.primary)
+				
+				CategoryShowCase
 			 }
-			 .padding(5)
-			 .background(
-				RoundedRectangle(cornerRadius: 10)
-				  .stroke(themeManager.themeAssets.border , lineWidth: 1)
-			 )
 		  }
-		}
-		
-		HStack{
-		  statCard(title: "Read", value: 0)
-		  statCard(title: "Saved", value: 0)
-		  statCard(title: "Dismissed", value: 0)
+		  .padding(.vertical)
+
+		  ProfileStatsView()
+			 .environment(vm)
+		  
+		  ProfileActionBar(profileActionCard: $profileActionCard)
 		}
 		.padding()
+		.padding()
 		.background(
-		  RoundedRectangle(cornerRadius: 10)
-			 .stroke(themeManager.themeAssets.border, lineWidth: 1)
+		  Image(themeManager.themeAssets.readerCard)
+			 .resizable()
+			 
 		)
+		.padding(.horizontal, 10)
 		
-		ThemeSelectorView()
-	 }
-	 .padding()
-	 .background(
-		ZStack{
-		  RoundedRectangle(cornerRadius: 10)
-			 .fill(themeManager.themeAssets.card)
-		  RoundedRectangle(cornerRadius: 10)
-			 .stroke(themeManager.themeAssets.border, lineWidth: 1)
-			 .padding(10)
-		}
-	 )
-	 .overlay(
-		Button{
-		  withAnimation(.easeInOut){
-			 navigationManager.secondary = nil
+		
+		
+		if let profileActionCard{
+		  ZStack{
+			 Color.black.opacity(0.1).ignoresSafeArea().onTapGesture {
+				self.profileActionCard = nil
+			 }
+			 switch profileActionCard {
+			 case .language:
+				//			 TODO: LANGUAGE LIST
+				EmptyView()
+			 case .theme:
+				ThemeSelectorView(){
+				  withAnimation{
+					 self.profileActionCard = nil
+				  }
+				}
+				  .zIndex(1)
+				  .transition(.opacity)
+			 case .categories:
+				  CategoriesView()
+					 .zIndex(1)
+					 .transition(.opacity)
+				}
 		  }
-		}label:{
-		Image(systemName: "xmark")
-		  .foregroundStyle(themeManager.themeAssets.accent)
-		  .padding()
-	 },
-		alignment: .topTrailing
-	 )
-	 .padding(.horizontal)
+		  .allowsHitTesting(self.profileActionCard != nil)
+		}
+	 }
+  }
+  
+  
+//  Category showcase:
+  private var CategoryShowCase: some View{
+	 VStack{
+		LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)){
+		  ForEach(userDefaultManager.selectedCategories, id: \.self){category in
+			 Text(category)
+				.secondary()
+		  }
+		}
+	 }
   }
 }
 
-@ViewBuilder
-func statCard(title: String, value: Int) -> some View{
-  VStack{
-	 Text(title)
-		.secondary()
-	 Text("\(value)")
-		.title()
-  }
-  .frame(maxWidth: .infinity)
-}
 
 #Preview {
     ProfileView()

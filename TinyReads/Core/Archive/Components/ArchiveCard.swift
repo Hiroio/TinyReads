@@ -24,11 +24,13 @@ struct ArchiveCard: View {
 		VStack{
 		  Text(read.title)
 			 .secondary()
+			 .padding(.horizontal)
+			 .padding(.trailing)
 			 .multilineTextAlignment(.center)
 			 .frame(maxWidth: .infinity, maxHeight: .infinity)
 			 .aspectRatio(1, contentMode: .fit)
 			 .background(
-				Image("backGroundCard")
+				Image("\(state.backCard)\(themeManager.appTheme == .dark ? "Dark" : "")")
 				  .resizable()
 				  .scaledToFit()
 			 )

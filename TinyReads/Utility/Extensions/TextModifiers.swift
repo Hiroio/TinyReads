@@ -31,6 +31,17 @@ struct SecondaryViewModifier: ViewModifier{
   }
 }
 
+struct HeadLineViewModifier: ViewModifier{
+  @Environment(ThemeManager.self) var themeManager
+  let weight: Font.Weight
+  func body(content: Content) -> some View {
+	 content
+		.font(.headline.weight(weight))
+		.foregroundStyle(themeManager.themeAssets.primary)
+		.fontDesign(.serif)
+  }
+}
+
 struct AccentViewModifier: ViewModifier{
   @Environment(ThemeManager.self) var themeManager
   let weight: Font.Weight
@@ -41,6 +52,7 @@ struct AccentViewModifier: ViewModifier{
 		.fontDesign(.serif)
   }
 }
+
 
 extension View{
   func title(weight: Font.Weight = .regular) -> some View{
@@ -54,6 +66,10 @@ extension View{
   
   func accent(weight: Font.Weight = .regular) -> some View{
 	 modifier(AccentViewModifier(weight: weight))
+  }
+  
+  func headline(weight: Font.Weight = .light) -> some View{
+	 modifier(HeadLineViewModifier(weight: weight))
   }
 }
 

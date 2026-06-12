@@ -9,7 +9,14 @@ import SwiftUI
 
 struct ThemeSelectorView: View {
   @Environment(ThemeManager.self) var themeManager
-    var body: some View {
+  let onDismiss: () -> ()
+  var body: some View {
+	 VStack{
+		Text("Theme selection")
+		  .title()
+		  .padding()
+		
+		
 		HStack(spacing: 0){
 		  ForEach(AppTheme.allCases, id: \.self){ item in
 			 let active = item == themeManager.appTheme
@@ -35,10 +42,25 @@ struct ThemeSelectorView: View {
 		  RoundedRectangle(cornerRadius: 10)
 			 .stroke(themeManager.themeAssets.border ,lineWidth: 1)
 		)
-    }
+		
+		Button{
+		  onDismiss()
+		}label:{
+		  Text("Close")
+			 .secondary()
+			 .padding()
+		}
+	 }
+	 .padding(50)
+	 .background(
+		Image(themeManager.themeAssets.backSmallCard)
+		  .resizable()
+		  .scaledToFit()
+	 )
+  }
 }
 
 #Preview {
-    ThemeSelectorView()
+  ThemeSelectorView(){}
 	 .environment(ThemeManager())
 }

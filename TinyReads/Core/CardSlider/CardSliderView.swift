@@ -16,18 +16,25 @@ struct CardSliderView: View {
 		ZStack{
 		  themeManager.themeAssets.background.ignoresSafeArea()
 		  VStack{
-			 if vm.loading{
+			 if vm.fetchIsActive && vm.cards.isEmpty{
 				LoadingView()
-			 }else{
-				if let error = vm.errorState{
-				  CardErrorHandlingView(error: error) {
+			 }else if let error = vm.errorState{
+				CardErrorHandlingView(
+				  error: error,
+				  retryAction: {
 					 vm.fetchCards()
+				  },
+				  reshuffleAction: {
+					 vm.reshuffleViewed()
+				  },
+				  selectCategoriesAction: {
+					 NavigationManager.shared.secondary = .category
 				  }
-				}else{
-				  VStack{
-					 SlideView()
-						.environment(vm)
-				  }
+				)
+			 }else{
+				VStack{
+				  SlideView()
+					 .environment(vm)
 				}
 			 }
 		  }

@@ -28,6 +28,7 @@ struct ArchiveView: View {
 						.environment(vm)
 				  }
 				}
+				.padding(5)
 			 }
 		  }
 		}

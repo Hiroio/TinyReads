@@ -10,73 +10,84 @@ import SwiftUI
 struct CategoriesView: View {
   @Environment(UserDefaultsManager.self) var userDefaults
   @Environment(ThemeManager.self) var themeManager
+  @Environment(NavigationManager.self) var navigationManager
+  
   let secondary: Bool
+  
   init(secondary: Bool = false){
 	 self.secondary = secondary
   }
+  
   var body: some View {
-		ZStack{
-		  let assets = themeManager.themeAssets
-		  
-		  assets.background.ignoresSafeArea()
-		  VStack{
-			 Text("Select Your Interests")
-				.title()
-			 ScrollView{
-				LazyVGrid(columns: Array(repeating: .init(spacing: 20), count: 2), spacing: 0) {
-				  ForEach(ReadCategories.allCases){item in
-					 let active = userDefaults.selectedCategories.contains(item.rawValue)
-					 Button{
-						userDefaults.toggleCategory(item)
-					 }label:{
-						Text(item.rawValue.capitalized)
-						  .font(.title3.weight(.medium))
-						  .fontDesign(.serif)
-						  .foregroundStyle( active ? assets.accent : assets.primary )
-						  .frame(maxWidth: .infinity, maxHeight: .infinity)
-						  .aspectRatio(1, contentMode: .fit)
-						  .background(
-							 Image("backGroundCard")
-								.resizable()
-								.scaledToFill()
-								.shadow(color: assets.accent, radius: active ? 10 : 0)
-						  )
-						  .scaleEffect(active ? 1.05 : 1)
-						  .geometryGroup()
-						  .padding()
-						  .contentShape(.rect)
-					 }
-				  }
-				}
-				.padding(.horizontal)
-			 }
-		  }
-		  .overlay(
+	 ZStack(alignment: .topLeading) {
+		
+		VStack(spacing: 24) {
+		  Text("Select Your Interests")
+			 .title()
+			 .frame(maxWidth: .infinity)
+			 .overlay(
 				Button{
 				  NavigationManager.shared.secondary = nil
 				}label: {
-				  Image(systemName: "chevron.left")
-					 .font(.headline.weight(.light))
-					 .foregroundStyle(assets.primary)
-					 .padding(.horizontal)
-				}
-				  .opacity(secondary ? 1 : 0)
-				  .allowsHitTesting(secondary)
-				,
-				alignment: .topLeading
-		  )
+				  Image(systemName: "xmark")
+					 .accent()
+				},
+				alignment: .leading
+			 )
+			 .padding()
+		  
+		  categoryList
 		}
-    }
-  
-  func addCategory(_ item: ReadCategories){
-	 var array = UserDefaults.standard.array(forKey: "selectedCategories") as? [String] ?? []
-	 if array.contains(item.rawValue){
-		array.removeAll(where: {$0 == item.rawValue})
-	 }else{
-		array.append(item.rawValue)
+		.padding()
+		.padding(.top, 20)
+		.background {
+		  Image(themeManager.themeAssets.backCard)
+			 .resizable()
+			 .allowsHitTesting(false)
+		}
 	 }
+	 .animation(.easeInOut, value: userDefaults.selectedCategories)
+    }
+}
+
+// MARK: - Components
+private extension CategoriesView {
+  // Categories title list
+  var categoryList: some View {
+	 ScrollView {
+		VStack(spacing: 18) {
+		  ForEach(ReadCategories.allCases) { item in
+			 categoryRow(item)
+		  }
+		}
+		.padding()
+		.frame(maxWidth: .infinity)
+	 }
+	 .scrollIndicators(.hidden)
+	 .clipShape(.rect)
+	 .scaledToFit()
+	 .frame(height: 450)
+  }
+  
+  // Category title
+  func categoryRow(_ item: ReadCategories) -> some View {
+	 let assets = themeManager.themeAssets
+	 let active = userDefaults.selectedCategories.contains(item.rawValue)
 	 
-	 self.userDefaults.selectedCategories = array
+	 return Button {
+		userDefaults.toggleCategory(item)
+	 } label: {
+		Text(item.rawValue.capitalized)
+		  .font(.title2.weight(.medium))
+		  .fontDesign(.serif)
+		  .strikethrough(!active, color: assets.secondary)
+		  .foregroundStyle(active ? assets.accent : assets.secondary)
+		  .opacity(active ? 1 : 0.55)
+		  .frame(maxWidth: .infinity)
+		  .padding(.vertical, 4)
+		  .contentShape(.rect)
+	 }
+	 .buttonStyle(.plain)
   }
 }
 
@@ -84,4 +95,5 @@ struct CategoriesView: View {
     CategoriesView(secondary: true)
 	 .environment(ThemeManager())
 	 .environment(UserDefaultsManager.shared)
+	 .environment(NavigationManager.shared)
 }

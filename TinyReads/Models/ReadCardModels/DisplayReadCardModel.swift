@@ -34,4 +34,13 @@ enum ReadCardDisplayStatus: Equatable {
 		"Archived"
 	 }
   }
+  
+  var backCard: String{
+	 switch self{
+	 case .dismissed:
+		"DismissedBack"
+	 default:
+		"SavedBack"
+	 }
+  }
 }

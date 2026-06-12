@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SlideView: View {
   @Environment(ThemeManager.self) var themeManager
+  @Environment(NavigationManager.self) var navigationManager
   @Environment(CardSliderViewModel.self) var vm
   @State private var dragAmount: CGFloat = .zero
   
@@ -28,6 +29,10 @@ struct SlideView: View {
 			 .opacity(isTopCard ? 1.0 : backCardOpacity)
 			 .zIndex(isTopCard ? 2 : 1)
 			 .gesture(isTopCard ? dragGesture(cardId: card.id) : nil)
+			 .onTapGesture {
+				guard isTopCard, abs(dragAmount) < 2 else { return }
+				navigationManager.article = vm.articleRoute(for: card.id)
+			 }
 		}
 		 }
 		 .overlay(alignment: slideHint?.alignment ?? .topTrailing) {

@@ -11,10 +11,19 @@ struct CardErrorHandlingView: View {
   @Environment(ThemeManager.self) var themeManager
   let error: CardError
   let retryAction: () -> Void
+  let reshuffleAction: () -> Void
+  let selectCategoriesAction: () -> Void
 
-  init(error: CardError, retryAction: @escaping () -> Void = {}) {
+  init(
+	 error: CardError,
+	 retryAction: @escaping () -> Void = {},
+	 reshuffleAction: @escaping () -> Void = {},
+	 selectCategoriesAction: @escaping () -> Void = {}
+  ) {
 	 self.error = error
 	 self.retryAction = retryAction
+	 self.reshuffleAction = reshuffleAction
+	 self.selectCategoriesAction = selectCategoriesAction
   }
 
     var body: some View {
@@ -34,18 +43,22 @@ struct CardErrorHandlingView: View {
 				  .secondary()
 				  .multilineTextAlignment(.center)
 			 }
-			 Button {
-				switch error {
-				case .badInternetConnection:
-				  retryAction()
-				case .somethingWentWrong:
-				  retryAction()
-				case .cardNoLeft:
-				  NavigationManager.shared.secondary = .category
+			 VStack(spacing: 12) {
+				Button {
+				  primaryAction()
+				} label: {
+				  Text(error.primaryButtonTitle)
+					 .accent(weight: .semibold)
 				}
-			 } label: {
-				Text(error.buttonTitle)
-				  .accent(weight: .semibold)
+				
+				if let secondaryButtonTitle = error.secondaryButtonTitle {
+				  Button {
+					 selectCategoriesAction()
+				  } label: {
+					 Text(secondaryButtonTitle)
+						.secondary(weight: .semibold)
+				  }
+				}
 			 }
 		  }
 		  .padding()
@@ -56,6 +69,17 @@ struct CardErrorHandlingView: View {
 				.scaledToFit()
 		  )
 	    }
+  
+  private func primaryAction() {
+	 switch error {
+	 case .badInternetConnection, .somethingWentWrong:
+		retryAction()
+	 case .cardNoLeft:
+		reshuffleAction()
+	 case .noCategories:
+		selectCategoriesAction()
+	 }
+  }
 }
 
 #Preview {

@@ -12,10 +12,12 @@ import Foundation
 final class CardSliderViewModel{
   var cards: [DisplayReadCard] = []
   var errorState: CardError?
-  var loading: Bool = false
+  var fetchIsActive: Bool = false
   var deckMode: DeckMode = .freshOnly
   
   let deckManager = ReadsDeckManager.shared
+  private let loadMoreThreshold = 1
+  
   init(){
 	 fetchCards()
   }
@@ -24,18 +26,32 @@ final class CardSliderViewModel{
 	 cards.filter({$0.status != ReadCardDisplayStatus.fresh}).count
   }
   
+  var hasSelectedCategories: Bool {
+	 !deckManager.categories.isEmpty
+  }
+  
 }
 
 // MARK: - Deck Loading
 extension CardSliderViewModel {
   // Fetch cards
   func fetchCards() {
-	 loading = true
+	 fetchIsActive = true
 	 errorState = nil
+	 
+	 guard hasSelectedCategories else {
+		cards = []
+		errorState = .noCategories
+		fetchIsActive = false
+		return
+	 }
+	 
 	 guard deckManager.reads.isEmpty else {
 		syncCardsFromDeck()
-		self.errorState = errorState(for: cards)
-		self.loading = false
+		self.fetchIsActive = false
+		if !keepDeckAliveIfNeeded(), !fetchIsActive {
+		  self.errorState = errorState(for: cards)
+		}
 		return
 	 }
 	 
@@ -45,13 +61,15 @@ extension CardSliderViewModel {
 		  
 		  await MainActor.run {
 			 self.syncCardsFromDeck()
-			 self.errorState = self.errorState(for: self.cards)
-			 self.loading = false
+			 self.fetchIsActive = false
+			 if !self.keepDeckAliveIfNeeded(), !self.fetchIsActive {
+				self.errorState = self.errorState(for: self.cards)
+			 }
 		  }
 		}catch{
 		  await MainActor.run {
 			 self.errorState = self.errorState(for: error)
-			 self.loading = false
+			 self.fetchIsActive = false
 		  }
 		}
 	 }
@@ -59,9 +77,15 @@ extension CardSliderViewModel {
   
   // Reload cards
   func reloadCards() async {
-	 loading = true
+	 fetchIsActive = true
 	 errorState = nil
 	 self.cards = []
+	 
+	 guard hasSelectedCategories else {
+		self.errorState = .noCategories
+		self.fetchIsActive = false
+		return
+	 }
 	 
 	 do{
 		try await self.deckManager.reloadForSelectedCategories()
@@ -69,12 +93,12 @@ extension CardSliderViewModel {
 		await MainActor.run {
 		  self.syncCardsFromDeck()
 		  self.errorState = self.errorState(for: self.cards)
-		  self.loading = false
+		  self.fetchIsActive = false
 		}
 	 }catch{
 		await MainActor.run {
 		  self.errorState = self.errorState(for: error)
-		  self.loading = false
+		  self.fetchIsActive = false
 		}
 	 }
 	 
@@ -94,6 +118,46 @@ extension CardSliderViewModel {
 	 self.deckMode = deckMode == .freshOnly ? .repeatOld : .freshOnly
 	 
 	 syncCardsFromDeck()
+	 if !keepDeckAliveIfNeeded(), !fetchIsActive {
+		errorState = errorState(for: cards)
+	 }
+  }
+  
+  func reshuffleViewed() {
+	 deckMode = .repeatOld
+	 syncCardsFromDeck()
+	 errorState = errorState(for: cards)
+  }
+  
+  // Load next batch when fresh deck is almost empty
+  @discardableResult
+  private func keepDeckAliveIfNeeded() -> Bool {
+	 guard deckMode == .freshOnly else { return false }
+	 guard hasSelectedCategories else { return false }
+	 guard !fetchIsActive else { return false }
+	 guard cards.count <= loadMoreThreshold else { return false }
+	 
+	 fetchIsActive = true
+	 errorState = nil
+	 
+	 Task {
+		do {
+		  try await deckManager.loadMoreReads()
+		  
+		  await MainActor.run {
+			 self.syncCardsFromDeck()
+			 self.fetchIsActive = false
+			 self.errorState = self.errorState(for: self.cards)
+		  }
+		} catch {
+		  await MainActor.run {
+			 self.fetchIsActive = false
+			 self.errorState = self.cards.isEmpty ? self.errorState(for: error) : nil
+		  }
+		}
+	 }
+	 
+	 return true
   }
 }
 
@@ -107,6 +171,9 @@ extension CardSliderViewModel {
 	 cards.remove(at: index)
 	 deckManager.removeFromDeck(id)
 	 deckManager.dismissCard(card)
+	 if !keepDeckAliveIfNeeded(), !fetchIsActive {
+		errorState = errorState(for: cards)
+	 }
   }
   
   // Right Swipe
@@ -117,6 +184,30 @@ extension CardSliderViewModel {
 	 cards.remove(at: index)
 	 deckManager.removeFromDeck(id)
 	 deckManager.saveCard(card)
+	 if !keepDeckAliveIfNeeded(), !fetchIsActive {
+		errorState = errorState(for: cards)
+	 }
+  }
+  
+  func articleRoute(for id: String) -> ArticleRoute? {
+	 guard let displayCard = cards.first(where: { $0.id == id }) else { return nil }
+	 
+	 return ArticleRoute(
+		article: displayCard.card,
+		onInteractionChanged: { [weak self] in
+		  self?.onArticleInteractionChange(id)
+		},
+		isAbleToInteract: displayCard.status
+	 )
+  }
+  
+  func onArticleInteractionChange(_ id: String) {
+	 deckManager.applyInteractionChange(id)
+	 deckManager.removeFromDeck(id)
+	 syncCardsFromDeck()
+	 if !keepDeckAliveIfNeeded(), !fetchIsActive {
+		errorState = errorState(for: cards)
+	 }
   }
 }
 
@@ -156,6 +247,7 @@ enum CardError: Error, LocalizedError{
   case badInternetConnection
   case somethingWentWrong
   case cardNoLeft
+  case noCategories
 
   var title: String {
 	 switch self {
@@ -165,6 +257,8 @@ enum CardError: Error, LocalizedError{
 		"Something went wrong"
 	 case .cardNoLeft:
 		"No cards left"
+	 case .noCategories:
+		"Select categories"
 	 }
   }
 
@@ -176,6 +270,8 @@ enum CardError: Error, LocalizedError{
 		"We could not prepare your reads right now."
 	 case .cardNoLeft:
 		"You reached the end of this shelf for now."
+	 case .noCategories:
+		"Choose a few shelves to prepare your reading deck."
 	 }
   }
 
@@ -187,15 +283,28 @@ enum CardError: Error, LocalizedError{
 		"SomethingWentWrong"
 	 case .cardNoLeft:
 		"CardNoLeft"
+	 case .noCategories:
+		"CardNoLeft"
 	 }
   }
 
-  var buttonTitle: String {
+  var primaryButtonTitle: String {
 	 switch self {
 	 case .badInternetConnection, .somethingWentWrong:
 		"Try again"
 	 case .cardNoLeft:
-		"Select Category"
+		"Reshuffle viewed"
+	 case .noCategories:
+		"Select Categories"
+	 }
+  }
+  
+  var secondaryButtonTitle: String? {
+	 switch self {
+	 case .cardNoLeft:
+		"Change Categories"
+	 default:
+		nil
 	 }
   }
 }
