@@ -18,6 +18,7 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
   
   private let selectedCategoriesKey = "selectedCategories"
   private let selectedColorThemeKey = "selectedColorTheme"
+  private let onBoardingKey = "onBoardingCompletion"
   
   var selectedCategories: [String] {
 	 didSet {
@@ -31,6 +32,12 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
 	 }
   }
   
+  var onBoardingCompletion: Bool{
+	 didSet{
+		UserDefaults.standard.set(onBoardingCompletion, forKey: onBoardingKey)
+	 }
+  }
+  
   
   
   private init() {
@@ -39,6 +46,9 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
 	 
 	 let colorTheme = UserDefaults.standard.string(forKey: selectedColorThemeKey) ?? ""
 	 self.selectedColorTheme = AppTheme(rawValue: colorTheme) ?? .system
+	 
+	 let onBoardingCompletion = UserDefaults.standard.bool(forKey: onBoardingKey)
+	 self.onBoardingCompletion = onBoardingCompletion
   }
   
   func toggleCategory(_ category: ReadCategories) {

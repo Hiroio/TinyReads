@@ -8,21 +8,35 @@
 import SwiftUI
 
 struct SlideView: View {
-  @Environment(ThemeManager.self) var themeManager
-  @Environment(NavigationManager.self) var navigationManager
-  @Environment(CardSliderViewModel.self) var vm
+  let readArray: [DisplayReadCard]
+  let onSave: (String) -> ()
+  let onDismiss: (String) -> ()
+  let onTap: ((String) -> ())?
+  
   @State private var dragAmount: CGFloat = .zero
   
   private let swipeThreshold: CGFloat = 150
+  
+  init(
+	 readArray: [DisplayReadCard],
+	 onSave: @escaping (String) -> (),
+	 onDismiss: @escaping (String) -> (),
+	 onTap: ((String) -> ())? = nil
+  ) {
+	 self.readArray = readArray
+	 self.onSave = onSave
+	 self.onDismiss = onDismiss
+	 self.onTap = onTap
+  }
+  
   var body: some View {
-	 let assets = themeManager.themeAssets
 	 ZStack{
-		let activeTwo = Array(vm.cards.prefix(2))
+		let activeTwo = Array(readArray.prefix(2))
 		
 		ForEach(activeTwo, id: \.id) { card in
-		  let isTopCard = card.id == vm.cards.first?.id
+		  let isTopCard = card.id == readArray.first?.id
 		  
-			  CardView(displayCard: card)
+		  CardView(displayCard: card, showsTapHint: onTap != nil)
 			 .padding(20)
 			 .offset(x: isTopCard ? dragAmount / 2 : 0)
 			 .scaleEffect(isTopCard ? 1.0 : backCardScale)
@@ -31,24 +45,41 @@ struct SlideView: View {
 			 .gesture(isTopCard ? dragGesture(cardId: card.id) : nil)
 			 .onTapGesture {
 				guard isTopCard, abs(dragAmount) < 2 else { return }
-				navigationManager.article = vm.articleRoute(for: card.id)
+				onTap?(card.id)
 			 }
 		}
-		 }
-		 .overlay(alignment: slideHint?.alignment ?? .topTrailing) {
-			if let slideHint {
-			  Image(systemName: slideHint.iconName)
-				 .font(.largeTitle)
-				 .foregroundStyle(slideHint.color)
-				 .padding()
-				 .opacity(slideHintOpacity)
-				 .scaleEffect(0.8 + slideHintOpacity * 0.2)
-				 .zIndex(1)
-			}
-		 }
-		 .animation(.interactiveSpring(response: 0.3, dampingFraction: 0.75), value: dragAmount)
-	  }
-  
+	 }
+	 .overlay(alignment: slideHint?.alignment ?? .topTrailing) {
+		if let slideHint {
+		  Image(slideHint.iconName)
+			 .resizable()
+			 .scaledToFit()
+			 .frame(width: 80)
+			 .padding()
+			 .opacity(slideHintOpacity)
+			 .scaleEffect(0.8 + slideHintOpacity * 0.3)
+			 .zIndex(1)
+			 .offset(y: -80)
+		}
+	 }
+	 .animation(.interactiveSpring(response: 0.3, dampingFraction: 0.75), value: dragAmount)
+  }
+}
+
+#Preview {
+  SlideView(
+	 readArray: DisplayReadCard.onBoardingCard,
+	 onSave: { _ in },
+	 onDismiss: { _ in },
+	 onTap: nil
+  )
+	 .environment(ThemeManager())
+}
+
+
+
+
+extension SlideView{
   private func dragGesture(cardId: String) -> some Gesture {
 	 DragGesture()
 		.onChanged { value in
@@ -69,14 +100,14 @@ struct SlideView: View {
 				var transaction = Transaction()
 				transaction.disablesAnimations = true
 				
-					withTransaction(transaction) {
-					  if width > 0 {
-						 vm.onSave(cardId)
-					  } else {
-						 vm.onDismiss(cardId)
-					  }
-					  dragAmount = 0
-					}
+				withTransaction(transaction) {
+				  if width > 0 {
+					 onSave(cardId)
+				  } else {
+					 onDismiss(cardId)
+				  }
+				  dragAmount = 0
+				}
 			 }
 		  } else {
 			 withAnimation(.interactiveSpring()) {
@@ -94,32 +125,25 @@ struct SlideView: View {
 	 return startScale + (progress * (1.0 - startScale))
   }
   
-	  var backCardOpacity: Double {
-		 let startOpacity: Double = 0.4
-		 let opacityThreshold = swipeThreshold * 2
-		 let progress = min(abs(dragAmount) / opacityThreshold, 1.0)
-		 
-		 return startOpacity + (progress * (1.0 - startOpacity))
-	  }
-
+  var backCardOpacity: Double {
+	 let startOpacity: Double = 0.4
+	 let opacityThreshold = swipeThreshold * 2
+	 let progress = min(abs(dragAmount) / opacityThreshold, 1.0)
+	 
+	 return startOpacity + (progress * (1.0 - startOpacity))
+  }
+  
   private var slideHint: SlideHint? {
-    if dragAmount > 50 {
-      .archive
-    } else if dragAmount < -50 {
-      .dismiss
-    } else {
-      nil
-    }
+	 if dragAmount > 50 {
+		.archive
+	 } else if dragAmount < -50 {
+		.dismiss
+	 } else {
+		nil
+	 }
   }
-
+  
   private var slideHintOpacity: Double {
-    min(max((abs(dragAmount) - 50) / 80, 0), 1)
+	 min(max((abs(dragAmount) - 50) / 80, 0), 1)
   }
-}
-
-#Preview {
-  SlideView()
-	 .environment(CardSliderViewModel())
-	 .environment(ThemeManager())
-	 .environment(NavigationManager.shared)
 }

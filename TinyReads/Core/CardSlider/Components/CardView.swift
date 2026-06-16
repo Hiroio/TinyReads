@@ -10,6 +10,12 @@ import SwiftUI
 struct CardView: View {
   @Environment(ThemeManager.self) var themeManager
   let displayCard: DisplayReadCard
+  let showsTapHint: Bool
+  
+  init(displayCard: DisplayReadCard, showsTapHint: Bool = true) {
+	 self.displayCard = displayCard
+	 self.showsTapHint = showsTapHint
+  }
   
   private var card: ReadCardModel {
 	 displayCard.card
@@ -29,6 +35,7 @@ struct CardView: View {
 				.allowsTightening(true)
 		  }
 		  .multilineTextAlignment(.center)
+		  .frame(maxWidth: .infinity)
 		  .padding(30)
 		  
 		  VStack{
@@ -39,11 +46,13 @@ struct CardView: View {
 		  .foregroundStyle(themeManager.themeAssets.secondary)
 		  .padding(.bottom)
 		  
-		  Text("*Tap to read*")
-			 .font(.caption)
-			 .fontDesign(.serif)
-			 .foregroundStyle(themeManager.themeAssets.accent)
-			 .allowsHitTesting(false)
+		  if showsTapHint {
+			 Text("*Tap to read*")
+				.font(.caption)
+				.fontDesign(.serif)
+				.foregroundStyle(themeManager.themeAssets.accent)
+				.allowsHitTesting(false)
+		  }
 		  
 		  if displayCard.status != .fresh {
 			 Text(displayCard.status.title)
@@ -53,7 +62,8 @@ struct CardView: View {
 		  }
 		}
 		.padding()
-		.frame(maxWidth: .infinity)
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
+		.aspectRatio(0.7, contentMode: .fit)
 		.background(
 		  Image(themeManager.themeAssets.backCard)
 			 .resizable(resizingMode: .stretch)

@@ -14,9 +14,9 @@ enum SlideHint {
   var iconName: String {
     switch self {
     case .archive:
-      "archivebox"
+      "SaveAction"
     case .dismiss:
-      "xmark"
+      "DismissAction"
     }
   }
 
