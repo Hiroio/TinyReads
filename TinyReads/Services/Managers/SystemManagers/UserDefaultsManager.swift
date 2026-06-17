@@ -18,6 +18,7 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
   
   private let selectedCategoriesKey = "selectedCategories"
   private let selectedColorThemeKey = "selectedColorTheme"
+  private let selectedLanguageKey = "selectedLanguage"
   private let onBoardingKey = "onBoardingCompletion"
   
   var selectedCategories: [String] {
@@ -38,6 +39,12 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
 	 }
   }
   
+  var selectedLanguage: LanguageEnum{
+	 didSet{
+		UserDefaults.standard.set(selectedLanguage.rawValue, forKey: selectedLanguageKey)
+	 }
+  }
+  
   
   
   private init() {
@@ -49,8 +56,17 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
 	 
 	 let onBoardingCompletion = UserDefaults.standard.bool(forKey: onBoardingKey)
 	 self.onBoardingCompletion = onBoardingCompletion
+	 
+	 let selectedLanguage = UserDefaults.standard.string(forKey: selectedLanguageKey) ?? ""
+	 let language = LanguageEnum(rawValue: selectedLanguage) ?? .en
+	 self.selectedLanguage = language
   }
   
+}
+
+
+extension UserDefaultsManager{
+//  MARK: Toggling Category
   func toggleCategory(_ category: ReadCategories) {
 	 if selectedCategories.contains(category.rawValue) {
 		selectedCategories.removeAll { $0 == category.rawValue }
@@ -58,8 +74,19 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
 		selectedCategories.append(category.rawValue)
 	 }
   }
+  
+  
+//  MARK: For Category Numbers
+  /// getting number
+  func getCategoryReadedCount(for category: ReadCategories) -> Int{
+	 UserDefaults.standard.integer(forKey: category.userDefaultKey)
+  }
+  /// setting number
+  func setCategoryReadedCount(for category: String, index: Int){
+	 guard let category = ReadCategories(rawValue: category), getCategoryReadedCount(for: category) < index else { return }
+	 UserDefaults.standard.set(index, forKey: category.userDefaultKey)
+  }
 }
-
 
 
 // MARK: MOCK USERDEFAULT FOR TESTING

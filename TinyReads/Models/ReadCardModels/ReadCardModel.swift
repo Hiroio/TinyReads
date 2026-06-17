@@ -48,3 +48,25 @@ extension ReadCardModel: Equatable {
 	 )
   }
 }
+
+
+
+
+
+// MARK: Category Enum
+enum ReadCategories: String, CaseIterable, Identifiable{
+  case science, history, culture, psychology, philosophy, nature, finance, health, space
+  
+  var id: String { self.rawValue}
+  
+  var limit: Int{
+	 switch self {
+	 default:
+		100
+	 }
+  }
+  
+  var userDefaultKey: String{
+	 "\(self.rawValue)_key"
+  }
+}

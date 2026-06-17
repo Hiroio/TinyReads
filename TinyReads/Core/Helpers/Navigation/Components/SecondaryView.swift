@@ -15,7 +15,7 @@ struct SecondaryView: View {
 		  case .profile:
 			 ProfileView()
 		  case .category:
-				CategoriesView(secondary: true)
+				CategoriesView()
 		  case .archive:
 			 ArchiveView()
 		  case .dismissed:

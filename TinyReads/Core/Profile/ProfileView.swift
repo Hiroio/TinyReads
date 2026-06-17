@@ -34,7 +34,7 @@ struct ProfileView: View {
 			 }
 		  }
 		  .padding(.vertical)
-
+		  
 		  ProfileStatsView()
 			 .environment(vm)
 		  
@@ -45,7 +45,7 @@ struct ProfileView: View {
 		.background(
 		  Image(themeManager.themeAssets.readerCard)
 			 .resizable()
-			 
+		  
 		)
 		.padding(.horizontal, 10)
 		
@@ -58,21 +58,30 @@ struct ProfileView: View {
 			 }
 			 switch profileActionCard {
 			 case .language:
-				//			 TODO: LANGUAGE LIST
-				EmptyView()
+				ProfileLanguageView() {
+				  withAnimation{
+					 self.profileActionCard = nil
+				  }
+				}
+				.zIndex(1)
+				.transition(.opacity)
 			 case .theme:
 				ThemeSelectorView(){
 				  withAnimation{
 					 self.profileActionCard = nil
 				  }
 				}
-				  .zIndex(1)
-				  .transition(.opacity)
+				.zIndex(1)
+				.transition(.opacity)
 			 case .categories:
-				  CategoriesView()
-					 .zIndex(1)
-					 .transition(.opacity)
+				CategoriesView(secondary: false) {
+				  withAnimation{
+					 self.profileActionCard = nil
+				  }
 				}
+				.zIndex(1)
+				.transition(.opacity)
+			 }
 		  }
 		  .allowsHitTesting(self.profileActionCard != nil)
 		}
@@ -80,7 +89,7 @@ struct ProfileView: View {
   }
   
   
-//  Category showcase:
+  //  Category showcase:
   private var CategoryShowCase: some View{
 	 VStack{
 		LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)){
@@ -95,7 +104,7 @@ struct ProfileView: View {
 
 
 #Preview {
-    ProfileView()
+  ProfileView()
 	 .environment(ThemeManager())
 	 .environment(NavigationManager.shared)
 	 .environment(UserDefaultsManager.shared)

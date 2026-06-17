@@ -14,8 +14,9 @@ class JSONUploader{
   var statusMessage: String = "ready to start"
   
   func startUpload() {
-			 uploadLocalJSONToFirestore(fileName: "Ukraine_Culture")
-			 uploadLocalJSONToFirestore(fileName: "English_Culture")
+			 uploadLocalJSONToFirestore(fileName: "English_Space")
+			 uploadLocalJSONToFirestore(fileName: "Ukraine_Space")
+
 		}
 		
 		func uploadLocalJSONToFirestore(fileName: String) {

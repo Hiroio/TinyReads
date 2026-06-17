@@ -36,10 +36,10 @@ struct OnboardingView: View {
 			 }
 			 .onboardingPage(isVisible: step == .practice)
 			 
-			 CategoriesView()
+			 CategoriesView(secondary: false)
 				.onboardingPage(isVisible: step == .categories)
 		  }
-		  let selectedCategoryActive = userDefaults.selectedCategories.count > 0
+		  let selectedCategoryActive = userDefaults.selectedCategories.count < 0
 		  if step == .categories{
 			 Button{
 				userDefaults.onBoardingCompletion = true
@@ -53,7 +53,7 @@ struct OnboardingView: View {
 				  )
 			 }
 			 .disabled(selectedCategoryActive)
-			 .opacity(selectedCategoryActive ? 1 : 0.5)
+			 .opacity(selectedCategoryActive ? 0.5 : 1)
 		  }
 		}
 		.padding(.top, 32)

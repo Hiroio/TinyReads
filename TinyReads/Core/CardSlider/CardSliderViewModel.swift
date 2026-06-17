@@ -16,6 +16,7 @@ final class CardSliderViewModel{
   var deckMode: DeckMode = .freshOnly
   
   let deckManager = ReadsDeckManager.shared
+  private let userDefaultManager = UserDefaultsManager.shared
   private let loadMoreThreshold = 1
   
   init(){
@@ -171,6 +172,7 @@ extension CardSliderViewModel {
 	 cards.remove(at: index)
 	 deckManager.removeFromDeck(id)
 	 deckManager.dismissCard(card)
+	 userDefaultManager.setCategoryReadedCount(for: card.categoryId, index: card.sortIndex)
 	 if !keepDeckAliveIfNeeded(), !fetchIsActive {
 		errorState = errorState(for: cards)
 	 }
@@ -184,6 +186,7 @@ extension CardSliderViewModel {
 	 cards.remove(at: index)
 	 deckManager.removeFromDeck(id)
 	 deckManager.saveCard(card)
+	 userDefaultManager.setCategoryReadedCount(for: card.categoryId, index: card.sortIndex)
 	 if !keepDeckAliveIfNeeded(), !fetchIsActive {
 		errorState = errorState(for: cards)
 	 }

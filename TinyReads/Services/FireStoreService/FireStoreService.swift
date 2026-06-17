@@ -105,17 +105,6 @@ extension FireStoreService{
 }
 
 
-
-enum ReadCategories: String, CaseIterable, Identifiable{
-  case science, history, culture, psychology, philosophy
-  
-  var id: String { self.rawValue}
-}
-
-
-
-
-
 import Combine
 private extension Array {
   func chunked(into size: Int) -> [[Element]] {
