@@ -8,10 +8,12 @@
 import Foundation
 
 
+@MainActor
 @Observable
 final class ArticleViewModel{
   var article: ReadCardModel
   var interactionState: ReadCardDisplayStatus
+  var showState: AnimationCompletionEnum? = nil
   
   private let coreData: CoreDataService
   
@@ -26,8 +28,10 @@ final class ArticleViewModel{
 	 let interaction = ReadInteractionModel(readCard: article)
 	 if self.coreData.markRead(interaction) {
 		self.interactionState = .read
+		showAnimation(true)
 		return true
 	 }else{
+		showAnimation(false)
 		return false
 	 }
   }
@@ -37,9 +41,23 @@ final class ArticleViewModel{
 	 
 	 if self.coreData.markDismissed(interaction){
 		self.interactionState = .dismissed
+		showAnimation(true)
 		return true
 	 }else{
+		showAnimation(false)
 		return false
+	 }
+  }
+  
+  func showAnimation(_ state: Bool){
+	 if state{
+		self.showState = .success
+	 }else{
+		self.showState = .failure
+	 }
+	 Task{
+		try await Task.sleep(for: .seconds(state ? 1.1 : 1.7))
+		self.showState = nil
 	 }
   }
 }

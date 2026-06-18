@@ -42,7 +42,7 @@ final class ReadsDeckManager{
   }
   
   var freshDisplayReads: [DisplayReadCard] {
-	 makeDisplayReads(from: reads).filter { $0.card.isActive && $0.status == .fresh }
+	 makeDisplayReads(from: reads).filter { $0.card.isActive && $0.status == .fresh }.sorted(by: {$0.card.sortIndex < $1.card.sortIndex})
   }
   
   var repeatDisplayReads: [DisplayReadCard] {

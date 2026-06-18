@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 nonisolated struct ReadCardModel: Identifiable, Codable {
 	 let id: String
@@ -58,6 +59,29 @@ enum ReadCategories: String, CaseIterable, Identifiable{
   case science, history, culture, psychology, philosophy, nature, finance, health, space
   
   var id: String { self.rawValue}
+  
+  var title: LocalizedStringKey {
+	 switch self {
+	 case .science:
+		"Science"
+	 case .history:
+		"History"
+	 case .culture:
+		"Culture"
+	 case .psychology:
+		"Psychology"
+	 case .philosophy:
+		"Philosophy"
+	 case .nature:
+		"Nature"
+	 case .finance:
+		"Finance"
+	 case .health:
+		"Health"
+	 case .space:
+		"Space"
+	 }
+  }
   
   var limit: Int{
 	 switch self {

@@ -30,10 +30,10 @@ struct ArticleBottomBar: View {
 						.background(
 						  Circle()
 							 .fill(themeManager.themeAssets.card)
-							 .shadow(color: .red, radius: vm.interactionState == .dismissed ? 1 : 0)
+//							 .shadow(color: Color.dismissD, radius: vm.interactionState == .dismissed ? 1 : 0)
 						)
 					 Text("Dismiss")
-						.foregroundStyle(.red)
+						.foregroundStyle(Color.dismissD)
 						.secondary()
 				  }
 				}
@@ -54,10 +54,10 @@ struct ArticleBottomBar: View {
 						.background(
 						  Circle()
 							 .fill(themeManager.themeAssets.card)
-							 .shadow(color: .green, radius: vm.interactionState == .read ? 1 : 0)
+//							 .shadow(color: .green, radius: vm.interactionState == .read ? 1 : 0)
 						)
 					Text("Read")
-						.foregroundStyle(.green)
+						.foregroundStyle(Color.acceptD)
 						.secondary()
 				  }
 				  

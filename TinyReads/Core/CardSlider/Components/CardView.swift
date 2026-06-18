@@ -68,6 +68,8 @@ struct CardView: View {
 		  Image(themeManager.themeAssets.backCard)
 			 .resizable(resizingMode: .stretch)
 		)
+		.compositingGroup()
+		.shadow(radius: 5)
   }
 }
 

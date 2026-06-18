@@ -10,18 +10,22 @@ import SwiftUI
 struct ProfileStatsView: View {
   @Environment(ProfileViewModel.self) var vm
     var body: some View {
-		VStack(spacing: 10){
-		  Text("Statistic")
-			 .title()
-		  HStack(spacing: 5){
-			 statCard(title: "Skiped", value: "\(vm.skippedCardsCount)")
-			 statCard(title: "Saved", value: "\(vm.savedCardsCount)")
-			 statCard(title: "Read", value: "\(vm.readedCardsCount)")
+		VStack(alignment: .leading, spacing: 10){
+		  Text("Reader Information:")
+			 .headline()
+			 .frame(maxWidth: .infinity, alignment: .leading)
+		  VStack(alignment: .leading, spacing: 5){
+			 statCard(title: "Dismissed Cards", value: "\(vm.skippedCardsCount)")
+			 statCard(title: "Saved Cards", value: "\(vm.savedCardsCount)")
+			 statCard(title: "Read Cards", value: "\(vm.readedCardsCount)")
 		  }
+		  .padding(.horizontal)
 		  HStack{
-			 Text("*Favorite Category*")
+			 Text("Favorite Category: ")
+				.headline()
 			 Text(vm.favoriteCategory)
 				.accent()
+				.italic()
 			 
 		  }
 		  .padding(.top, 5)
@@ -33,13 +37,14 @@ struct ProfileStatsView: View {
 
 @ViewBuilder
 func statCard(title: String, value: String) -> some View{
-  VStack{
+  HStack{
 	 Text("\(title):")
-		.headline(weight: .light)
+		.secondary(weight: .medium)
 	 Text("\(value)")
 		.accent()
+		.italic()
   }
-  .frame(maxWidth: .infinity)
+  .frame(maxWidth: .infinity, alignment: .leading)
   
 }
 

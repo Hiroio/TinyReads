@@ -111,7 +111,7 @@ extension CardSliderViewModel {
 	 case .freshOnly:
 		cards = deckManager.freshDisplayReads
 	 case .repeatOld:
-		cards = deckManager.repeatDisplayReads.shuffled()
+		cards = deckManager.repeatDisplayReads.sorted(by: {$0.card.sortIndex < $1.card.sortIndex})
 	 }
   }
   
@@ -242,88 +242,5 @@ private extension CardSliderViewModel {
 	 }
 
 	 return .somethingWentWrong
-  }
-}
-
-
-enum CardError: Error, LocalizedError{
-  case badInternetConnection
-  case somethingWentWrong
-  case cardNoLeft
-  case noCategories
-
-  var title: String {
-	 switch self {
-	 case .badInternetConnection:
-		"Bad internet connection"
-	 case .somethingWentWrong:
-		"Something went wrong"
-	 case .cardNoLeft:
-		"No cards left"
-	 case .noCategories:
-		"Select categories"
-	 }
-  }
-
-  var subtitle: String {
-	 switch self {
-	 case .badInternetConnection:
-		"Check your connection and try again."
-	 case .somethingWentWrong:
-		"We could not prepare your reads right now."
-	 case .cardNoLeft:
-		"You reached the end of this shelf for now."
-	 case .noCategories:
-		"Choose a few shelves to prepare your reading deck."
-	 }
-  }
-
-  var imageName: String {
-	 switch self {
-	 case .badInternetConnection:
-		"BadInternetConnection"
-	 case .somethingWentWrong:
-		"SomethingWentWrong"
-	 case .cardNoLeft:
-		"CardNoLeft"
-	 case .noCategories:
-		"CardNoLeft"
-	 }
-  }
-
-  var primaryButtonTitle: String {
-	 switch self {
-	 case .badInternetConnection, .somethingWentWrong:
-		"Try again"
-	 case .cardNoLeft:
-		"Reshuffle viewed"
-	 case .noCategories:
-		"Select Categories"
-	 }
-  }
-  
-  var secondaryButtonTitle: String? {
-	 switch self {
-	 case .cardNoLeft:
-		"Change Categories"
-	 default:
-		nil
-	 }
-  }
-}
-
-
-
-enum DeckMode {
-	 case freshOnly
-	 case repeatOld
-  
-  var image: String {
-	 switch self {
-	 case .freshOnly:
-		"newspaper"
-	 case .repeatOld:
-		"xmark.bin"
-	 }
   }
 }

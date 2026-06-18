@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PaperBackGround: View {
+  @Environment(ThemeManager.self) var themeManager
 	 private let assetWidth: CGFloat = 1051
 	 private let topAssetHeight: CGFloat = 310
 	 private let middleAssetHeight: CGFloat = 420
@@ -24,15 +25,15 @@ struct PaperBackGround: View {
 				)
 
 				VStack(spacing: 0) {
-					 Image("reader_paper_top_light")
+				  Image(themeManager.themeAssets.topArticleCard)
 						  .resizable()
 						  .frame(width: .infinity, height: topHeight)
 
-					 Image("reader_paper_middle_light")
+				  Image(themeManager.themeAssets.middleArticleCard)
 						  .resizable(resizingMode: .stretch)
 						  .frame(width: .infinity, height: middleHeight)
 
-					 Image("reader_paper_bottom_light")
+				  Image(themeManager.themeAssets.bottomArticleCard)
 						  .resizable()
 						  .frame(width: .infinity, height: bottomHeight)
 				}
@@ -43,4 +44,5 @@ struct PaperBackGround: View {
 
 #Preview {
     PaperBackGround()
+	 .environment(ThemeManager())
 }

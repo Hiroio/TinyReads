@@ -47,16 +47,6 @@ struct ReadInteractionModel: Identifiable, Codable {
   }
 }
 
-
-
-// Mistakes if needed
-enum ReadInteractionModelError: Error {
-  case missingId
-  case missingCategoryId
-  case missingLanguageCode
-}
-
-
 // Mapper for coreData.
 extension ReadInteractionModel {
   init(entity: ReadsEntity) throws {

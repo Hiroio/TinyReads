@@ -7,23 +7,13 @@
 
 import Foundation
 
-enum AppScreen{
-  case main, slide, archive, dismissed, publicCategories
-}
-enum SecondaryAppScreen{
-  case profile
-  case category
-  case dismissed
-  case archive
-}
-
 @Observable
 final class NavigationManager {
   static let shared = NavigationManager()
   
   private init(){}
   
-  var screen: AppScreen = .main
+  var loadingScreen: Bool = true
   var secondary: SecondaryAppScreen? = nil
   
   var article: ArticleRoute? = nil

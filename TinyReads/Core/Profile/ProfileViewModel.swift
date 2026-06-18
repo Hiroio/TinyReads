@@ -41,6 +41,10 @@ final class ProfileViewModel{
 	 
 	 let categories = readCards.map({ $0.categoryId })
 	 let count = categories.reduce(into: [:]) { $0[$1, default: 0] += 1}
-	 return count.max(by: {$0.value < $1.value})?.key.capitalized ?? "None"
+	 guard let favCategory = count.max(by: {$0.value < $1.value})?.key.capitalized, !favCategory.isEmpty else{
+		return "None"
+	 }
+	 
+	 return favCategory
   }
 }

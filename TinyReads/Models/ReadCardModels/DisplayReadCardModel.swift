@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct DisplayReadCard: Identifiable, Equatable {
 	 let card: ReadCardModel
@@ -22,7 +23,7 @@ enum ReadCardDisplayStatus: Equatable {
 	 case read
 	 case archived
   
-  var title: String {
+  var title: LocalizedStringKey {
 	 switch self {
 	 case .fresh:
 		"Fresh"

@@ -26,14 +26,3 @@ struct AppleSignInResultModel {
   let nonce: String
   let fullName: PersonNameComponents?
 }
-
-enum AuthServiceError: LocalizedError {
-  case missingCurrentUser
-
-  var errorDescription: String? {
-	 switch self {
-	 case .missingCurrentUser:
-		return "No authenticated Firebase user was found."
-	 }
-  }
-}

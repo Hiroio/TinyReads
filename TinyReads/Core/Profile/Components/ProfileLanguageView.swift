@@ -22,7 +22,7 @@ struct ProfileLanguageView: View {
 			 Button{
 				userDefault.selectedLanguage = item
 			 }label:{
-				Text(item.rawValue)
+				Text(item.title)
 				  .padding()
 				  .font(.title3.weight(.light))
 				  .fontDesign(.serif)

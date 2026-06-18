@@ -62,17 +62,16 @@ private extension CategoriesView {
   // Categories title list
   var categoryList: some View {
 	 ScrollView {
-		VStack(spacing: 18) {
+		VStack(spacing: 10) {
 		  ForEach(ReadCategories.allCases) { item in
 			 categoryRow(item)
 		  }
 		}
-		.padding()
+		.padding(30)
 		.frame(maxWidth: .infinity)
 	 }
 	 .scrollIndicators(.hidden)
 	 .clipShape(.rect)
-	 .scaledToFit()
 	 .frame(height: 450)
   }
   
@@ -85,7 +84,7 @@ private extension CategoriesView {
 		userDefaults.toggleCategory(item)
 	 } label: {
 		HStack(alignment: .bottom, spacing: 0){
-		  Text(item.rawValue.capitalized)
+		  Text(item.title)
 			 .fixedSize()
 		  Rectangle()
 			 .stroke(style: StrokeStyle(
@@ -97,6 +96,7 @@ private extension CategoriesView {
 			 .frame(height: 1)
 		  
 		  Text("\(userDefaults.getCategoryReadedCount(for: item))/\(item.limit)")
+			 .fixedSize()
 			 .secondary()
 		}
 		.font(.title2.weight(.light))
@@ -106,6 +106,7 @@ private extension CategoriesView {
 		.opacity(active ? 1 : 0.55)
 		.frame(maxWidth: .infinity)
 		.contentShape(.rect)
+		.padding(.horizontal)
 	 }
 	 .buttonStyle(.plain)
   }

@@ -19,35 +19,42 @@ struct ProfileView: View {
 		VStack(spacing: 0){
 		  
 		  HStack(alignment: .top){
-			 Image("ProfileImage")
+			 Image("ProfileImage\(themeManager.themeAssets.id)")
 				.resizable()
 				.scaledToFit()
-				.frame(width: 135)
+				.frame(width: 100)
+				.padding(5)
+				.background(
+				  RoundedRectangle(cornerRadius: 15)
+					 .stroke(themeManager.themeAssets.secondary.opacity(0.5), lineWidth: 2)
+				)
+				.padding()
 			 
 			 VStack{
 				Text("Reader Card")
-				  .title()
+				  .title(weight: .semibold)
 				  .frame(maxWidth: .infinity)
 				  .foregroundStyle(themeManager.themeAssets.primary)
-				
+				  .padding(.vertical)
+				Text("Active categories:")
+				  .secondary()
 				CategoryShowCase
 			 }
 		  }
-		  .padding(.vertical)
 		  
 		  ProfileStatsView()
 			 .environment(vm)
+			 
 		  
 		  ProfileActionBar(profileActionCard: $profileActionCard)
+			 .padding()
 		}
 		.padding()
 		.padding()
 		.background(
 		  Image(themeManager.themeAssets.readerCard)
 			 .resizable()
-		  
 		)
-		.padding(.horizontal, 10)
 		
 		
 		
@@ -94,7 +101,7 @@ struct ProfileView: View {
 	 VStack{
 		LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)){
 		  ForEach(userDefaultManager.selectedCategories, id: \.self){category in
-			 Text(category)
+			 Text("- \(category)")
 				.secondary()
 		  }
 		}

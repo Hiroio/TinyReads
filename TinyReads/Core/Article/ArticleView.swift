@@ -22,17 +22,14 @@ struct ArticleView: View {
 		VStack(spacing: 20){
 		  VStack(spacing: 10){
 			 Text(article.title)
-				.title()
+				.title(weight: .bold)
 			 Text(article.hook)
-				.padding(.horizontal, 1)
 				.secondary()
 		  }
 		  .multilineTextAlignment(.center)
 		  
 		  Text(article.body)
-			 .font(.subheadline.weight(.medium))
-			 .fontDesign(.serif)
-			 .foregroundStyle(.primary.opacity(0.88))
+			 .regular(weight: .medium)
 			 .lineSpacing(7)
 			 .padding(10)
 		  
@@ -94,6 +91,20 @@ struct ArticleView: View {
 		},
 		alignment: .topTrailing
 	 )
+	 .overlay {
+		Group{
+		  if let state = vm.showState {
+			 CompletedAnimation(state: state)
+				.padding()
+				.background(
+				  Image(themeManager.themeAssets.backSmallCard)
+					 .resizable()
+					 .scaledToFill()
+				)
+		  }
+		}
+	 }
+	 .animation(.easeInOut, value: vm.showState != nil)
   }
 }
 

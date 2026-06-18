@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum ArchiveState: String, CaseIterable, Identifiable {
   case saved, read
@@ -14,8 +15,13 @@ enum ArchiveState: String, CaseIterable, Identifiable {
 	 self.rawValue
   }
   
-  var text: String {
-	 self.rawValue.capitalized
+  var text: LocalizedStringKey {
+	 switch self {
+	 case .saved:
+		"Saved"
+	 case .read:
+		"Read"
+	 }
   }
   
   var cardStatus: ReadCardDisplayStatus {

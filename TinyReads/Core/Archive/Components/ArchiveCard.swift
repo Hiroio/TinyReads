@@ -23,8 +23,8 @@ struct ArchiveCard: View {
 	 }label: {
 		VStack{
 		  Text(read.title)
-			 .secondary()
-			 .padding(.horizontal)
+			 .secondary(weight: .bold)
+			 .padding(.horizontal, 30)
 			 .padding(.trailing)
 			 .multilineTextAlignment(.center)
 			 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -33,7 +33,9 @@ struct ArchiveCard: View {
 				Image("\(state.backCard)\(themeManager.appTheme == .dark ? "Dark" : "")")
 				  .resizable()
 				  .scaledToFit()
+				  
 			 )
+			 .shadow(radius: 3)
 			 .allowsTightening(true)
 		  
 		}
