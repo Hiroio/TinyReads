@@ -8,15 +8,16 @@
 import SwiftUI
 
 struct CardSliderView: View {
+  @Binding var active: Bool
   @Environment(ThemeManager.self) var themeManager
   @Environment(UserDefaultsManager.self) var userDefaultManager
   @Environment(NavigationManager.self) var navigationManager
-  @State private var vm = CardSliderViewModel()
-  @Binding var active: Bool
+  @Environment(CardSliderViewModel.self) var vm
   var body: some View {
 	 ZStack{
 		themeManager.themeAssets.background.ignoresSafeArea()
 		VStack{
+		  Text("\(vm.cards.count)")
 		  if vm.fetchIsActive && vm.cards.isEmpty{
 			 LoadingView()
 		  }else if let error = vm.errorState{
@@ -32,6 +33,10 @@ struct CardSliderView: View {
 				  navigationManager.secondary = .category
 				}
 			 )
+			 .compositingGroup()
+			 .transition(.move(edge: .bottom))
+			 .zIndex(1)
+			 .allowsHitTesting(vm.errorState != nil)
 		  }else{
 			 VStack{
 				SlideView(
@@ -44,12 +49,7 @@ struct CardSliderView: View {
 		  }
 		}
 		.frame(maxHeight: .infinity)
-		.onChange(of: userDefaultManager.selectedCategories, { _, _ in
-		  Task{
-			 await vm.reloadCards()
-		  }
-		})
-		.overlay(
+		.overlay(alignment: .topTrailing){
 		  Group{
 			 if !active{
 				HStack{
@@ -74,10 +74,23 @@ struct CardSliderView: View {
 				.transition(.move(edge: .top).combined(with: .opacity))
 			 }
 		  }
-		  , alignment: .topTrailing)
+		  
+		  .onChange(of: userDefaultManager.selectedCategories, { _, _ in
+			 Task{
+				await vm.reloadCards()
+			 }
+		  })
+		  .onChange(of: userDefaultManager.selectedLanguage, { _, _ in
+			 Task{
+				await vm.reloadCards()
+			 }
+		  })
+		}
+		.animation(.easeInOut, value: vm.deckMode)
+		.animation(.easeInOut, value: vm.cards.count)
+		.animation(.easeInOut, value: vm.fetchIsActive)
+		.animation(.easeInOut, value: active)
 	 }
-	 .animation(.easeInOut, value: vm.deckMode)
-	 .animation(.easeInOut, value: active)
   }
 }
 
@@ -95,4 +108,5 @@ private extension CardSliderView {
 	 .environment(ThemeManager())
 	 .environment(UserDefaultsManager.shared)
 	 .environment(NavigationManager.shared)
+	 .environment(CardSliderViewModel())
 }

@@ -90,7 +90,7 @@ enum ReadCategories: String, CaseIterable, Identifiable{
 	 }
   }
   
-  var userDefaultKey: String{
-	 "\(self.rawValue)_key"
+  func userDefaultKey(language: LanguageEnum) -> String {
+	 "\(language.code)_\(self.rawValue)_key"
   }
 }

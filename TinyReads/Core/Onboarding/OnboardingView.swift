@@ -80,6 +80,8 @@ private extension OnboardingView {
 		"Swipe cards"
 	 case .categories:
 		"Select categories you are interested in"
+	 case .finale:
+		"That's it!\n Everything is simple."
 	 }
   }
   // Stable loading overlay
@@ -104,7 +106,7 @@ private extension OnboardingView {
 	 isLoading = false
 	 
 	 try? await Task.sleep(for: .seconds(1))
-	 step = .practice
+	 step = .categories
   }
 }
 
@@ -113,6 +115,7 @@ private enum OnboardingStep {
   case welcome
   case practice
   case categories
+  case finale
 }
 
 private extension View {

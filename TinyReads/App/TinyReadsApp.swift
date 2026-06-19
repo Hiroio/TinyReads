@@ -24,7 +24,7 @@ struct TinyReadsApp: App {
   }
     var body: some Scene {
         WindowGroup {
-			 UploaderView()
+			 MainNavigationView()
 				.environment(navigationManager)
 				.environment(themeManager)
 				.environment(userDefaultManager)

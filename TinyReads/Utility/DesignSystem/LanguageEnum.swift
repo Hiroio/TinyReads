@@ -10,10 +10,14 @@ import SwiftUI
 
 
 enum LanguageEnum: String, Identifiable, CaseIterable{
-  case en = "English"
-  case uk = "Ukrainian"
+  case en 
+  case uk
   
   var id: String { self.rawValue }
+  
+  var code: String {
+	 rawValue
+  }
   
   var title: LocalizedStringKey {
 	 switch self {

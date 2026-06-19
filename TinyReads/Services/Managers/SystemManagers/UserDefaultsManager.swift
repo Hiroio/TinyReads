@@ -9,6 +9,7 @@ import Foundation
 
 protocol UserDefaultsManagerProtocol{
   var selectedCategories: [String] { get set }
+  var selectedLanguage: LanguageEnum { get set }
 }
 
 // MARK: MAIN FOR APPLICATION
@@ -78,13 +79,17 @@ extension UserDefaultsManager{
   
 //  MARK: For Category Numbers
   /// getting number
-  func getCategoryReadedCount(for category: ReadCategories) -> Int{
-	 UserDefaults.standard.integer(forKey: category.userDefaultKey)
+  func getCategoryReadedCount(for category: ReadCategories, language: LanguageEnum? = nil) -> Int{
+	 let language = language ?? selectedLanguage
+	 return UserDefaults.standard.integer(forKey: category.userDefaultKey(language: language))
   }
   /// setting number
-  func setCategoryReadedCount(for category: String, index: Int){
-	 guard let category = ReadCategories(rawValue: category), getCategoryReadedCount(for: category) < index else { return }
-	 UserDefaults.standard.set(index, forKey: category.userDefaultKey)
+  func setCategoryReadedCount(for category: String, index: Int, language: LanguageEnum? = nil){
+	 guard let category = ReadCategories(rawValue: category) else { return }
+	 let language = language ?? selectedLanguage
+	 guard getCategoryReadedCount(for: category, language: language) < index else { return }
+	 
+	 UserDefaults.standard.set(index, forKey: category.userDefaultKey(language: language))
   }
 }
 
@@ -92,8 +97,10 @@ extension UserDefaultsManager{
 // MARK: MOCK USERDEFAULT FOR TESTING
 final class MockUserDefaultsManager: UserDefaultsManagerProtocol {
 	 var selectedCategories: [String] = []
+  var selectedLanguage: LanguageEnum = .en
   
-  init(selectedCategories: [String] = []){
+  init(selectedCategories: [String] = [], selectedLanguage: LanguageEnum = .en){
 	 self.selectedCategories = selectedCategories
+	 self.selectedLanguage = selectedLanguage
   }
 }
