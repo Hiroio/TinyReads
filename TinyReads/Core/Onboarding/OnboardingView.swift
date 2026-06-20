@@ -106,7 +106,7 @@ private extension OnboardingView {
 	 isLoading = false
 	 
 	 try? await Task.sleep(for: .seconds(1))
-	 step = .categories
+	 step = .practice
   }
 }
 

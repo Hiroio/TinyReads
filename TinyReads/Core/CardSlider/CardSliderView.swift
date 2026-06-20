@@ -17,8 +17,7 @@ struct CardSliderView: View {
 	 ZStack{
 		themeManager.themeAssets.background.ignoresSafeArea()
 		VStack{
-		  Text("\(vm.cards.count)")
-		  if vm.fetchIsActive && vm.cards.isEmpty{
+		  if vm.fetchIsActive {
 			 LoadingView()
 		  }else if let error = vm.errorState{
 			 CardErrorHandlingView(
@@ -37,6 +36,8 @@ struct CardSliderView: View {
 			 .transition(.move(edge: .bottom))
 			 .zIndex(1)
 			 .allowsHitTesting(vm.errorState != nil)
+		  }else if vm.cards.isEmpty{
+			 CardEmptyState()
 		  }else{
 			 VStack{
 				SlideView(
@@ -74,17 +75,6 @@ struct CardSliderView: View {
 				.transition(.move(edge: .top).combined(with: .opacity))
 			 }
 		  }
-		  
-		  .onChange(of: userDefaultManager.selectedCategories, { _, _ in
-			 Task{
-				await vm.reloadCards()
-			 }
-		  })
-		  .onChange(of: userDefaultManager.selectedLanguage, { _, _ in
-			 Task{
-				await vm.reloadCards()
-			 }
-		  })
 		}
 		.animation(.easeInOut, value: vm.deckMode)
 		.animation(.easeInOut, value: vm.cards.count)

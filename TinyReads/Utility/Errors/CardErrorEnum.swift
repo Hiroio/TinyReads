@@ -49,7 +49,7 @@ enum CardError: Error, LocalizedError {
 	 case .cardNoLeft:
 		"CardNoLeft"
 	 case .noCategories:
-		"NoCategory"
+		"NoCategories"
 	 }
   }
   

@@ -95,7 +95,7 @@ struct ArticleView: View {
 		Group{
 		  if let state = vm.showState {
 			 CompletedAnimation(state: state)
-				.padding()
+				.padding(40)
 				.background(
 				  Image(themeManager.themeAssets.backSmallCard)
 					 .resizable()

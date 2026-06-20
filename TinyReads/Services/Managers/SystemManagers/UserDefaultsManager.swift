@@ -21,7 +21,7 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
   private let selectedColorThemeKey = "selectedColorTheme"
   private let selectedLanguageKey = "selectedLanguage"
   private let onBoardingKey = "onBoardingCompletion"
-  
+  private let avaratKey = "SelectedIndexAvatar"
   var selectedCategories: [String] {
 	 didSet {
 		UserDefaults.standard.set(selectedCategories, forKey: selectedCategoriesKey)
@@ -46,6 +46,12 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
 	 }
   }
   
+  var selectedAvatarIndex: Int {
+	 didSet{
+		UserDefaults.standard.set(selectedAvatarIndex, forKey: avaratKey)
+	 }
+  }
+  
   
   
   private init() {
@@ -61,6 +67,9 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
 	 let selectedLanguage = UserDefaults.standard.string(forKey: selectedLanguageKey) ?? ""
 	 let language = LanguageEnum(rawValue: selectedLanguage) ?? .en
 	 self.selectedLanguage = language
+	 
+	 let avatarIndex = UserDefaults.standard.integer(forKey: avaratKey)
+	 self.selectedAvatarIndex = avatarIndex
   }
   
 }

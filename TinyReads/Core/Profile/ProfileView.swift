@@ -17,96 +17,76 @@ struct ProfileView: View {
   var body: some View {
 	 ZStack{
 		VStack(spacing: 0){
-		  
 		  HStack(alignment: .top){
-			 Image("ProfileImage\(themeManager.themeAssets.id)")
-				.resizable()
-				.scaledToFit()
-				.frame(width: 100)
-				.padding(5)
-				.background(
-				  RoundedRectangle(cornerRadius: 15)
-					 .stroke(themeManager.themeAssets.secondary.opacity(0.5), lineWidth: 2)
-				)
-				.padding()
+			 Button{
+				profileActionCard = .avatars
+			 }label:{
+				Image("ProfileIcon\(userDefaultManager.selectedAvatarIndex)\(themeManager.themeAssets.id)")
+				  .resizable()
+				  .scaledToFit()
+				  .aspectRatio(1, contentMode: .fit)
+				  .overlay(alignment: .topTrailing) {
+					 Image(systemName: "pencil")
+						.font(.headline.weight(.black))
+				  }
+				  .foregroundStyle(themeManager.themeAssets.primary)
+			 }
+			 .frame(maxWidth: .infinity)
 			 
 			 VStack{
 				Text("Reader Card")
-				  .title(weight: .semibold)
+				  .title(weight: .bold)
 				  .frame(maxWidth: .infinity)
 				  .foregroundStyle(themeManager.themeAssets.primary)
-				  .padding(.vertical)
 				Text("Active categories:")
-				  .secondary()
+				  .secondary(weight: .bold)
 				CategoryShowCase
 			 }
+			 .frame(maxWidth: .infinity)
+			 .padding(.top)
 		  }
+		  .padding(.vertical)
+		  .frame(maxWidth: .infinity)
 		  
 		  ProfileStatsView()
 			 .environment(vm)
 			 
 		  
 		  ProfileActionBar(profileActionCard: $profileActionCard)
-			 .padding()
+			 .padding(.horizontal)
 		}
-		.padding()
 		.padding()
 		.background(
 		  Image(themeManager.themeAssets.readerCard)
 			 .resizable()
+			 .shadow(radius: 5)
 		)
-		
-		
-		
-		if let profileActionCard{
-		  ZStack{
-			 Color.black.opacity(0.1).ignoresSafeArea().onTapGesture {
-				self.profileActionCard = nil
-			 }
-			 switch profileActionCard {
-			 case .language:
-				ProfileLanguageView() {
-				  withAnimation{
-					 self.profileActionCard = nil
-				  }
-				}
-				.zIndex(1)
-				.transition(.opacity)
-			 case .theme:
-				ThemeSelectorView(){
-				  withAnimation{
-					 self.profileActionCard = nil
-				  }
-				}
-				.zIndex(1)
-				.transition(.opacity)
-			 case .categories:
-				CategoriesView(secondary: false) {
-				  withAnimation{
-					 self.profileActionCard = nil
-				  }
-				}
-				.zIndex(1)
-				.transition(.opacity)
-			 }
-		  }
-		  .allowsHitTesting(self.profileActionCard != nil)
-		}
-	 }
-  }
-  
-  
-  //  Category showcase:
-  private var CategoryShowCase: some View{
-	 VStack{
-		LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)){
-		  ForEach(userDefaultManager.selectedCategories, id: \.self){category in
-			 Text("- \(category)")
-				.secondary()
+		.overlay(alignment: .topTrailing){
+		  Button{
+			 navigationManager.secondary = nil
+		  }label:{
+			 Image(systemName: "xmark")
+				.fontWeight(.bold)
+				.foregroundStyle(themeManager.themeAssets.primary)
+				.padding(15)
+				.background(
+				  Image(themeManager.themeAssets.backSmallCard)
+					 .resizable()
+					 .scaledToFit()
+					 .shadow(color: .black.opacity(0.1),radius: 5)
+				)
+				.offset(y: -55)
 		  }
 		}
+		.padding(.horizontal, 5)
+		.padding(.vertical)
+		
+		SecondaryViews
+	
 	 }
+	 .animation(.easeInOut, value: profileActionCard == nil)
   }
+ 
 }
 
 
@@ -115,4 +95,65 @@ struct ProfileView: View {
 	 .environment(ThemeManager())
 	 .environment(NavigationManager.shared)
 	 .environment(UserDefaultsManager.shared)
+}
+
+
+extension ProfileView{
+  @ViewBuilder
+  private var SecondaryViews: some View{
+	 if let profileActionCard{
+		ZStack{
+		  Color.black.opacity(0.1).ignoresSafeArea().onTapGesture {
+			 self.profileActionCard = nil
+		  }
+		  switch profileActionCard {
+		  case .language:
+			 ProfileLanguageView() {
+				withAnimation{
+				  self.profileActionCard = nil
+				}
+			 }
+			 .zIndex(2)
+			 .transition(.opacity)
+		  case .theme:
+			 ThemeSelectorView(){
+				withAnimation{
+				  self.profileActionCard = nil
+				}
+			 }
+			 .zIndex(2)
+			 .transition(.opacity)
+		  case .categories:
+			 CategoriesView(secondary: false) {
+				withAnimation{
+				  self.profileActionCard = nil
+				}
+			 }
+			 .zIndex(2)
+			 .transition(.opacity)
+		  case .avatars:
+			 ProfileAvatarSelectionView() {
+				withAnimation{
+				  self.profileActionCard = nil
+				}
+			 }
+			 .zIndex(2)
+			 .transition(.move(edge: .bottom).combined(with: .opacity))
+		  }
+		}
+		.allowsHitTesting(self.profileActionCard != nil)
+	 }
+  }
+  
+  
+  private var CategoryShowCase: some View{
+	 VStack{
+		LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)){
+		  ForEach(userDefaultManager.selectedCategories, id: \.self){category in
+			 Text("-\(category)")
+				.secondary()
+		  }
+		}
+	 }
+  }
 }

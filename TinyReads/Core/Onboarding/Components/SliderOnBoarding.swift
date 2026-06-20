@@ -22,8 +22,8 @@ struct SliderOnBoarding: View {
 		)
 		  .offset(x: animationDragGesture)
 		  .onAppear{
-			 withAnimation(.easeInOut(duration: 1).delay(1.5).repeatForever()) {
-				animationDragGesture = 10
+			 withAnimation(.easeInOut(duration: 1).delay(1).repeatForever()) {
+				animationDragGesture = cards.count > 1 ? 10 : -10
 			 }
 		  }
     }

@@ -11,18 +11,21 @@ struct ProfileStatsView: View {
   @Environment(ProfileViewModel.self) var vm
     var body: some View {
 		VStack(alignment: .leading, spacing: 10){
-		  Text("Reader Information:")
-			 .headline()
-			 .frame(maxWidth: .infinity, alignment: .leading)
-		  VStack(alignment: .leading, spacing: 5){
-			 statCard(title: "Dismissed Cards", value: "\(vm.skippedCardsCount)")
-			 statCard(title: "Saved Cards", value: "\(vm.savedCardsCount)")
-			 statCard(title: "Read Cards", value: "\(vm.readedCardsCount)")
+		  VStack{
+			 Text("Reader Information:")
+				.headline(weight: .bold)
+				.frame(maxWidth: .infinity, alignment: .leading)
+			 HStack(alignment: .bottom, spacing: 5){
+				statCard(title: "Dismissed", value: "\(vm.skippedCardsCount)")
+				statCard(title: "Read", value: "\(vm.readedCardsCount)")
+				statCard(title: "Saved", value: "\(vm.savedCardsCount)")
+			 }
+			 .padding(.vertical, 10)
 		  }
 		  .padding(.horizontal)
 		  HStack{
 			 Text("Favorite Category: ")
-				.headline()
+				.headline(weight: .semibold)
 			 Text(vm.favoriteCategory)
 				.accent()
 				.italic()
@@ -37,14 +40,14 @@ struct ProfileStatsView: View {
 
 @ViewBuilder
 func statCard(title: String, value: String) -> some View{
-  HStack{
+  VStack{
 	 Text("\(title):")
-		.secondary(weight: .medium)
+		.secondary(weight: .semibold)
 	 Text("\(value)")
-		.accent()
+		.accent(weight: .bold)
 		.italic()
   }
-  .frame(maxWidth: .infinity, alignment: .leading)
+  .frame(maxWidth: .infinity)
   
 }
 

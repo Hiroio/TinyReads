@@ -17,35 +17,38 @@ struct ProfileLanguageView: View {
 		  Text("Language")
 			 .title()
 		  
-		  ForEach(LanguageEnum.allCases){item in
-			 let active = userDefault.selectedLanguage == item
-			 Button{
-				userDefault.selectedLanguage = item
-			 }label:{
-				Text(item.title)
-				  .padding()
-				  .font(.title3.weight(.light))
-				  .fontDesign(.serif)
+		  VStack(alignment: .leading, spacing: 8){
+			 ForEach(LanguageEnum.allCases){item in
+				let active = userDefault.selectedLanguage == item
+				Button{
+				  userDefault.selectedLanguage = item
+				}label:{
+				  HStack{
+					 Circle()
+						.frame(width: 5)
+					 Text(item.title)
+					 .font(active ? .headline : .subheadline)
+				  }
 				  .strikethrough(!active, color: assets.secondary)
 				  .foregroundStyle(active ? assets.accent : assets.secondary)
+				}
 			 }
 		  }
-		}
-		.overlay(
+		  .padding(.vertical)
+		  
 		  Button{
 			 onDismiss()
 		  }label:{
-			 Image(systemName: "xmark")
-				.font(.headline)
-				.foregroundStyle(assets.primary)
+			 Text("Close")
+				.secondary()
+				.padding(.top)
 		  }
-		)
+		}
 		.padding()
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.padding(.horizontal, 50)
-		.aspectRatio(1.2, contentMode: .fit)
+		.padding(.horizontal)
+		.padding()
 		.background(
-		  Image(assets.backCard)
+		  Image(assets.backSmallCard)
 			 .resizable()
 		)
     }
