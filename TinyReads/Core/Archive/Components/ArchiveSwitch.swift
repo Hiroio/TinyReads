@@ -21,6 +21,7 @@ struct ArchiveSwitch: View {
 				  .font( state ? .footnote : .headline.weight(.regular))
 				  .foregroundStyle(state ? themeManager.themeAssets.secondary : themeManager.themeAssets.accent)
 			 }
+			 .tinyAccessibilityButton(ArchiveState.saved.accessibilityLabel)
 		  
 		  Rectangle()
 			 .frame(width: 0.5, height: 25)
@@ -33,6 +34,7 @@ struct ArchiveSwitch: View {
 				  .font( state ? .headline.weight(.regular) : .footnote)
 				  .foregroundStyle(state ? themeManager.themeAssets.accent : themeManager.themeAssets.secondary)
 			 }
+			 .tinyAccessibilityButton(ArchiveState.read.accessibilityLabel)
 				
 		}
 		.fontDesign(.serif)

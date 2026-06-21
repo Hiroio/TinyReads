@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-class CoreDataService{
+final class CoreDataService{
   static let shared = CoreDataService()
   let container: NSPersistentContainer
   let viewContext: NSManagedObjectContext
@@ -17,7 +17,9 @@ class CoreDataService{
 	 let initContainer = NSPersistentContainer(name: "Reads")
 	 initContainer.loadPersistentStores { _, error in
 		if let error{
+#if DEBUG
 		  print("Failed to load core data: \(error.localizedDescription)")
+#endif
 		}
 	 }
 	 
@@ -31,7 +33,9 @@ class CoreDataService{
 		try viewContext.save()
 		return true
 	 }catch{
+#if DEBUG
 		print("Failed to save: \(error.localizedDescription)")
+#endif
 		return false
 	 }
   }
@@ -47,7 +51,9 @@ extension CoreDataService{
 		let entities = try viewContext.fetch(request)
 		return entities
 	 }catch{
+#if DEBUG
 		print("Failed to fetch entities: \(error.localizedDescription)")
+#endif
 		return []
 	 }
   }
@@ -137,7 +143,9 @@ extension CoreDataService {
 		let entities = try viewContext.fetch(request)
 		return entities
 	 }catch{
+#if DEBUG
 		print("Failed to fetch entities: \(error.localizedDescription)")
+#endif
 		return []
 	 }
   }
@@ -150,7 +158,9 @@ extension CoreDataService {
 		let entities = try viewContext.fetch(request)
 		return entities
 	 }catch{
+#if DEBUG
 		print("Failed to fetch entities: \(error.localizedDescription)")
+#endif
 		return []
 	 }
   }

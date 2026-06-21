@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestore
 
 @Observable
-class JSONUploader{
+final class JSONUploader{
   var isUploading = false
   var statusMessage: String = "ready to start"
   
@@ -55,7 +55,9 @@ class JSONUploader{
 			 } catch {
 				  isUploading = false
 				  statusMessage = "Parse error: \(error.localizedDescription)"
+#if DEBUG
 				  print("Full error: \(error)")
+#endif
 			 }
 		}
 }

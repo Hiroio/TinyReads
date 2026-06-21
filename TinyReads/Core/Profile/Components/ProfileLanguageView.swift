@@ -32,6 +32,7 @@ struct ProfileLanguageView: View {
 				  .strikethrough(!active, color: assets.secondary)
 				  .foregroundStyle(active ? assets.accent : assets.secondary)
 				}
+				.tinyAccessibilityButton(item.title)
 			 }
 		  }
 		  .padding(.vertical)
@@ -43,6 +44,7 @@ struct ProfileLanguageView: View {
 				.secondary()
 				.padding(.top)
 		  }
+		  .tinyAccessibilityButton("Close")
 		}
 		.padding()
 		.padding(.horizontal)

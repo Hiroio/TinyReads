@@ -150,7 +150,9 @@ extension Query{
 	 let publisher = PassthroughSubject<[T], Error>()
 	 let listener = self.addSnapshotListener { querySnapshot, error in
 		guard let documents = querySnapshot?.documents else{
+#if DEBUG
 		  print("no documents")
+#endif
 		  return
 		}
 		let products : [T] = documents.compactMap({ try? $0.data(as: T.self)})

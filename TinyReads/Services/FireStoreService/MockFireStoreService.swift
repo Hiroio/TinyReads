@@ -8,7 +8,7 @@
 import Foundation
 
 
-class MockFireStoreService: PublicReadsServiceProtocol{
+final class MockFireStoreService: PublicReadsServiceProtocol{
 	  func fetchReads(
 	    categoryProgress: [String: Int],
 	    languageCode: String,

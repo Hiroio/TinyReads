@@ -33,11 +33,8 @@ final class DismissedManager{
 extension DismissedManager{
   func initializeManager() async throws  {
 	 self.cardsInteractions = fetchInteractionReads()
-	 
-	 print("Card Interaction: \(cardsInteractions.count)")
-	 
 	 let cards = try await fetchCards()
-	 print("Fetched Cards \(cards.count)")
+	 
 	 await MainActor.run {
 		self.cards = cards
 	 }

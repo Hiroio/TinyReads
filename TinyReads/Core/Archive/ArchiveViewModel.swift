@@ -30,7 +30,6 @@ extension ArchiveViewModel{
 	 do{
 		try await archiveManager.initializeManager()
 	 }catch{
-		print("Failed to load archived cards: \(error.localizedDescription)")
 		self.error = error
 	 }
 	 

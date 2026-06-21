@@ -49,6 +49,9 @@ struct SlideView: View {
 			 }
 		}
 	 }
+	 .accessibilityElement(children: .contain)
+	 .accessibilityLabel("Reading card deck")
+	 .accessibilityHint("Swipe right to save, swipe left to dismiss, or double tap to read.")
 	 .overlay(alignment: slideHint?.alignment ?? .topTrailing) {
 		if let slideHint {
 		  Image(slideHint.iconName)
@@ -60,6 +63,7 @@ struct SlideView: View {
 			 .scaleEffect(0.8 + slideHintOpacity * 0.3)
 			 .zIndex(1)
 			 .offset(y: -80)
+			 .tinyAccessibilityHidden()
 		}
 	 }
 	 .animation(.interactiveSpring(response: 0.3, dampingFraction: 0.75), value: dragAmount)

@@ -24,8 +24,10 @@ struct CardView: View {
   var body: some View {
 		VStack(spacing: 10){
 		  VStack(spacing: 15){
-			 Text(card.categoryId)
-				.secondary()
+			 if let category = ReadCategories(rawValue: card.categoryId){
+				Text(category.title)
+				  .secondary()
+			 }
 			 Text(card.title)
 				.title()
 				.allowsTightening(false)

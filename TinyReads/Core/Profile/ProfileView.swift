@@ -17,45 +17,19 @@ struct ProfileView: View {
   var body: some View {
 	 ZStack{
 		VStack(spacing: 0){
-		  HStack(alignment: .top){
-			 Button{
-				profileActionCard = .avatars
-			 }label:{
-				Image("ProfileIcon\(userDefaultManager.selectedAvatarIndex)\(themeManager.themeAssets.id)")
-				  .resizable()
-				  .scaledToFit()
-				  .aspectRatio(1, contentMode: .fit)
-				  .overlay(alignment: .topTrailing) {
-					 Image(systemName: "pencil")
-						.font(.headline.weight(.black))
-				  }
-				  .foregroundStyle(themeManager.themeAssets.primary)
-			 }
-			 .frame(maxWidth: .infinity)
-			 
-			 VStack{
-				Text("Reader Card")
-				  .title(weight: .bold)
-				  .frame(maxWidth: .infinity)
-				  .foregroundStyle(themeManager.themeAssets.primary)
-				Text("Active categories:")
-				  .secondary(weight: .bold)
-				CategoryShowCase
-			 }
-			 .frame(maxWidth: .infinity)
-			 .padding(.top)
-		  }
-		  .padding(.vertical)
-		  .frame(maxWidth: .infinity)
+		  ProfileAvatarCategoriesSection
 		  
 		  ProfileStatsView()
 			 .environment(vm)
-			 
-		  
 		  ProfileActionBar(profileActionCard: $profileActionCard)
 			 .padding(.horizontal)
+		  
+		  ReferencesProfileView()
+			 .padding(.bottom)
 		}
 		.padding()
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
+		.aspectRatio(0.9 ,contentMode: .fit)
 		.background(
 		  Image(themeManager.themeAssets.readerCard)
 			 .resizable()
@@ -81,12 +55,12 @@ struct ProfileView: View {
 		.padding(.horizontal, 5)
 		.padding(.vertical)
 		
-		SecondaryViews
-	
+		ProfileSecondaryView(profileActionCard: $profileActionCard)
+		
 	 }
 	 .animation(.easeInOut, value: profileActionCard == nil)
   }
- 
+  
 }
 
 
@@ -99,59 +73,57 @@ struct ProfileView: View {
 
 
 extension ProfileView{
-  @ViewBuilder
-  private var SecondaryViews: some View{
-	 if let profileActionCard{
-		ZStack{
-		  Color.black.opacity(0.1).ignoresSafeArea().onTapGesture {
-			 self.profileActionCard = nil
+//  AVATAR Selection Btn And Title + Active Categories
+  private var ProfileAvatarCategoriesSection: some View{
+	 HStack(alignment: .top){
+		Button{
+		  withAnimation{
+			 profileActionCard = .avatars
 		  }
-		  switch profileActionCard {
-		  case .language:
-			 ProfileLanguageView() {
-				withAnimation{
-				  self.profileActionCard = nil
-				}
+		}label:{
+		  Image("ProfileIcon\(userDefaultManager.selectedAvatarIndex)\(themeManager.themeAssets.id)")
+			 .resizable()
+			 .scaledToFit()
+			 .aspectRatio(1, contentMode: .fit)
+			 .overlay(alignment: .topTrailing) {
+				Image(systemName: "pencil")
+				  .font(.title3.weight(.black))
 			 }
-			 .zIndex(2)
-			 .transition(.opacity)
-		  case .theme:
-			 ThemeSelectorView(){
-				withAnimation{
-				  self.profileActionCard = nil
-				}
-			 }
-			 .zIndex(2)
-			 .transition(.opacity)
-		  case .categories:
-			 CategoriesView(secondary: false) {
-				withAnimation{
-				  self.profileActionCard = nil
-				}
-			 }
-			 .zIndex(2)
-			 .transition(.opacity)
-		  case .avatars:
-			 ProfileAvatarSelectionView() {
-				withAnimation{
-				  self.profileActionCard = nil
-				}
-			 }
-			 .zIndex(2)
-			 .transition(.move(edge: .bottom).combined(with: .opacity))
-		  }
+			 .foregroundStyle(themeManager.themeAssets.accent)
 		}
-		.allowsHitTesting(self.profileActionCard != nil)
+		.tinyAccessibilityButton(ProfileActionBarEnum.avatars.accessibilityLabel, hint: ProfileActionBarEnum.avatars.accessibilityHint)
+		
+		VStack{
+		  Text("Reader Card")
+			 .title(weight: .bold)
+			 .frame(maxWidth: .infinity)
+			 .foregroundStyle(themeManager.themeAssets.primary)
+		  Text("Active categories:")
+			 .secondary(weight: .bold)
+		  CategoryShowCase
+		}
+		.frame(maxWidth: .infinity)
+		.padding(.top)
 	 }
+	 .padding(.vertical)
+	 .geometryGroup()
   }
   
   
   private var CategoryShowCase: some View{
-	 VStack{
+	 ScrollView{
 		LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)){
-		  ForEach(userDefaultManager.selectedCategories, id: \.self){category in
-			 Text("-\(category)")
-				.secondary()
+		  ForEach(userDefaultManager.selectedCategories, id: \.self){item in
+			 if let category = ReadCategories(rawValue: item){
+				HStack{
+				  Circle()
+					 .fill(themeManager.themeAssets.secondary)
+					 .frame(width: 2)
+				  
+				  Text(category.title)
+					 .secondary()
+				}
+			 }
 		  }
 		}
 	 }

@@ -364,6 +364,7 @@ private extension ReadsDeckManager {
   
   /// Prints original error details before mapping.
   func printDeckError(_ error: Error) {
+#if DEBUG
 	 let nsError = error as NSError
 	 print("""
 	 ❌ ReadsDeckManager error
@@ -375,6 +376,7 @@ private extension ReadsDeckManager {
 	 userInfo: \(nsError.userInfo)
 	 mappedState: \(mapDeckError(error))
 	 """)
+#endif
   }
 }
 

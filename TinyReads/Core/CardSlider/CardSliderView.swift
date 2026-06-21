@@ -60,6 +60,7 @@ struct CardSliderView: View {
 					 Image(systemName: "xmark")
 						.frame(maxWidth: .infinity, alignment: .leading)
 				  }
+				  .tinyAccessibilityButton("Close reader controls")
 				  
 				  Spacer()
 				  Button{
@@ -68,6 +69,7 @@ struct CardSliderView: View {
 					 Image(systemName: vm.deckMode.image)
 					 
 				  }
+				  .tinyAccessibilityButton(vm.deckMode.accessibilityLabel, hint: vm.deckMode.accessibilityHint)
 				}
 				.font(.headline.weight(.light))
 				.padding()

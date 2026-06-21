@@ -45,6 +45,7 @@ struct ProfileActionBar: View {
 				  .frame(width: 55)
 				  .frame(maxWidth: .infinity)
 			 }
+			 .tinyAccessibilityButton(item.accessibilityLabel, hint: item.accessibilityHint)
 		  }
 		}
 		.padding()

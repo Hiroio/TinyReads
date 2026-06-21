@@ -17,13 +17,6 @@ struct ProfileAvatarSelectionView: View {
 			 Text("Avatars")
 				.title(weight: .semibold)
 				.frame(maxWidth: .infinity)
-				.overlay(alignment: .trailing) {
-				  Button{onDismiss()}label:{
-					 Image(systemName: "xmark")
-						.font(.headline.weight(.bold))
-				  }
-				}
-				.foregroundStyle(themeManager.themeAssets.primary)
 			 LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: 15), count: 2), spacing: 15){
 				ForEach(0...19, id: \.self){index in
 				  let active = index == userDefault.selectedAvatarIndex
@@ -38,11 +31,12 @@ struct ProfileAvatarSelectionView: View {
 						  .aspectRatio(contentMode: .fit)
 						  .shadow(color: themeManager.themeAssets.accent.opacity(0.6),radius: active ? 10 : 0)
 						  .opacity(active ? 1 : 0.7)
-						Text(active ? "*Selected*" : "")
-						  .font(.footnote.weight(.black))
+						Text(active ? "Selected" : "")
+						  .font(.subheadline.weight(.black))
 						  .foregroundStyle(themeManager.themeAssets.accent)
 					 }
 				  }
+				  .tinyAccessibilityButton(active ? "Selected avatar" : "Select avatar")
 				}
 			 }
 		  }
@@ -53,11 +47,27 @@ struct ProfileAvatarSelectionView: View {
 			 PaperBackGround()
 		  )
 		}
+		.overlay(alignment: .topTrailing) {
+		  Button{onDismiss()}label:{
+			 Image(systemName: "xmark")
+				.font(.headline.weight(.bold))
+				.padding(15)
+				.background(
+				  Image(themeManager.themeAssets.backSmallCard)
+					 .resizable()
+					 .scaledToFit()
+					 .shadow(color: .black.opacity(0.1),radius: 5)
+				)
+		  }
+		  .tinyAccessibilityButton("Close")
+		}
+		.foregroundStyle(themeManager.themeAssets.primary)
     }
 }
 
 #Preview {
   ProfileAvatarSelectionView(){}
-	 .environment(ThemeManager())
+	 .environment(ThemeManager())	
 	 .environment(UserDefaultsManager.shared)
+	 .environment(\.locale, Locale(identifier: "en"))
 }

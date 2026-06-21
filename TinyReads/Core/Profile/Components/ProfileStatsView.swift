@@ -26,7 +26,7 @@ struct ProfileStatsView: View {
 		  HStack{
 			 Text("Favorite Category: ")
 				.headline(weight: .semibold)
-			 Text(vm.favoriteCategory)
+			 Text(ReadCategories(rawValue: vm.favoriteCategory)?.title ?? "None")
 				.accent()
 				.italic()
 			 
@@ -39,9 +39,9 @@ struct ProfileStatsView: View {
 
 
 @ViewBuilder
-func statCard(title: String, value: String) -> some View{
+func statCard(title: LocalizedStringKey, value: String) -> some View{
   VStack{
-	 Text("\(title):")
+	 Text(title)
 		.secondary(weight: .semibold)
 	 Text("\(value)")
 		.accent(weight: .bold)

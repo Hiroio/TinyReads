@@ -35,6 +35,7 @@ struct ThemeSelectorView: View {
 						.fill(active ? themeManager.themeAssets.border : .clear)
 				  )
 			 }
+			 .tinyAccessibilityButton("Change theme")
 		  }
 		}
 		.cornerRadius(10)
@@ -50,6 +51,7 @@ struct ThemeSelectorView: View {
 			 .secondary()
 			 .padding()
 		}
+		.tinyAccessibilityButton("Close")
 	 }
 	 .padding(50)
 	 .background(

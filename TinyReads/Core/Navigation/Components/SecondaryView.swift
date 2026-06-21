@@ -16,16 +16,18 @@ struct SecondaryView: View {
 			 ProfileView()
 		  case .category:
 				CategoriesView()
+				.geometryGroup()
 		  case .archive:
 			 ArchiveView()
+				.geometryGroup()
 		  case .dismissed:
 			 DismissedView()
+				.geometryGroup()
 		  default:
 			 EmptyView()
 		  }
 		}
 		.animation(.easeInOut, value: navigationManager.secondary != nil)
-		.animation(.easeInOut, value: navigationManager.secondary == .profile)
     }
 }
 
