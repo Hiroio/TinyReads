@@ -16,31 +16,22 @@ final class CardSliderViewModel{
   
   let deckManager = ReadsDeckManager.shared
   private let userDefaultManager = UserDefaultsManager.shared
-  private let loadMoreThreshold = 1
+  private let loadMoreThreshold = 2
   
   init(){
-	 fetchCards()
-  }
-  
-  var dismissedCards: Int{
-	 cards.filter({$0.status != ReadCardDisplayStatus.fresh}).count
+	 startTracking()
   }
   
   var fetchIsActive: Bool {
 	 deckManager.fetchIsActive
   }
-  
-  //  checking selected Categories for showing errors
-  var hasSelectedCategories: Bool {
-	 !deckManager.categories.isEmpty
-  }
-  
   var errorState: CardError? {
-	 guard cards.isEmpty else { return nil }
-	 if let errorState = deckManager.errorState { return errorState }
-	 guard hasSelectedCategories else { return .noCategories }
-	 return .cardNoLeft
+	 deckManager.errorState
   }
+  
+  var freshDisplayReads: [DisplayReadCard] = []
+  
+  var repeatDisplayReads: [DisplayReadCard] = []
   
 }
 
@@ -48,67 +39,35 @@ final class CardSliderViewModel{
 extension CardSliderViewModel {
   // Fetch cards
   func fetchCards() {
-	 guard hasSelectedCategories else {
-		cards = []
-		return
-	 }
-	 /// checking if deckManager has cards, if it's we getting this cards and fetch next 10 if needed
-	 guard deckManager.reads.isEmpty else {
-		syncCardsFromDeck()
-		keepDeckAliveIfNeeded()
-		return
-	 }
-	 
 	 Task {
-		await deckManager.loadMoreReads()
-		await MainActor.run {
-		  self.syncCardsFromDeck()
-		  self.keepDeckAliveIfNeeded()
-		}
+		await deckManager.fetchFreshReads()
 	 }
   }
   
   // Reload cards
   func reloadCards() async {
 	 self.cards = []
-	 
-	 guard hasSelectedCategories else {
-		return
-	 }
-	 
 	 await deckManager.reloadForSelectedCategories()
-	 
-	 await MainActor.run {
-		self.syncCardsFromDeck()
-	 }
   }
   
   
-  // Sync UI cards from manager
-  private func syncCardsFromDeck() {
-	 switch deckMode{
-	 case .freshOnly:
-		cards = deckManager.freshDisplayReads
-	 case .repeatOld:
-		cards = deckManager.repeatDisplayReads.filter({$0.status != .fresh}).sorted(by: {$0.card.sortIndex < $1.card.sortIndex})
-	 }
+  // Refresh Active Status for Viewed
+  func refreshActiveStatus() {
+	 deckManager.refreshActiveStatus()
+	 self.cards = deckManager.displayCards
   }
   
   
-  // Load next batch when fresh deck is almost empty
+  // Load next batch only after swipe actions when fresh deck reaches the threshold
   @discardableResult
-  private func keepDeckAliveIfNeeded() -> Bool {
+  private func keepDeckAliveAfterSwipe() -> Bool {
 	 guard deckMode == .freshOnly else { return false }
-	 guard hasSelectedCategories else { return false }
+	 guard deckManager.errorState == nil else { return false }
 	 guard !fetchIsActive else { return false }
-	 guard cards.count <= loadMoreThreshold else { return false }
+	 guard freshDisplayReads.count <= loadMoreThreshold else { return false }
 	 
 	 Task {
-		await deckManager.loadMoreReads()
-		
-		await MainActor.run {
-		  self.syncCardsFromDeck()
-		}
+		await deckManager.fetchFreshReads()
 	 }
 	 
 	 return true
@@ -124,23 +83,28 @@ extension CardSliderViewModel {
 	 guard let index = cards.firstIndex(where: { $0.id == id }) else { return }
 	 
 	 let card = cards[index].card
+	 if cards[index].status == .fresh{
+		userDefaultManager.setCategoryReadedCount(for: card.categoryId, index: card.sortIndex, language: LanguageEnum(rawValue: card.languageCode))
+		keepDeckAliveAfterSwipe()
+	 }
 	 cards.remove(at: index)
 	 deckManager.removeFromDeck(id)
 	 deckManager.dismissCard(card)
-	 userDefaultManager.setCategoryReadedCount(for: card.categoryId, index: card.sortIndex, language: LanguageEnum(rawValue: card.languageCode))
-	 keepDeckAliveIfNeeded()
+	 
   }
   
   // Right Swipe
   func onSave(_ id: String) {
 	 guard let index = cards.firstIndex(where: { $0.id == id }) else { return }
-	 
+	 print("saving")
 	 let card = cards[index].card
+	 if cards[index].status == .fresh{
+		userDefaultManager.setCategoryReadedCount(for: card.categoryId, index: card.sortIndex, language: LanguageEnum(rawValue: card.languageCode))
+		keepDeckAliveAfterSwipe()
+	 }
 	 cards.remove(at: index)
 	 deckManager.removeFromDeck(id)
 	 deckManager.saveCard(card)
-	 userDefaultManager.setCategoryReadedCount(for: card.categoryId, index: card.sortIndex, language: LanguageEnum(rawValue: card.languageCode))
-	 keepDeckAliveIfNeeded()
   }
   
   func articleRoute(for id: String) -> ArticleRoute? {
@@ -158,8 +122,6 @@ extension CardSliderViewModel {
   func onArticleInteractionChange(_ id: String) {
 	 deckManager.applyInteractionChange(id)
 	 deckManager.removeFromDeck(id)
-	 syncCardsFromDeck()
-	 keepDeckAliveIfNeeded()
   }
 }
 
@@ -170,15 +132,6 @@ extension CardSliderViewModel{
   //  CHANGE MOD OF CARDS
   func changeDeckMode() {
 	 self.deckMode = deckMode == .freshOnly ? .repeatOld : .freshOnly
-	 
-	 syncCardsFromDeck()
-	 keepDeckAliveIfNeeded()
-  }
-  
-  
-  func reshuffleViewed() {
-	 deckMode = .repeatOld
-	 syncCardsFromDeck()
   }
   
   // Check if all cards readed.
@@ -192,5 +145,33 @@ extension CardSliderViewModel{
 	 }
 	 
 	 return false
+  }
+}
+
+
+
+
+extension CardSliderViewModel{
+  //  For Navigation
+  func openArticle(_ id: String) {
+	 guard let route = self.articleRoute(for: id) else { return }
+	 NavigationManager.shared.article = route
+  }
+  
+  //  Subscribe for reads in deckManager
+  func startTracking() {
+	 withObservationTracking {
+		_ = deckManager.reads
+	 } onChange: {
+		
+		DispatchQueue.main.async { [weak self] in
+		  guard let self = self else { return }
+		  
+		  self.cards = deckManager.displayCards
+		  self.repeatDisplayReads = cards.filter{ $0.status != .fresh && $0.status != .read && $0.card.isActive }.sorted{ $0.card.sortIndex < $1.card.sortIndex }
+		  self.freshDisplayReads = cards.filter { $0.card.isActive && $0.status == .fresh }.sorted { $0.card.sortIndex < $1.card.sortIndex }
+		  self.startTracking()
+		}
+	 }
   }
 }

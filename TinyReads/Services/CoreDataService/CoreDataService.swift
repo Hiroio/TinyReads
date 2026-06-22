@@ -60,10 +60,17 @@ extension CoreDataService{
   
   /// saving
   @discardableResult
-  func saveReadEntity(_ read: ReadInteractionModel) -> Bool {
-	 let entity = ReadsEntity(context: viewContext)
+  func markSaved(_ read: ReadInteractionModel) -> Bool {
+	 let entity: ReadsEntity
+	 if let loadedEntity = getSingleEntity(by: read.id){
+		entity = loadedEntity
+	 } else {
+		entity = createNewEntity(read: read)
+	 }
 	 
-	 entity.update(from: read)
+	 entity.isSkipped = false
+	 entity.isSaved = true
+	 entity.savedAt = Date.now
 	 
 	 return self.save()
   }

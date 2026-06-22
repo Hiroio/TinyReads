@@ -33,7 +33,7 @@ struct SlideView: View {
 	 ZStack{
 		let activeTwo = Array(readArray.prefix(2))
 		
-		ForEach(activeTwo, id: \.id) { card in
+		ForEach(activeTwo, id: \.card.id) { card in
 		  let isTopCard = card.id == readArray.first?.id
 		  
 		  CardView(displayCard: card, showsTapHint: onTap != nil)
@@ -67,6 +67,7 @@ struct SlideView: View {
 		}
 	 }
 	 .animation(.interactiveSpring(response: 0.3, dampingFraction: 0.75), value: dragAmount)
+	 .animation(.spring(response: 0.32, dampingFraction: 0.82), value: readArray.count)
   }
 }
 
@@ -102,7 +103,7 @@ extension SlideView{
 			 
 			 DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
 				var transaction = Transaction()
-				transaction.disablesAnimations = true
+//				transaction.disablesAnimations = true
 				
 				withTransaction(transaction) {
 				  if width > 0 {

@@ -53,7 +53,11 @@ struct CardErrorHandlingView: View {
 				
 				if let secondaryButtonTitle = error.secondaryButtonTitle {
 				  Button {
-					 selectCategoriesAction()
+					 if error == .cardNoLeft{
+						selectCategoriesAction()
+					 }else{
+						reshuffleAction()
+					 }
 				  } label: {
 					 Text(secondaryButtonTitle)
 						.secondary(weight: .semibold)
@@ -63,11 +67,14 @@ struct CardErrorHandlingView: View {
 		  }
 		  .padding()
 		  .frame(maxWidth: .infinity, maxHeight: .infinity)
+		  .aspectRatio(0.7, contentMode: .fit)
 		  .background(
-			 Image(themeAssets.backCard)
-				.resizable()
-				.scaledToFit()
+			 Image(themeManager.themeAssets.backCard)
+				.resizable(resizingMode: .stretch)
 		  )
+		  .padding(20)
+		  .compositingGroup()
+		  .shadow(radius: 5)
 	    }
   
   private func primaryAction() {

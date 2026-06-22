@@ -23,6 +23,7 @@ struct CardView: View {
   
   var body: some View {
 		VStack(spacing: 10){
+		  Text("\(displayCard.card.sortIndex)")
 		  VStack(spacing: 15){
 			 if let category = ReadCategories(rawValue: card.categoryId){
 				Text(category.title)

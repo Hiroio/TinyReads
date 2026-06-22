@@ -10,6 +10,8 @@ import SwiftUI
 
 @Observable
 final class ThemeManager{
+  var colorSceme: ColorScheme = .light
+  
   var appTheme: AppTheme{
 	 didSet{
 		userDefaults.selectedColorTheme = appTheme
@@ -23,6 +25,16 @@ final class ThemeManager{
   }
   
   var themeAssets: AppThemeAssets{
-	 appTheme.assets
+	 switch appTheme {
+	 case .light:
+		  .light
+	 case .dark:
+		  .dark
+	 case .system:
+		colorSceme == .dark ? .dark : .light
+	 }
   }
 }
+
+
+

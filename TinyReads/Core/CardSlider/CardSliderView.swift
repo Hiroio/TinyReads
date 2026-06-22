@@ -17,81 +17,26 @@ struct CardSliderView: View {
 	 ZStack{
 		themeManager.themeAssets.background.ignoresSafeArea()
 		VStack{
-		  if vm.fetchIsActive {
-			 LoadingView()
-		  }else if let error = vm.errorState{
-			 CardErrorHandlingView(
-				error: error,
-				retryAction: {
-				  vm.fetchCards()
-				},
-				reshuffleAction: {
-				  vm.reshuffleViewed()
-				},
-				selectCategoriesAction: {
-				  navigationManager.secondary = .category
-				}
-			 )
-			 .compositingGroup()
-			 .transition(.move(edge: .bottom))
-			 .zIndex(1)
-			 .allowsHitTesting(vm.errorState != nil)
-		  }else if vm.cards.isEmpty{
-			 CardEmptyState()
-		  }else{
-			 VStack{
-				SlideView(
-				  readArray: vm.cards,
-				  onSave: vm.onSave,
-				  onDismiss: vm.onDismiss,
-				  onTap: openArticle
-				)
-			 }
+		  switch vm.deckMode{
+		  case .freshOnly:
+			 FreshSliderView()
+				.transition(.move(edge: .leading))
+		  case .repeatOld:
+			 ViewedSliderView()
+				.transition(.move(edge: .trailing))
 		  }
 		}
-		.frame(maxHeight: .infinity)
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
 		.overlay(alignment: .topTrailing){
-		  Group{
-			 if !active{
-				HStack{
-				  Button{
-					 active = true
-				  }label:{
-					 Image(systemName: "xmark")
-						.frame(maxWidth: .infinity, alignment: .leading)
-				  }
-				  .tinyAccessibilityButton("Close reader controls")
-				  
-				  Spacer()
-				  Button{
-					 vm.changeDeckMode()
-				  }label: {
-					 Image(systemName: vm.deckMode.image)
-					 
-				  }
-				  .tinyAccessibilityButton(vm.deckMode.accessibilityLabel, hint: vm.deckMode.accessibilityHint)
-				}
-				.font(.headline.weight(.light))
-				.padding()
-				.foregroundStyle(themeManager.themeAssets.primary)
-				.transition(.move(edge: .top).combined(with: .opacity))
-			 }
-		  }
+		  TopBar
 		}
 		.animation(.easeInOut, value: vm.deckMode)
-		.animation(.easeInOut, value: vm.cards.count)
+		.animation(.easeInOut, value: vm.repeatDisplayReads.count)
+		.animation(.easeInOut, value: vm.freshDisplayReads.count)
+		.animation(.easeInOut, value: vm.cards)
 		.animation(.easeInOut, value: vm.fetchIsActive)
 		.animation(.easeInOut, value: active)
 	 }
-  }
-}
-
-// MARK: - Actions
-private extension CardSliderView {
-  // Open article from top card
-  func openArticle(_ id: String) {
-	 guard let route = vm.articleRoute(for: id) else { return }
-	 navigationManager.article = route
   }
 }
 
@@ -101,4 +46,37 @@ private extension CardSliderView {
 	 .environment(UserDefaultsManager.shared)
 	 .environment(NavigationManager.shared)
 	 .environment(CardSliderViewModel())
+}
+
+
+
+// MARK: - Actions
+private extension CardSliderView {
+  @ViewBuilder
+  private var TopBar: some View {
+		if !active{
+		  HStack{
+			 Button{
+				active = true
+			 }label:{
+				Image(systemName: "xmark")
+				  .frame(maxWidth: .infinity, alignment: .leading)
+			 }
+			 .tinyAccessibilityButton("Close reader controls")
+			 
+			 Spacer()
+			 Button{
+				vm.changeDeckMode()
+			 }label: {
+				Image(systemName: vm.deckMode.image)
+				
+			 }
+			 .tinyAccessibilityButton(vm.deckMode.accessibilityLabel, hint: vm.deckMode.accessibilityHint)
+		  }
+		  .font(.headline.weight(.light))
+		  .padding()
+		  .foregroundStyle(themeManager.themeAssets.primary)
+		  .transition(.move(edge: .top).combined(with: .opacity))
+		}
+	 }
 }

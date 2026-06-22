@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CardEmptyState: View {
   @Environment(ThemeManager.self) var themeManager
+  @Environment(CardSliderViewModel.self) var vm
   var body: some View {
 	 VStack{
 		
@@ -20,8 +21,18 @@ struct CardEmptyState: View {
 		VStack{
 		  Text("There is nothing to show here!")
 			 .headline(weight: .semibold)
-		  Text("Swipe some pages to get started")
+		  Text("Swipe some pages to get something here!")
 			 .secondary(weight: .medium)
+		  
+		  if !vm.cards.isEmpty {
+			 Button{
+				vm.refreshActiveStatus()
+			 }label: {
+				Text("Reshuffle")
+				  .accent()
+				  .padding(.top)
+			 }
+		  }
 		}
 		.padding(.bottom, 40)
 		.multilineTextAlignment(.center)
@@ -33,6 +44,7 @@ struct CardEmptyState: View {
 		Image(themeManager.themeAssets.backCard)
 		  .resizable(resizingMode: .stretch)
 	 )
+	 .padding(20)
 	 .compositingGroup()
 	 .shadow(radius: 5)
   }
@@ -41,4 +53,5 @@ struct CardEmptyState: View {
 #Preview {
   CardEmptyState()
 	 .environment(ThemeManager())
+	 .environment(CardSliderViewModel())
 }

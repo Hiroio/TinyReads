@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseFirestoreInternal
 
 @Observable
 final class ReadsDeckManager {
@@ -26,28 +27,26 @@ final class ReadsDeckManager {
   /// Prevents UI from starting duplicate fetches and lets views show loading state.
   var fetchIsActive: Bool = false
   
+  var displayCards: [DisplayReadCard]{
+	 makeDisplayReads(from: reads)
+  }
+  
   // MARK: - Dependencies
   let firestore: PublicReadsServiceProtocol
   let userDefaults: UserDefaultsManagerProtocol
   let coreDataManager = CoreDataService.shared
-  
-  // MARK: - Private State
-  /// Keeps one Firestore loading pipeline alive at a time.
-  /// If another caller asks for more reads while loading, it waits for this task.
-  private var loadingTask: Task<Void, Never>?
+ 
   
   // MARK: - Init
   init(
 	 firestore: PublicReadsServiceProtocol = FireStoreService.shared,
 	 userDefaultsManager: UserDefaultsManagerProtocol = UserDefaultsManager.shared,
-	 autoLoad: Bool = true
   ) {
 	 self.firestore = firestore
 	 self.userDefaults = userDefaultsManager
 	 
-	 if autoLoad {
-		loadInitialDeck()
-	 }
+	 loadInitialDeck()
+	 
   }
 }
 
@@ -79,6 +78,8 @@ extension ReadsDeckManager {
   /// Includes fresh/read/saved/dismissed cards so UI can display their previous status.
   var repeatDisplayReads: [DisplayReadCard] {
 	 makeDisplayReads(from: reads)
+		.filter{ $0.status != .fresh && $0.status != .read }
+		.sorted{ $0.card.sortIndex < $1.card.sortIndex }
   }
 }
 
@@ -86,30 +87,49 @@ extension ReadsDeckManager {
 extension ReadsDeckManager {
   /// Initial load of manager to load reads
   func loadInitialDeck() {
-	 fetchInteractionReads()
-	 
 	 Task {
-		await loadMoreReads()
+		await fetchFreshReads()
 		await loadViewedCardsForSelectedCategories()
 	 }
   }
   
-  /// Loads the next Firestore batch.
-  /// Errors are stored in `errorState`, ViewModel reads `errorState` to show errors to user.
-  func loadMoreReads() async {
-	 if let loadingTask {
-		await loadingTask.value
-		return
+  /// Loads the next fresh Firestore batch.
+  ///
+  /// Flow is intentionally direct:
+  /// 1. refresh CoreData interactions,
+  /// 2. calculate the next sortIndex per selected category,
+  /// 3. fetch one Firestore batch,
+  /// 4. append unique reads or expose a UI-friendly error.
+  func fetchFreshReads() async {
+	 guard !fetchIsActive else { return }
+	 
+	 await MainActor.run {
+		self.fetchIsActive = true
+		self.errorState = nil
+		self.fetchInteractionReads()
 	 }
 	 
-	 let task = Task { [weak self] in
-		guard let self else { return }
-		await self.performLoadMoreReads()
+	 do {
+		let categoryProgress = try filterInteractions()
+		
+		let newReads = try await firestore.fetchReads(
+		  categoryProgress: categoryProgress,
+		  languageCode: userDefaults.selectedLanguage.code,
+		  limitPerCategory: 3 // TODO: Change to 25 for production
+		)
+		
+		await MainActor.run {
+		  self.appendUniqueReads(newReads)
+		  self.errorState = nil
+		  self.fetchIsActive = false
+		}
+	 } catch {
+		await MainActor.run {
+		  self.errorState = self.mapDeckError(error)
+		  self.fetchIsActive = false
+		  self.printDeckError(error)
+		}
 	 }
-	 
-	 loadingTask = task
-	 await task.value
-	 loadingTask = nil
   }
   
   /// Clears the in-memory deck and loads for new categories/language.
@@ -118,17 +138,17 @@ extension ReadsDeckManager {
 		self.reads = []
 	 }
 	 
-	 await loadMoreReads()
+	 await fetchFreshReads()
 	 await loadViewedCardsForSelectedCategories()
   }
   
   /// Loads viewedCards which user has interaction.
   func loadViewedCardsForSelectedCategories() async {
 	 let interactedCards = self.readsInteractions.filter {
-		  $0.languageCode == userDefaults.selectedLanguage.rawValue
-		  && categories.contains($0.categoryId)
-		  && ($0.isSaved || $0.isSkipped || $0.isRead)
-		}
+		$0.languageCode == userDefaults.selectedLanguage.rawValue
+		&& categories.contains($0.categoryId)
+		&& ($0.isSaved || $0.isSkipped || $0.isRead)
+	 }
 	 let ids = interactedCards.map { $0.id }
 	 
 	 let viewedCards = try? await firestore.fetchReads(ids: ids)
@@ -163,6 +183,12 @@ extension ReadsDeckManager {
 		readsInteractions.append(interaction)
 	 }
   }
+  
+  func refreshActiveStatus() {
+		for i in reads.indices {
+			 reads[i].isActive = true
+		}
+  }
 }
 
 // MARK: - CoreData Actions
@@ -176,7 +202,7 @@ extension ReadsDeckManager {
   /// Saves a card to the user's archive.
   @discardableResult
   func saveCard(_ card: ReadCardModel) -> Bool {
-	 guard !readsInteractions.contains(where: { card.id == $0.id }) else { return true }
+	 guard !readsInteractions.contains(where: { card.id == $0.id && !$0.isSaved }) else { return true }
 	 
 	 var interaction = ReadInteractionModel(
 		id: card.id,
@@ -187,7 +213,7 @@ extension ReadsDeckManager {
 	 interaction.savedAt = Date.now
 	 interaction.isSaved = true
 	 
-	 let saved = coreDataManager.saveReadEntity(interaction)
+	 let saved = coreDataManager.markSaved(interaction)
 	 if saved { fetchInteractionReads() }
 	 return saved
   }
@@ -213,10 +239,9 @@ extension ReadsDeckManager {
 
 // MARK: - Fetch Progress
 extension ReadsDeckManager {
-  /// Builds Firestore progress per selected category.
-  ///
-  /// The progress is based on CoreData interactions, filtered by the selected app language.
-  /// Categories that already reached their known content limit are removed from the fetch request.
+  // - Calculate indexes which is not marked.
+  /// gettings dict where ["Category" : latest fresh index]
+  /// fresh - means not swiped
   func filterInteractions() throws -> [String: Int] {
 	 guard !categories.isEmpty else { throw CardError.noCategories }
 	 
@@ -238,72 +263,14 @@ extension ReadsDeckManager {
   }
 }
 
-// MARK: - Loading Pipeline
-private extension ReadsDeckManager {
-  /// Runs the full load-more pipeline:
-  /// refresh interactions, calculate progress, fetch Firestore cards, append unique reads,
-  /// and store any error as `errorState`.
-  func performLoadMoreReads() async {
-	 await MainActor.run {
-		self.fetchIsActive = true
-		self.errorState = nil
-	 }
-	 
-	 do {
-		await MainActor.run {
-		  self.fetchInteractionReads()
-		}
-		
-		let categoryProgress = try filterInteractions()
-		try await loadMoreReads(categoryProgress: categoryProgress)
-		
-		await MainActor.run {
-		  self.errorState = nil
-		  self.fetchIsActive = false
-		}
-	 } catch {
-		await MainActor.run {
-		  self.errorState = mapDeckError(error)
-		  self.fetchIsActive = false
-		  self.printDeckError(error)
-		}
-	 }
-  }
-}
-
-// MARK: - Firestore Fetching
-private extension ReadsDeckManager {
-  /// Fetches cards for selected categories and selected language.
-  func fetchReadsCard(categoryProgress: [String: Int]) async throws -> [ReadCardModel] {
-	 guard !categoryProgress.isEmpty else { throw CardError.cardNoLeft }
-	 
-	 return try await firestore.fetchReads(
-		categoryProgress: categoryProgress,
-		languageCode: userDefaults.selectedLanguage.code,
-		limitPerCategory: 10
-	 )
-  }
-  
-  /// Fetches and appends a prepared batch.
-  func loadMoreReads(categoryProgress: [String: Int]) async throws {
-	 let cards = try await fetchReadsCard(categoryProgress: categoryProgress)
-	 
-	 await MainActor.run {
-		self.appendUniqueReads(cards)
-	 }
-  }
-}
-
 // MARK: - Display Mapping
 private extension ReadsDeckManager {
   /// Combines Firestore cards with local CoreData interactions for UI.
   func makeDisplayReads(from reads: [ReadCardModel]) -> [DisplayReadCard] {
-	 let interactionsById = Dictionary(uniqueKeysWithValues: readsInteractions.map { ($0.id, $0) })
-	 
 	 return reads.map { read in
 		DisplayReadCard(
 		  card: read,
-		  status: status(for: read, interactionsById: interactionsById)
+		  status: status(for: read)
 		)
 	 }
   }
@@ -312,14 +279,13 @@ private extension ReadsDeckManager {
   ///
   /// Priority matters: read beats archived, archived beats dismissed.
   func status(
-	 for read: ReadCardModel,
-	 interactionsById: [String: ReadInteractionModel]
+	 for read: ReadCardModel
   ) -> ReadCardDisplayStatus {
-	 guard let interaction = interactionsById[read.id] else { return .fresh }
+	 guard let index = readsInteractions.firstIndex(where: {$0.id == read.id }) else { return .fresh }
 	 
-	 if interaction.isRead { return .read }
-	 if interaction.isSaved { return .archived }
-	 if interaction.isSkipped { return .dismissed }
+	 if readsInteractions[index].isRead { return .read }
+	 if readsInteractions[index].isSaved { return .archived }
+	 if readsInteractions[index].isSkipped { return .dismissed }
 	 
 	 return .fresh
   }
@@ -335,31 +301,24 @@ private extension ReadsDeckManager {
 private extension ReadsDeckManager {
   /// Converts low-level fetch errors into UI-friendly card errors.
   func mapDeckError(_ error: Error) -> CardError {
-	 if let cardError = error as? CardError {
-		return cardError
-	 }
-	 
-	 if let urlError = error as? URLError {
-		switch urlError.code {
-		case .notConnectedToInternet, .networkConnectionLost, .cannotFindHost, .cannotConnectToHost, .timedOut:
-		  return .badInternetConnection
-		case .dataNotAllowed:
-		  return .cardNoLeft
-		default:
-		  return .somethingWentWrong
+		if let cardError = error as? CardError {
+			 return cardError
 		}
-	 }
-	 
-	 let nsError = error as NSError
-	 if nsError.isFirestoreNoCardsError {
-		return .cardNoLeft
-	 }
-	 
-	 if nsError.domain == NSURLErrorDomain {
-		return .badInternetConnection
-	 }
-	 
-	 return .somethingWentWrong
+		
+		let nsError = error as NSError
+		if nsError.domain == FirestoreErrorDomain {
+			 switch nsError.code {
+			 case FirestoreErrorCode.unavailable.rawValue:
+				  return .badInternetConnection
+			 case FirestoreErrorCode.permissionDenied.rawValue,
+					FirestoreErrorCode.unauthenticated.rawValue:
+				  return .somethingWentWrong
+			 default:
+				  return .somethingWentWrong
+			 }
+		}
+		
+		return .somethingWentWrong
   }
   
   /// Prints original error details before mapping.
@@ -367,33 +326,38 @@ private extension ReadsDeckManager {
 #if DEBUG
 	 let nsError = error as NSError
 	 print("""
-	 ❌ ReadsDeckManager error
-	 domain: \(nsError.domain)
-	 code: \(nsError.code)
-	 description: \(nsError.localizedDescription)
-	 failureReason: \(nsError.localizedFailureReason ?? "nil")
-	 recoverySuggestion: \(nsError.localizedRecoverySuggestion ?? "nil")
-	 userInfo: \(nsError.userInfo)
-	 mappedState: \(mapDeckError(error))
-	 """)
+  ❌ ReadsDeckManager error
+  domain: \(nsError.domain)
+  code: \(nsError.code)
+  description: \(nsError.localizedDescription)
+  failureReason: \(nsError.localizedFailureReason ?? "nil")
+  recoverySuggestion: \(nsError.localizedRecoverySuggestion ?? "nil")
+  userInfo: \(nsError.userInfo)
+  mappedState: \(mapDeckError(error))
+  """)
 #endif
   }
 }
 
 // MARK: - Firestore Error Helpers
 private extension NSError {
+  /// Firestore usually reports internet/offline issues as NSError instead of URLError.
+  var isFirestoreNetworkError: Bool {
+	 let message = firestoreMessage
+	 
+	 if code == 14 { return true }
+	 if message.contains("network") { return true }
+	 if message.contains("offline") { return true }
+	 if message.contains("unavailable") { return true }
+	 if message.contains("could not reach cloud firestore backend") { return true }
+	 
+	 return false
+  }
+  
   /// Firestore sometimes reports an exhausted query/index as an NSError.
   /// These cases are treated as "no cards left" instead of a generic failure.
   var isFirestoreNoCardsError: Bool {
-	 let message = [
-		localizedDescription,
-		localizedFailureReason,
-		localizedRecoverySuggestion
-	 ]
-		.compactMap { $0 }
-		.joined(separator: " ")
-		.lowercased()
-		.replacingOccurrences(of: "_", with: " ")
+	 let message = firestoreMessage
 	 
 	 if code == 11 { return true }
 	 if message.contains("out of range") { return true }
@@ -401,5 +365,18 @@ private extension NSError {
 	 if message.contains("out of index") { return true }
 	 
 	 return false
+  }
+  
+  var firestoreMessage: String {
+	 [
+		localizedDescription,
+		localizedFailureReason,
+		localizedRecoverySuggestion,
+		userInfo.description
+	 ]
+		.compactMap { $0 }
+		.joined(separator: " ")
+		.lowercased()
+		.replacingOccurrences(of: "_", with: " ")
   }
 }

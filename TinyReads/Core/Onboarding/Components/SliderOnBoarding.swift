@@ -26,6 +26,7 @@ struct SliderOnBoarding: View {
 				animationDragGesture = cards.count > 1 ? 10 : -10
 			 }
 		  }
+		  .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -36,8 +37,10 @@ private extension SliderOnBoarding {
 	 cards.removeAll { $0.id == id }
 	 
 	 if cards.isEmpty {
-		withAnimation(.easeInOut(duration: 0.8)){
-		  onFinished()
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.3){
+		  withAnimation(.easeInOut(duration: 0.45)){
+			 onFinished()
+		  }
 		}
 	 }
   }

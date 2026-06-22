@@ -12,6 +12,11 @@ import Foundation
 final class DismissedViewModel{
   var reads: [ReadCardModel] = []
   var error: Error? = nil
+  var filterSelection: Bool = false
+  
+  let filters: [String] = ["All"] + ReadCategories.allCases.map({$0.rawValue.capitalized})
+  
+  var selectedFilter = "All"
   
   private let dismissedManager = DismissedManager.shared
   

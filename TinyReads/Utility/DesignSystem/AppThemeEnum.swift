@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import UIKit
 
-enum AppTheme: String, CaseIterable {
+enum AppTheme: String, CaseIterable, Equatable {
   case light, dark, system
   
   var icon: String {
@@ -35,11 +36,16 @@ enum AppTheme: String, CaseIterable {
   var assets: AppThemeAssets {
 	 switch self {
 	 case .light:
-		.light
+		return .light
 	 case .dark:
-		.dark
+		return .dark
 	 case .system:
-		.light
+		return .light
 	 }
   }
 }
+
+
+
+
+

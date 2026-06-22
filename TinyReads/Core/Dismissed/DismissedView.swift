@@ -31,16 +31,57 @@ struct DismissedView: View {
 		}
 	 }
 	 .overlay(
-		Button{
-		  withAnimation(){
-			 NavigationManager.shared.secondary = nil
+		HStack{
+		  Button{
+			 withAnimation(){
+				NavigationManager.shared.secondary = nil
+			 }
+		  }label:{
+			 Image(systemName: "chevron.left")
+				.foregroundStyle(themeManager.themeAssets.secondary)
+				.frame(maxWidth: .infinity, alignment: .leading)
+				
 		  }
-		}label:{
-		  Image(systemName: "chevron.left")
-			 .foregroundStyle(themeManager.themeAssets.secondary)
-			 .padding()
-		},
-		alignment: .topLeading
+		  
+		  
+		  
+		  Button{
+			 withAnimation(.easeInOut){
+				vm.filterSelection.toggle()
+			 }
+		  }label:{
+			 Text(vm.selectedFilter)
+				.accent()
+				.frame(maxWidth: .infinity, alignment: .trailing)
+		  }
+			 .overlay(alignment: .topTrailing){
+				VStack(alignment: .leading){
+						ForEach(vm.filters, id: \.self){ item in
+						  Button{
+							 withAnimation{
+								vm.selectedFilter = item
+								vm.filterSelection = false
+							 }
+						  }label: {
+							 Text(item)
+								.font(.caption)
+								.fontDesign(.serif)
+								.foregroundStyle(vm.selectedFilter == item ? themeManager.themeAssets.accent : themeManager.themeAssets.secondary)
+								.padding(5)
+						  }
+						}
+					 }
+					 .padding()
+					 .background(
+						RoundedRectangle(cornerRadius: 15)
+						  .fill(themeManager.themeAssets.card.opacity(0.8))
+					 )
+					 .offset(y: 20)
+					 .opacity(vm.filterSelection ? 1 : 0)
+				  }
+		}
+		  .padding(),
+		alignment: .top
 	 )
 	 .task {
 		await vm.initialize()

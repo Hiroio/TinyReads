@@ -19,8 +19,8 @@ struct OnboardingView: View {
 	 ZStack {
 		themeManager.themeAssets.background.ignoresSafeArea()
 		
-		VStack(spacing: 18) {
-		  VStack(spacing: 8) {
+		VStack(spacing: 15) {
+		  VStack(spacing: 10) {
 			 Text("Tiny Reads")
 				.title()
 			 
@@ -57,12 +57,12 @@ struct OnboardingView: View {
 		  }
 		}
 		.padding(.top, 32)
-		
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
 		loadingOverlay
 	 }
 	 .animation(.easeInOut(duration: 0.8), value: userDefaults.selectedCategories.count)
 	 .animation(.easeInOut(duration: 0.45), value: step)
-	 .animation(.easeInOut(duration: 0.6), value: isLoading)
+	 .animation(.easeInOut(duration: 0.4), value: isLoading)
 	 .task {
 		await startIntro()
 	 }

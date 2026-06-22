@@ -68,6 +68,8 @@ enum CardError: Error, LocalizedError {
 	 switch self {
 	 case .cardNoLeft:
 		"Change Categories"
+	 case .badInternetConnection, .somethingWentWrong:
+		"Check Viewed Cards"
 	 default:
 		nil
 	 }
