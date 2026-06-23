@@ -26,18 +26,23 @@ struct PaperBackGround: View {
 
 				VStack(spacing: 0) {
 				  Image(themeManager.themeAssets.topArticleCard)
-						  .resizable()
-						  .frame(width: .infinity, height: topHeight)
+						  .resizable(resizingMode: .stretch)
+						  .frame(maxWidth: .infinity)
+						  .frame(height: topHeight)
 
 				  Image(themeManager.themeAssets.middleArticleCard)
 						  .resizable(resizingMode: .stretch)
-						  .frame(width: .infinity, height: middleHeight)
+						  .frame(maxWidth: .infinity)
+						  .frame(height: middleHeight)
 
 				  Image(themeManager.themeAssets.bottomArticleCard)
-						  .resizable()
-						  .frame(width: .infinity, height: bottomHeight)
+						  .resizable(resizingMode: .stretch)
+						  .frame(maxWidth: .infinity)
+						  .frame(height: bottomHeight)
 				}
+				.compositingGroup()
 				.frame(maxWidth: .infinity, maxHeight: .infinity)
+				.shadow(radius: 5)
 		  }
 	 }
 }

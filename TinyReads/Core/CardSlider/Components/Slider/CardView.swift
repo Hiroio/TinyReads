@@ -23,7 +23,6 @@ struct CardView: View {
   
   var body: some View {
 		VStack(spacing: 10){
-		  Text("\(displayCard.card.sortIndex)")
 		  VStack(spacing: 15){
 			 if let category = ReadCategories(rawValue: card.categoryId){
 				Text(category.title)
@@ -34,12 +33,13 @@ struct CardView: View {
 				.allowsTightening(false)
 			 Text(card.hook)
 				.secondary()
-				.padding(.horizontal, 10)
+				.padding(.horizontal)
 				.allowsTightening(true)
 		  }
 		  .multilineTextAlignment(.center)
-		  .frame(maxWidth: .infinity)
-		  .padding(30)
+		  .frame(maxWidth: .infinity, maxHeight: .infinity)
+		  .aspectRatio(1.1, contentMode: .fit)
+		  .padding(.horizontal)
 		  
 		  VStack{
 			 Text("\(card.wordCount) words")
@@ -66,7 +66,7 @@ struct CardView: View {
 		}
 		.padding()
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.aspectRatio(0.7, contentMode: .fit)
+		.aspectRatio(UIDevice.isIPad ? 0.9 : 0.7, contentMode: .fit)
 		.background(
 		  Image(themeManager.themeAssets.backCard)
 			 .resizable(resizingMode: .stretch)

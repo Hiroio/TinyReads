@@ -24,10 +24,11 @@ struct ThemeSelectorView: View {
 			 Button{
 				withAnimation(.easeInOut){
 				  themeManager.appTheme = item
+				  themeManager.changeColorTheme()
 				}
 			 }label: {
 				Image(systemName: icon)
-				  .font(.headline)
+				  .font(.title)
 				  .foregroundStyle(themeManager.themeAssets.primary)
 				  .padding()
 				  .background(

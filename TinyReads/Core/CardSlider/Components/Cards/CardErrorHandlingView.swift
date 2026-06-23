@@ -29,7 +29,7 @@ struct CardErrorHandlingView: View {
     var body: some View {
 		let themeAssets = themeManager.themeAssets
         VStack(spacing: 25) {
-			 Image(error.imageName)
+			 Image("\(error.imageName)\(themeAssets == .dark ? "Dark" : "")")
 				.resizable()
 				.scaledToFit()
 				.aspectRatio(0.45, contentMode: .fit)

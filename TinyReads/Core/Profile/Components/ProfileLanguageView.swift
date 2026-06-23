@@ -50,7 +50,7 @@ struct ProfileLanguageView: View {
 		.padding(.horizontal)
 		.padding()
 		.background(
-		  Image(assets.backSmallCard)
+		  Image(assets.readerCard)
 			 .resizable()
 		)
     }

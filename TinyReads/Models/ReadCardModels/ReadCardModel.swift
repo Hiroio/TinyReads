@@ -36,7 +36,7 @@ extension ReadCardModel: Equatable {
 	 ReadCardModel(
 		id: "1",
 		translationGroupId: "",
-		categoryId: "",
+		categoryId: "philosophy",
 		languageCode: "uk",
 		title: "Чому ми продовжуємо дивитися поганий фільм до кінця?",
 		hook: "Ви заплатили за квиток і вже через 20 хвилин розумієте, що фільм жахливий. Але ви залишаєтеся, бо “вже ж заплатили”. Це омана незворотних витрат, і вона змушує нас приймати погані рішення щодня.",

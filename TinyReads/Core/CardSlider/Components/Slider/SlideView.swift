@@ -102,8 +102,7 @@ extension SlideView{
 			 }
 			 
 			 DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-				var transaction = Transaction()
-//				transaction.disablesAnimations = true
+				let transaction = Transaction()
 				
 				withTransaction(transaction) {
 				  if width > 0 {

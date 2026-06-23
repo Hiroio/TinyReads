@@ -38,11 +38,11 @@ struct ProfileActionBar: View {
 				  profileActionCard = item
 				}
 			 }label:{
-				let image = "\(item.icon)\(themeManager.appTheme == .dark ? "Dark" : "")"
+				let image = "\(item.icon)\(themeManager.themeAssets == .dark ? "Dark" : "")"
 				Image(image)
 				  .resizable()
 				  .scaledToFit()
-				  .frame(width: 55)
+				  .frame(width: UIDevice.isIPad ? 110 : 55)
 				  .frame(maxWidth: .infinity)
 			 }
 			 .tinyAccessibilityButton(item.accessibilityLabel, hint: item.accessibilityHint)

@@ -71,6 +71,7 @@ enum AppThemeAssets: String, Identifiable {
   }
   
   
+  
 //  MARK: - BackGround Cards
   var backCard: String{
 	 switch self {
@@ -142,6 +143,8 @@ enum AppThemeAssets: String, Identifiable {
 		"bottomArticleCardDark"
 	 }
   }
+  
+  
 //  MARK: - Actions Icons
 //  - Profile Actions
   var languageAction: String{
@@ -214,6 +217,17 @@ enum AppThemeAssets: String, Identifiable {
 		"nav_categories_light"
 	 case .dark:
 		"nav_categories_dark"
+	 }
+  }
+  
+  
+//  MARK: OTHERS
+  var emptyState: String{
+	 switch self {
+	 case .light:
+		"EmptyState"
+	 case .dark:
+		"EmptyStateDark"
 	 }
   }
 }

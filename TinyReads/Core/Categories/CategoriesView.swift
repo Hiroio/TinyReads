@@ -25,33 +25,42 @@ struct CategoriesView: View {
 		
 		VStack(spacing: 24) {
 		  Text("Select Your Interests")
+			 .padding(.top)
 			 .title()
 			 .frame(maxWidth: .infinity)
-			 .overlay(
-				Button{
-				  if secondary{
-					 NavigationManager.shared.secondary = nil
-				  }else{
-					 onDismiss()
-				  }
-				}label: {
-				  Image(systemName: "xmark")
-					 .accent()
-				}
-				  .opacity(secondary ? 1 : 0),
-				alignment: .leading
-			 )
 			 .padding()
 		  
 		  categoryList
 		}
 		.padding()
-		.padding(.top, 20)
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
+		.aspectRatio(UIDevice.isIPad ? 1 : 0.7, contentMode: .fit)
 		.background {
 		  Image(themeManager.themeAssets.backCard)
 			 .resizable()
 			 .allowsHitTesting(false)
 		}
+		.overlay(
+		  Button{
+			 if secondary{
+				NavigationManager.shared.secondary = nil
+			 }else{
+				onDismiss()
+			 }
+		  }label: {
+			 Text("Close")
+				.accent()
+				.padding()
+				.background(
+				  Image(themeManager.themeAssets.backSmallCard)
+					 .resizable()
+				)
+		  }
+			 .opacity(secondary ? 1 : 0),
+		  alignment: .bottom
+		)
+		.padding(.horizontal)
+		.shadow(radius: 5)
 	 }
 	 .animation(.easeInOut, value: userDefaults.selectedCategories)
   }
@@ -67,12 +76,11 @@ private extension CategoriesView {
 			 categoryRow(item)
 		  }
 		}
-		.padding(30)
-		.frame(maxWidth: .infinity)
 	 }
+	 .frame(maxWidth: .infinity)
 	 .scrollIndicators(.hidden)
 	 .clipShape(.rect)
-	 .frame(height: 450)
+	 .aspectRatio(UIDevice.isIPad ? 0.9 : 0.6, contentMode: .fit)
   }
   
   // Category title

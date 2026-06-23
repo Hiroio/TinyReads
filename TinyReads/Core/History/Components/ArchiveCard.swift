@@ -24,21 +24,24 @@ struct ArchiveCard: View {
 		VStack{
 		  Text(read.title)
 			 .secondary(weight: .bold)
-			 .padding(.horizontal, 30)
-			 .padding(.trailing)
 			 .multilineTextAlignment(.center)
-			 .frame(maxWidth: .infinity, maxHeight: .infinity)
-			 .aspectRatio(1, contentMode: .fit)
-			 .background(
-				Image("\(state.backCard)\(themeManager.appTheme == .dark ? "Dark" : "")")
-				  .resizable()
-				  .scaledToFit()
-				  
-			 )
-			 .shadow(radius: 3)
-			 .allowsTightening(true)
-		  
+		  Text(read.categoryId)
+			 .secondary(weight: .light)
 		}
+		.padding(.horizontal, 30)
+		.padding(.trailing)
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
+		.aspectRatio(1, contentMode: .fit)
+		.background(
+		  Image("\(state.backCard)\(themeManager.themeAssets == .dark ? "Dark" : "")")
+			 .resizable()
+			 .scaledToFit()
+		  
+		)
+		.compositingGroup()
+		.shadow(radius: 3)
+		.allowsTightening(true)
+		
 	 }
   }
 }

@@ -23,6 +23,7 @@ struct ArticleView: View {
 		  VStack(spacing: 10){
 			 Text(article.title)
 				.title(weight: .bold)
+				.padding()
 			 Text(article.hook)
 				.secondary()
 		  }
@@ -31,7 +32,6 @@ struct ArticleView: View {
 		  Text(article.body)
 			 .regular(weight: .medium)
 			 .lineSpacing(7)
-			 .padding(10)
 		  
 		  
 		  VStack{
@@ -47,7 +47,8 @@ struct ArticleView: View {
 			 }
 		  }.fontDesign(.serif)
 		}
-		.padding(35)
+		.padding(.horizontal, UIDevice.isIPad ? 50 : 10)
+		.padding(UIDevice.isIPad ? 75 : 40)
 		.background(
 		  PaperBackGround()
 		)
@@ -86,6 +87,11 @@ struct ArticleView: View {
 				  .font(.title2.weight(.medium))
 				  .padding(15)
 				  .foregroundStyle(themeManager.themeAssets.primary)
+				  .background(
+					 Image(themeManager.themeAssets.backSmallCard)
+						.resizable()
+						.opacity(0.8)
+				  )
 			 }
 		  }
 		},

@@ -12,8 +12,7 @@ struct CardEmptyState: View {
   @Environment(CardSliderViewModel.self) var vm
   var body: some View {
 	 VStack{
-		
-		Image("EmptyState")
+		Image(themeManager.themeAssets.emptyState)
 		  .resizable()
 		  .scaledToFit()
 		  .aspectRatio(0.5, contentMode: .fit)

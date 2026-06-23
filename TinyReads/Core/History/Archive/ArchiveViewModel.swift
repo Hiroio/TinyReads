@@ -13,6 +13,17 @@ final class ArchiveViewModel{
   var reads: [ReadCardModel] = []
   var error: Error? = nil
   
+  var selectedFilter = "All"
+  
+  var filetredReads: [ReadCardModel]{
+	 switch selectedFilter{
+	 case "All":
+		return reads
+	 default:
+		return reads.filter({ $0.categoryId == selectedFilter.lowercased()})
+	 }
+  }
+  
   private let archiveManager = ArchiveManager.shared
   
   var state: ArchiveState {

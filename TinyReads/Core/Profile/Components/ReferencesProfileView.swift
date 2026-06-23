@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ReferencesProfileView: View {
   @Environment(ThemeManager.self) var themeManager
-  let policyURL = URL(string: "https://github.com/Hiroio")!
-  let termsOfUseURL = URL(string: "https://github.com/Hiroio")!
+  let policyURL = URL(string: "https://hiroio.github.io/tinyreads-legal/privacy.html")!
+  let termsOfUseURL = URL(string: "https://hiroio.github.io/tinyreads-legal/terms.html")!
     var body: some View {
 		HStack(spacing: 10){
 		  Link(destination: policyURL) {

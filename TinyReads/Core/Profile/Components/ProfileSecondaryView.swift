@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfileSecondaryView: View {
+  @Environment(ThemeManager.self) var themeManager
   @Binding var profileActionCard: ProfileActionBarEnum?
   var body: some View {
 	 switch profileActionCard {
@@ -52,6 +53,21 @@ struct ProfileSecondaryView: View {
 				self.profileActionCard = nil
 			 }
 		  }
+		  .overlay(alignment: .bottom){
+			 Button{
+				withAnimation{
+				  self.profileActionCard = nil
+				}
+			 }label:{
+				Text("Close")
+				  .accent()
+				  .padding()
+				  .background(
+					 Image(themeManager.themeAssets.backSmallCard)
+						.resizable()
+				  )
+			 }
+		  }
 		  .transition(.opacity)
 		}
 		.zIndex(2)
@@ -79,4 +95,5 @@ struct ProfileSecondaryView: View {
 
 #Preview {
   ProfileSecondaryView(profileActionCard: .constant(nil))
+	 .environment(ThemeManager())
 }

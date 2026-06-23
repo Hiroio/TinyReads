@@ -10,15 +10,23 @@ import Foundation
 @MainActor
 @Observable
 final class DismissedViewModel{
-  var reads: [ReadCardModel] = []
+  var reads: [ReadCardModel] = [ReadCardModel.getForPreview()]
   var error: Error? = nil
-  var filterSelection: Bool = false
-  
-  let filters: [String] = ["All"] + ReadCategories.allCases.map({$0.rawValue.capitalized})
   
   var selectedFilter = "All"
   
+  var filetredReads: [ReadCardModel]{
+	 switch selectedFilter{
+	 case "All":
+		return reads
+	 default:
+		return reads.filter({ $0.categoryId == selectedFilter.lowercased()})
+	 }
+  }
+  
   private let dismissedManager = DismissedManager.shared
+  
+  
   
   
 }

@@ -10,7 +10,7 @@ import SwiftUI
 
 @Observable
 final class ThemeManager{
-  var colorSceme: ColorScheme = .light
+  var colorScheme: ColorScheme = .light
   
   var appTheme: AppTheme{
 	 didSet{
@@ -18,22 +18,32 @@ final class ThemeManager{
 	 }
   }
   
+  var themeAssets: AppThemeAssets
+  
   let userDefaults = UserDefaultsManager.shared
   
   init(){
-	 self.appTheme = userDefaults.selectedColorTheme
+	 let selectedColorTheme = userDefaults.selectedColorTheme
+	 self.appTheme = selectedColorTheme
+	 self.themeAssets = selectedColorTheme.assets
   }
   
-  var themeAssets: AppThemeAssets{
+  
+  func changeColorTheme() {
+	 var assets = appTheme.assets
 	 switch appTheme {
 	 case .light:
-		  .light
+		assets = .light
 	 case .dark:
-		  .dark
+		assets = .dark
 	 case .system:
-		colorSceme == .dark ? .dark : .light
+		assets = colorScheme == .dark ? .dark : .light
 	 }
+	 
+	 self.themeAssets = assets
+	 print(themeAssets)
   }
+  
 }
 
 

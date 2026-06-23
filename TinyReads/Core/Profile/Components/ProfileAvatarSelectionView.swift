@@ -40,7 +40,7 @@ struct ProfileAvatarSelectionView: View {
 				}
 			 }
 		  }
-		  .padding(40)
+		  .padding(UIDevice.isIPad ? 70 : 40)
 		  .frame(maxHeight: .infinity)
 		  .ignoresSafeArea(edges: .bottom)
 		  .background(
@@ -61,6 +61,7 @@ struct ProfileAvatarSelectionView: View {
 		  }
 		  .tinyAccessibilityButton("Close")
 		}
+		.padding(.horizontal)
 		.foregroundStyle(themeManager.themeAssets.primary)
     }
 }

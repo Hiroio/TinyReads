@@ -29,7 +29,7 @@ struct ProfileView: View {
 		}
 		.padding()
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.aspectRatio(0.9 ,contentMode: .fit)
+		.aspectRatio(UIDevice.isIPad ? 1.6 : 0.9 ,contentMode: .fit)
 		.background(
 		  Image(themeManager.themeAssets.readerCard)
 			 .resizable()
@@ -49,11 +49,10 @@ struct ProfileView: View {
 					 .scaledToFit()
 					 .shadow(color: .black.opacity(0.1),radius: 5)
 				)
-				.offset(y: -55)
+				.offset(y: -45)
 		  }
 		}
-		.padding(.horizontal, 5)
-		.padding(.vertical)
+		.padding(.horizontal, UIDevice.isIPad ? 20 : 5)
 		
 		ProfileSecondaryView(profileActionCard: $profileActionCard)
 		
