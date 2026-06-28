@@ -28,8 +28,9 @@ struct ProfileView: View {
 			 .padding(.bottom)
 		}
 		.padding()
+		.padding(.horizontal, UIDevice.isIPad ? 20 : 5)
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.aspectRatio(UIDevice.isIPad ? 1.6 : 0.9 ,contentMode: .fit)
+		.aspectRatio(UIDevice.isIPad ? 1.7 : 0.9 ,contentMode: .fit)
 		.background(
 		  Image(themeManager.themeAssets.readerCard)
 			 .resizable()
@@ -83,7 +84,7 @@ extension ProfileView{
 		  Image("ProfileIcon\(userDefaultManager.selectedAvatarIndex)\(themeManager.themeAssets.id)")
 			 .resizable()
 			 .scaledToFit()
-			 .aspectRatio(1, contentMode: .fit)
+			 .aspectRatio(UIDevice.isIPad ? 1.1 : 1, contentMode: .fit)
 			 .overlay(alignment: .topTrailing) {
 				Image(systemName: "pencil")
 				  .font(.title3.weight(.black))

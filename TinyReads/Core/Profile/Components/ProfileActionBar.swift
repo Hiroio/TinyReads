@@ -42,7 +42,7 @@ struct ProfileActionBar: View {
 				Image(image)
 				  .resizable()
 				  .scaledToFit()
-				  .frame(width: UIDevice.isIPad ? 110 : 55)
+				  .frame(width: UIDevice.isIPad ? 95 : 55)
 				  .frame(maxWidth: .infinity)
 			 }
 			 .tinyAccessibilityButton(item.accessibilityLabel, hint: item.accessibilityHint)

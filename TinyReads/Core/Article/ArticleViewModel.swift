@@ -28,7 +28,15 @@ final class ArticleViewModel{
 	 return interactionState == .archived || interactionState == .read
   }
   
-  
+  var shareText: String {
+	 """
+	 Tiny Read: \(article.title)
+
+	 \(article.hook)
+
+	 Short reads for curious minds.
+	 """
+  }
   
 }
 

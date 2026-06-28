@@ -55,19 +55,19 @@ struct ArticleView: View {
 	 }
 	 .onScrollGeometryChange(for: CGFloat.self) { geometry in
 		let offsetY = geometry.contentOffset.y
-			 let maxOffsetY = max(0, geometry.contentSize.height - geometry.containerSize.height)
-			 let minOffsetY = min (0, geometry.contentSize.height)
-			 return min(max(offsetY, minOffsetY), maxOffsetY)
+		let maxOffsetY = max(0, geometry.contentSize.height - geometry.containerSize.height)
+		let minOffsetY = min (0, geometry.contentSize.height)
+		return min(max(offsetY, minOffsetY), maxOffsetY)
 	 } action: { oldValue, newValue in
 		let delta = newValue - oldValue
-			 guard abs(delta) > 2 else { return }
+		guard abs(delta) > 2 else { return }
 		
 		withAnimation {
-			 if delta > 0 {
-				  scrollUp = false
-			 } else {
-				  scrollUp = true
-			 }
+		  if delta > 0 {
+			 scrollUp = false
+		  } else {
+			 scrollUp = true
+		  }
 		}
 	 }
 	 .overlay(
@@ -79,6 +79,20 @@ struct ArticleView: View {
 		Group{
 		  if scrollUp{
 			 HStack(spacing: 5){
+				ShareLink(item: vm.shareText){
+				  Image(systemName: "square.and.arrow.up")
+					 .resizable()
+					 .scaledToFit()
+					 .padding(15)
+					 .foregroundStyle(themeManager.themeAssets.primary)
+					 .background(
+						Image(themeManager.themeAssets.backSmallCard)
+						  .resizable()
+						  .opacity(0.8)
+					 )
+				}
+				
+				Spacer()
 				Button{
 				  if vm.markAsSaved(){
 					 onInteractionChanged()
@@ -92,7 +106,6 @@ struct ArticleView: View {
 					 .background(
 						Image(themeManager.themeAssets.backSmallCard)
 						  .resizable()
-						  .opacity(0.8)
 					 )
 				}
 				
@@ -104,16 +117,18 @@ struct ArticleView: View {
 				  Image(systemName: "xmark")
 					 .resizable()
 					 .scaledToFit()
-					 .padding(15)
+					 .padding(20)
 					 .foregroundStyle(themeManager.themeAssets.primary)
 					 .background(
 						Image(themeManager.themeAssets.backSmallCard)
 						  .resizable()
-						  .opacity(0.8)
 					 )
 				}
 			 }
+			 .padding(.horizontal)
 			 .frame(height: 55)
+			 .compositingGroup()
+			 .shadow(radius: 2)
 		  }
 		},
 		alignment: .topTrailing
@@ -134,7 +149,7 @@ struct ArticleView: View {
 	 .animation(.easeInOut, value: vm.showState != nil)
   }
   
- 
+  
 }
 
 @ViewBuilder
