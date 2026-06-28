@@ -78,21 +78,42 @@ struct ArticleView: View {
 	 .overlay(
 		Group{
 		  if scrollUp{
-			 Button{
-				withAnimation(){
-				  NavigationManager.shared.article = nil
+			 HStack(spacing: 5){
+				Button{
+				  if vm.markAsSaved(){
+					 onInteractionChanged()
+				  }
+				}label:{
+				  Image(vm.articleSaved ? "SaveAction" : themeManager.themeAssets.saveAction)
+					 .resizable()
+					 .scaledToFit()
+					 .shadow(color: .green.opacity(0.7),radius: vm.articleSaved ? 3 : 0)
+					 .padding(10)
+					 .background(
+						Image(themeManager.themeAssets.backSmallCard)
+						  .resizable()
+						  .opacity(0.8)
+					 )
 				}
-			 }label:{
-				Image(systemName: "xmark")
-				  .font(.title2.weight(.medium))
-				  .padding(15)
-				  .foregroundStyle(themeManager.themeAssets.primary)
-				  .background(
-					 Image(themeManager.themeAssets.backSmallCard)
-						.resizable()
-						.opacity(0.8)
-				  )
+				
+				Button{
+				  withAnimation(){
+					 NavigationManager.shared.article = nil
+				  }
+				}label:{
+				  Image(systemName: "xmark")
+					 .resizable()
+					 .scaledToFit()
+					 .padding(15)
+					 .foregroundStyle(themeManager.themeAssets.primary)
+					 .background(
+						Image(themeManager.themeAssets.backSmallCard)
+						  .resizable()
+						  .opacity(0.8)
+					 )
+				}
 			 }
+			 .frame(height: 55)
 		  }
 		},
 		alignment: .topTrailing
@@ -112,6 +133,8 @@ struct ArticleView: View {
 	 }
 	 .animation(.easeInOut, value: vm.showState != nil)
   }
+  
+ 
 }
 
 @ViewBuilder

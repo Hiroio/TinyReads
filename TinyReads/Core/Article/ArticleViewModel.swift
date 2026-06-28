@@ -24,10 +24,35 @@ final class ArticleViewModel{
   }
   
   
+  var articleSaved: Bool {
+	 return interactionState == .archived || interactionState == .read
+  }
+  
+  
+  
+}
+
+
+
+
+extension ArticleViewModel{
   func markAsRead() -> Bool{
 	 let interaction = ReadInteractionModel(readCard: article)
 	 if self.coreData.markRead(interaction) {
 		self.interactionState = .read
+		AnalyticsManager.shared.readCard(card: article)
+		showAnimation(true)
+		return true
+	 }else{
+		showAnimation(false)
+		return false
+	 }
+  }
+  
+  func markAsSaved() -> Bool{
+	 let interaction = ReadInteractionModel(readCard: article)
+	 if self.coreData.markSaved(interaction) {
+		self.interactionState = .archived
 		showAnimation(true)
 		return true
 	 }else{
@@ -60,4 +85,5 @@ final class ArticleViewModel{
 		self.showState = nil
 	 }
   }
+  
 }

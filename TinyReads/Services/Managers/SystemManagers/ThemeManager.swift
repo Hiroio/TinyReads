@@ -41,7 +41,6 @@ final class ThemeManager{
 	 }
 	 
 	 self.themeAssets = assets
-	 print(themeAssets)
   }
   
 }

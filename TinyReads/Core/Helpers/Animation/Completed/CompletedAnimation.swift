@@ -15,28 +15,24 @@ struct CompletedAnimation: View {
 		TimelineView(.animation(minimumInterval: 0.05, paused: pause)) { context in
 		  let elapsed = context.date.timeIntervalSince(startTime)
 		  let spriteIndex = (Int(elapsed / 0.05))
-		  let paused = pause(index: spriteIndex)
+		  let isFinished = spriteIndex >= state.sprites
 		  VStack{
 			 Image("\(state.name)\(min(state.sprites, spriteIndex))")
 				.resizable()
 				.scaledToFit()
 				.frame(width: 100)
-				.shadow(color: .green.opacity(0.4), radius: paused ? 10 : 0)
+				.shadow(color: .green.opacity(0.4), radius: isFinished ? 10 : 0)
 		  }
 		  .onChange(of: spriteIndex, { oldValue, newValue in
-			 self.pause = newValue == state.sprites + 1
+			 if newValue >= state.sprites {
+				self.pause = true
+			 }
 		  })
-		  .animation(.easeInOut, value: paused)
+		  .animation(.easeInOut, value: isFinished)
 		  .animation(.easeInOut(duration: 0.05), value: elapsed)
 		}
 		
     }
-  
-  func pause(index: Int) -> Bool{
-	 let pause = index == state.sprites + 1
-	 self.pause = true
-	 return pause
-  }
 }
 
 #Preview {

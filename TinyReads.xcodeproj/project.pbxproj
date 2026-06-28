@@ -11,6 +11,7 @@
 		CED0D4282FC8BE6B0058C075 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = CED0D4272FC8BE6B0058C075 /* FirebaseCore */; };
 		CED0D42A2FC8BE6B0058C075 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CED0D4292FC8BE6B0058C075 /* FirebaseFirestore */; };
 		CED0D42C2FC8BE6B0058C075 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = CED0D42B2FC8BE6B0058C075 /* FirebaseFunctions */; };
+		CED48A042FF0465D008869D8 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = CED48A032FF0465D008869D8 /* FirebaseAnalytics */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +29,19 @@
 		CED0D4042FC8789B0058C075 /* TinyReads.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinyReads.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CED48A0B2FF08D80008869D8 /* Exceptions for "TinyReads" folder in "TinyReads" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Models/JSONtoUpload/English_Philosophy.json,
+				Models/JSONtoUpload/English_Psychology.json,
+				Models/JSONtoUpload/Ukraine_Philosophy.json,
+				Models/JSONtoUpload/Ukraine_Psychology.json,
+			);
+			target = CED0D4032FC8789B0058C075 /* TinyReads */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CE9C8A672FD1FA1A00EE2165 /* TinyReadsTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -36,6 +50,9 @@
 		};
 		CED0D4062FC8789B0058C075 /* TinyReads */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CED48A0B2FF08D80008869D8 /* Exceptions for "TinyReads" folder in "TinyReads" target */,
+			);
 			path = TinyReads;
 			sourceTree = "<group>";
 		};
@@ -56,6 +73,7 @@
 				CED0D4282FC8BE6B0058C075 /* FirebaseCore in Frameworks */,
 				CED0D4262FC8BE6B0058C075 /* FirebaseAuth in Frameworks */,
 				CED0D42A2FC8BE6B0058C075 /* FirebaseFirestore in Frameworks */,
+				CED48A042FF0465D008869D8 /* FirebaseAnalytics in Frameworks */,
 				CED0D42C2FC8BE6B0058C075 /* FirebaseFunctions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -68,6 +86,7 @@
 			children = (
 				CED0D4062FC8789B0058C075 /* TinyReads */,
 				CE9C8A672FD1FA1A00EE2165 /* TinyReadsTests */,
+				CED48A022FF0465D008869D8 /* Frameworks */,
 				CED0D4052FC8789B0058C075 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -79,6 +98,13 @@
 				CE9C8A662FD1FA1A00EE2165 /* TinyReadsTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		CED48A022FF0465D008869D8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -128,6 +154,7 @@
 				CED0D4272FC8BE6B0058C075 /* FirebaseCore */,
 				CED0D4292FC8BE6B0058C075 /* FirebaseFirestore */,
 				CED0D42B2FC8BE6B0058C075 /* FirebaseFunctions */,
+				CED48A032FF0465D008869D8 /* FirebaseAnalytics */,
 			);
 			productName = TinyReads;
 			productReference = CED0D4042FC8789B0058C075 /* TinyReads.app */;
@@ -515,6 +542,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CED0D4242FC8BE6B0058C075 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFunctions;
+		};
+		CED48A032FF0465D008869D8 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CED0D4242FC8BE6B0058C075 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

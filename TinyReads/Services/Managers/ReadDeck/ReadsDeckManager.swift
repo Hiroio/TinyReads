@@ -115,7 +115,7 @@ extension ReadsDeckManager {
 		let newReads = try await firestore.fetchReads(
 		  categoryProgress: categoryProgress,
 		  languageCode: userDefaults.selectedLanguage.code,
-		  limitPerCategory: 3 // TODO: Change to 25 for production
+		  limitPerCategory: 25
 		)
 		
 		await MainActor.run {
@@ -157,9 +157,6 @@ extension ReadsDeckManager {
 	 
 	 await MainActor.run {
 		self.appendUniqueReads(viewedCards)
-		if !viewedCards.isEmpty {
-		  self.errorState = nil
-		}
 	 }
   }
 }

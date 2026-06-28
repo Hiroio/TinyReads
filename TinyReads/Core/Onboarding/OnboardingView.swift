@@ -41,19 +41,26 @@ struct OnboardingView: View {
 		  }
 		  let selectedCategoryActive = userDefaults.selectedCategories.count < 0
 		  if step == .categories{
-			 Button{
-				userDefaults.onBoardingCompletion = true
-			 }label: {
-				Text("Complete")
-				  .foregroundStyle(themeManager.themeAssets.card)
-				  .padding()
-				  .background(
-					 RoundedRectangle(cornerRadius: 30)
-						.fill(themeManager.themeAssets.accent)
-				  )
+			 VStack{
+				Button{
+				  if selectedCategoryActive{
+					 userDefaults.onBoardingCompletion = true
+				  }
+				}label: {
+				  Text("Complete")
+					 .foregroundStyle(themeManager.themeAssets.card)
+					 .padding()
+					 .background(
+						RoundedRectangle(cornerRadius: 30)
+						  .fill(themeManager.themeAssets.accent)
+					 )
+				}
+				.disabled(selectedCategoryActive)
+				.opacity(selectedCategoryActive ? 0.5 : 1)
+				Text("Choose at least one category to start")
+				  .font(.caption)
+				  .foregroundStyle(themeManager.themeAssets.secondary)
 			 }
-			 .disabled(selectedCategoryActive)
-			 .opacity(selectedCategoryActive ? 0.5 : 1)
 		  }
 		}
 		.padding(.top, 32)

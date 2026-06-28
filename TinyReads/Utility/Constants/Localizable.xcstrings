@@ -122,6 +122,9 @@
         }
       }
     },
+    "Can't find nothing" : {
+
+    },
     "Change avatar" : {
       "localizations" : {
         "en" : {

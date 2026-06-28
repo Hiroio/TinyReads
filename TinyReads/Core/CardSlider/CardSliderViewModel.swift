@@ -96,10 +96,11 @@ extension CardSliderViewModel {
   // Right Swipe
   func onSave(_ id: String) {
 	 guard let index = cards.firstIndex(where: { $0.id == id }) else { return }
-	 print("saving")
 	 let card = cards[index].card
 	 if cards[index].status == .fresh{
 		userDefaultManager.setCategoryReadedCount(for: card.categoryId, index: card.sortIndex, language: LanguageEnum(rawValue: card.languageCode))
+		trackCategoryCompletionIfNeeded(card: card)
+		
 		keepDeckAliveAfterSwipe()
 	 }
 	 cards.remove(at: index)
@@ -173,5 +174,15 @@ extension CardSliderViewModel{
 		  self.startTracking()
 		}
 	 }
+  }
+  
+  
+  
+//  For Analytics
+  private func trackCategoryCompletionIfNeeded(card: ReadCardModel){
+	 guard let category = ReadCategories(rawValue: card.categoryId) else { return }
+	 guard card.sortIndex == category.limit else { return }
+	 
+	 AnalyticsManager.shared.categoryCompleted(categoryId: category.rawValue, language: card.languageCode)
   }
 }

@@ -146,6 +146,15 @@ enum AppThemeAssets: String, Identifiable {
   
   
 //  MARK: - Actions Icons
+  var saveAction: String{
+	 switch self {
+	 case .light:
+		"SaveActionLight"
+	 case .dark:
+		"SaveActionDark"
+	 }
+  }
+  
 //  - Profile Actions
   var languageAction: String{
 	 switch self {
