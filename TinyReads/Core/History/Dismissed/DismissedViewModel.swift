@@ -13,21 +13,18 @@ final class DismissedViewModel{
   var reads: [ReadCardModel] = [ReadCardModel.getForPreview()]
   var error: Error? = nil
   
-  var selectedFilter = "All"
+  var searchText = "" {
+			 didSet { restartSearchDebounce() }
+		}
+  private var searchTask: Task<Void, Never>? = nil
+		
+  var selectedCategory: String = "All" {
+			 didSet { applyFilters() }
+		}
   
-  var filetredReads: [ReadCardModel]{
-	 switch selectedFilter{
-	 case "All":
-		return reads
-	 default:
-		return reads.filter({ $0.categoryId == selectedFilter.lowercased()})
-	 }
-  }
+  var filteredResults: [ReadCardModel] = []
   
   private let dismissedManager = DismissedManager.shared
-  
-  
-  
   
 }
 
@@ -41,7 +38,7 @@ extension DismissedViewModel{
 		  self.error = error
 		}
 		
-		syncCardsFromManager()
+		applyFilters()
 	 }
 	 
   //  SYNC CARDS WITH MANAGER USING STATE
@@ -51,6 +48,31 @@ extension DismissedViewModel{
 	 
 	 func onInteractionChange(_ id: String) {
 		dismissedManager.applyInteractionChange(id)
-		syncCardsFromManager()
+		applyFilters()
 	 }
+  
+  
+  func applyFilters() {
+	 var results = dismissedManager.cards
+			 if selectedCategory != "All" {
+				results = results.filter { $0.categoryId == selectedCategory.lowercased() }
+			 }
+			 
+			 if !searchText.isEmpty {
+				  results = results.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
+			 }
+			 
+			 filteredResults = results
+		}
+		
+		private func restartSearchDebounce() {
+			 searchTask?.cancel()
+			 
+			 searchTask = Task { @MainActor in
+				  do {
+						try await Task.sleep(for: .milliseconds(400))
+						applyFilters()
+				  } catch { }
+			 }
+		}
 }

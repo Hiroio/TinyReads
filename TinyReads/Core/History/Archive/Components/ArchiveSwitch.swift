@@ -15,7 +15,7 @@ struct ArchiveSwitch: View {
 		HStack(spacing: 15){
 		  let state = vm.state == .read
 			 Button{
-				vm.changeState(to: .saved)
+				vm.changeState(.saved)
 			 }label:{
 				Text(ArchiveState.saved.text)
 				  .font( state ? .footnote : .headline.weight(.regular))
@@ -28,7 +28,7 @@ struct ArchiveSwitch: View {
 			 .rotationEffect(Angle(degrees: 10))
 		  
 		  Button{
-			 vm.changeState(to: .read)
+			 vm.changeState(.read)
 			 }label:{
 				Text(ArchiveState.read.text)
 				  .font( state ? .headline.weight(.regular) : .footnote)

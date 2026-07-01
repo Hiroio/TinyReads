@@ -56,7 +56,7 @@ extension ReadCardModel: Equatable {
 
 // MARK: Category Enum
 enum ReadCategories: String, CaseIterable, Identifiable{
-  case science, history, culture, psychology, philosophy, nature, finance, health, space
+  case science, history, culture, psychology, philosophy, nature, finance, health, space, technology
   
   var id: String { self.rawValue}
   
@@ -80,6 +80,8 @@ enum ReadCategories: String, CaseIterable, Identifiable{
 		"Health"
 	 case .space:
 		"Space"
+	 case .technology:
+		"Technology"
 	 }
   }
   

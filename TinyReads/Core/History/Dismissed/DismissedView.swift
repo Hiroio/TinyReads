@@ -10,6 +10,7 @@ import SwiftUI
 struct DismissedView: View {
   @Environment(ThemeManager.self) var themeManager
   @State private var vm = DismissedViewModel()
+  @State private var searchText: String = ""
   var body: some View {
 	 ZStack{
 		themeManager.themeAssets.background.ignoresSafeArea()
@@ -18,9 +19,12 @@ struct DismissedView: View {
 		  Text("Dismissed")
 			 .title()
 			 .padding()
+		  
+		  CustomSearchBar(searchText: $vm.searchText)
+		  
 		  ScrollView{
 			 LazyVGrid(columns: Array(repeating: .init(.flexible()), count: UIDevice.isIPad ? 3 : 2)) {
-				ForEach(vm.filetredReads){item in
+				ForEach(vm.filteredResults){item in
 				  ArchiveCard(read: item, state: .dismissed){
 					 vm.onInteractionChange(item.id)
 				  }
@@ -44,13 +48,13 @@ struct DismissedView: View {
 		  Spacer()
 		  
 		  
-		  CategoryFilterView(selectedFilter: $vm.selectedFilter)
+		  CategoryFilterView(selectedFilter: $vm.selectedCategory)
 		}
 		  .padding(),
 		alignment: .top
 	 )
-	 .animation(.easeInOut, value: vm.selectedFilter)
-	 .animation(.easeInOut, value: vm.filetredReads.count)
+	 .animation(.easeInOut, value: vm.selectedCategory)
+	 .animation(.easeInOut, value: vm.filteredResults.count)
 	 .task {
 		await vm.initialize()
 	 }

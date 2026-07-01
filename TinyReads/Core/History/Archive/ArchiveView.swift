@@ -17,9 +17,10 @@ struct ArchiveView: View {
 		  VStack(spacing: 5){
 			 ArchiveSwitch(vm: vm)
 			 
+			 CustomSearchBar(searchText: $vm.searchText)
 			 Spacer()
 			 
-			 if vm.filetredReads.isEmpty{
+			 if vm.filteredResults.isEmpty{
 				VStack{
 				  Image(themeManager.themeAssets.emptyState)
 					 .resizable()
@@ -32,7 +33,7 @@ struct ArchiveView: View {
 			 }else{
 				ScrollView{
 				  LazyVGrid(columns: Array(repeating: .init(.flexible()), count: UIDevice.isIPad ? 3 : 2)) {
-					 ForEach(vm.filetredReads){item in
+					 ForEach(vm.filteredResults){item in
 						ArchiveCard(read: item, state: vm.state.cardStatus) {
 						  vm.onInteractionChange(item.id)
 						}
@@ -58,12 +59,12 @@ struct ArchiveView: View {
 			 Spacer()
 			 
 			 
-			 CategoryFilterView(selectedFilter: $vm.selectedFilter)
+			 CategoryFilterView(selectedFilter: $vm.selectedCategory)
 		  }
 			 .padding()
 		}
-		.animation(.easeInOut, value: vm.selectedFilter)
-		.animation(.easeInOut, value: vm.filetredReads.count)
+		.animation(.easeInOut, value: vm.selectedCategory)
+		.animation(.easeInOut, value: vm.filteredResults.count)
 		.task {
 		  await vm.initialize()
 		}

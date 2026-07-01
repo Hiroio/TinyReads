@@ -13,16 +13,16 @@ final class ArchiveViewModel{
   var reads: [ReadCardModel] = []
   var error: Error? = nil
   
-  var selectedFilter = "All"
+  var searchText = "" {
+			 didSet { restartSearchDebounce() }
+		}
+  private var searchTask: Task<Void, Never>? = nil
+		
+  var selectedCategory: String = "All" {
+			 didSet { applyFilters() }
+		}
   
-  var filetredReads: [ReadCardModel]{
-	 switch selectedFilter{
-	 case "All":
-		return reads
-	 default:
-		return reads.filter({ $0.categoryId == selectedFilter.lowercased()})
-	 }
-  }
+  var filteredResults: [ReadCardModel] = []
   
   private let archiveManager = ArchiveManager.shared
   
@@ -44,7 +44,7 @@ extension ArchiveViewModel{
 		self.error = error
 	 }
 	 
-	 syncCardsFromManager()
+	 applyFilters()
   }
   
 //  SYNC CARDS WITH MANAGER USING STATE
@@ -52,20 +52,37 @@ extension ArchiveViewModel{
 	 self.reads = archiveManager.visibleCards
   }
   
-//  Change state + syncronase cards
-  func changeState(to state: ArchiveState) {
-	 archiveManager.changeState(to: state)
-	 syncCardsFromManager()
-  }
-  
   func onInteractionChange(_ id: String) {
 	 archiveManager.applyInteractionChange(id)
-	 syncCardsFromManager()
+	 applyFilters()
   }
-  
-//  FOR PREVIEW
-  func preview(){
-	 let reads = ReadCardModel.getForPreview()
-	 self.reads = [reads]
+
+  func changeState(_ state: ArchiveState){
+	 archiveManager.state = state
+	 applyFilters()
   }
+
+func applyFilters() {
+  var results = archiveManager.visibleCards
+		  if selectedCategory != "All" {
+			 results = results.filter { $0.categoryId == selectedCategory.lowercased() }
+		  }
+		  
+		  if !searchText.isEmpty {
+				results = results.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
+		  }
+		  
+		  filteredResults = results
+	 }
+	 
+	 private func restartSearchDebounce() {
+		  searchTask?.cancel()
+		  
+		  searchTask = Task { @MainActor in
+				do {
+					 try await Task.sleep(for: .milliseconds(400))
+					 applyFilters()
+				} catch { }
+		  }
+	 }
 }
