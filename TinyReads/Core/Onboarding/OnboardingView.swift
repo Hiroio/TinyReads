@@ -39,7 +39,7 @@ struct OnboardingView: View {
 			 CategoriesView(secondary: false)
 				.onboardingPage(isVisible: step == .categories)
 		  }
-		  let selectedCategoryActive = userDefaults.selectedCategories.count < 0
+		  let selectedCategoryActive = userDefaults.selectedCategories.count > 0
 		  if step == .categories{
 			 VStack{
 				Button{
@@ -55,8 +55,8 @@ struct OnboardingView: View {
 						  .fill(themeManager.themeAssets.accent)
 					 )
 				}
-				.disabled(selectedCategoryActive)
-				.opacity(selectedCategoryActive ? 0.5 : 1)
+				.disabled(!selectedCategoryActive)
+				.opacity(!selectedCategoryActive ? 0.5 : 1)
 				Text("Choose at least one category to start")
 				  .font(.caption)
 				  .foregroundStyle(themeManager.themeAssets.secondary)

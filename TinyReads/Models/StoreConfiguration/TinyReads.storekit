@@ -1,0 +1,99 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "510E1DA6",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "80EB0F4C",
+      "localizations" : [
+        {
+          "description" : "A little thank-you to support TinyReads.",
+          "displayName" : "Small Tip",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.hiroio.tinyreads.tip.small",
+      "referenceName" : "Tip - Small ($1)",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "659CB39D",
+      "localizations" : [
+        {
+          "description" : "A generous tip to help us keep building.",
+          "displayName" : "Medium Tip",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.hiroio.tinyreads.tip.medium",
+      "referenceName" : "Tip - Medium ($3)",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "931EF4B7",
+      "localizations" : [
+        {
+          "description" : "A big thank-you for supporting TinyReads.",
+          "displayName" : "Large Tip",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.hiroio.tinyreads.tip.large",
+      "referenceName" : "Tip - Large ($5)",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "9.99",
+      "familyShareable" : false,
+      "internalID" : "E434EDD1",
+      "localizations" : [
+        {
+          "description" : "Love TinyReads? This tip means the world to us.",
+          "displayName" : "Extra Large Tip",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.hiroio.tinyreads.tip.extraLarge",
+      "referenceName" : "Tip - Extra Large ($10)",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_disableDialogs" : false,
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+
+    ],
+    "_timeRate" : 0
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 5,
+    "minor" : 0
+  }
+}
