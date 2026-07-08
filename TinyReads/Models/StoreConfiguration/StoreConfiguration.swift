@@ -16,21 +16,30 @@ enum StoreCategoriesConfigurationEnum: String, CaseIterable, Identifiable, Store
 }
 
 enum StoreTipConfigurationEnum: String, CaseIterable, Identifiable, StoreItems{
-  case smallTip = "com.hiroio.tinyreads.tip.small"
-  case mediumTip = "com.hiroio.tinyreads.tip.medium"
-  case largeTip = "com.hiroio.tinyreads.tip.large"
-  case extraLargeTip = "com.hiroio.tinyreads.tip.extraLarge"
+  case smallTip
+  case mediumTip
+  case largeTip
+  case extraLargeTip
 
   var id: String{
 	 self.rawValue
   }
+  
+  var storeID: String{
+	 switch self{
+	 case .smallTip: "com.hiroio.tinyreads.tip.small"
+	 case .mediumTip: "com.hiroio.tinyreads.tip.medium"
+	 case .largeTip: "com.hiroio.tinyreads.tip.large"
+	 case .extraLargeTip: "com.hiroio.tinyreads.tip.extraLarge"
+	 }
+  }
 
   var title: String {
 	 switch self {
-	 case .smallTip: "Small Tip"
-	 case .mediumTip: "Medium Tip"
-	 case .largeTip: "Large Tip"
-	 case .extraLargeTip: "Extra Large Tip"
+	 case .smallTip: "Small"
+	 case .mediumTip: "Medium"
+	 case .largeTip: "Large"
+	 case .extraLargeTip: "XLarge"
 	 }
   }
 
@@ -39,16 +48,16 @@ enum StoreTipConfigurationEnum: String, CaseIterable, Identifiable, StoreItems{
 	 case .smallTip: "A little thank-you"
 	 case .mediumTip: "A generous tip"
 	 case .largeTip: "A big thank-you"
-	 case .extraLargeTip: "This means the world to us"
+	 case .extraLargeTip: "I'm sooo grateful"
 	 }
   }
 
-  var icon: String {
+  var price: String {
 	 switch self {
-	 case .smallTip: "heart"
-	 case .mediumTip: "heart.fill"
-	 case .largeTip: "gift.fill"
-	 case .extraLargeTip: "crown.fill"
+	 case .smallTip: "1$"
+	 case .mediumTip: "2$"
+	 case .largeTip: "5$"
+	 case .extraLargeTip: "10$"
 	 }
   }
 }

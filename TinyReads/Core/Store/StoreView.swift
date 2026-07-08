@@ -13,8 +13,75 @@ struct StoreView: View {
   @State private var vm = StoreViewModel()
 
   var body: some View {
-	 let assets = themeManager.themeAssets
-	
+	 ZStack{
+		VStack{
+		  switch vm.state {
+		  case .categories:
+			 CategoryStoreView()
+				.transition(.move(edge: .leading).combined(with: .opacity))
+				.zIndex(1)
+				.allowsHitTesting(vm.state == .categories)
+				.drawingGroup()
+			 
+		  case .tip:
+			 TipStoreView()
+				.transition(.move(edge: .trailing).combined(with: .opacity))
+				.zIndex(1)
+				.allowsHitTesting(vm.state == .tip)
+				.drawingGroup()
+		  default:
+			 MainStoreView
+				.transition(.scale.combined(with: .opacity))
+				.zIndex(1)
+				.allowsHitTesting(vm.state == nil)
+		  }
+		  
+		  if vm.state != nil{
+		  Button{
+			 withAnimation {
+				vm.state = nil
+			 }
+		  }label:{
+			 Text("Back")
+				.secondary()
+				.padding()
+				.background(
+				  Image(themeManager.themeAssets.backSmallCard)
+					 .resizable()
+					 .scaledToFit()
+				)
+		  }
+		  .transition(.move(edge: .bottom).combined(with: .opacity))
+		  }
+		}
+	 }
+  }
+}
+
+#Preview {
+  StoreView()
+	 .environment(ThemeManager())
+}
+
+
+extension StoreView{
+  func StoreSection(section: StoreSectionEnum) -> some View{
+	 Button{
+		withAnimation(){
+		  vm.state = section
+		}
+	 }label:{
+		  Image(section.image)
+			 .resizable()
+			 .scaledToFit()
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
+		.aspectRatio(0.7, contentMode: .fit)
+	 }
+  }
+  
+  
+  
+  private var MainStoreView: some View{
 	 VStack{
 		Text("Store")
 		  .title()
@@ -29,35 +96,10 @@ struct StoreView: View {
 	 .padding()
 	 .aspectRatio(1, contentMode: .fit)
 	 .background(
-		Image(assets.readerCard)
+		Image(themeManager.themeAssets.readerCard)
 		  .resizable()
 	 )
 	 .padding()
 	 
-  }
-}
-
-#Preview {
-  StoreView()
-	 .environment(ThemeManager())
-}
-
-
-extension StoreView{
-  func StoreSection(section: StoreSectionEnum) -> some View{
-	 
-	 VStack{
-		Image(section.image)
-		  .resizable()
-		  .scaledToFit()
-		
-		Text(section.title)
-	 }
-	 .frame(maxWidth: .infinity, maxHeight: .infinity)
-	 .padding()
-	 .background(
-		RoundedRectangle(cornerRadius: 10)
-		  .stroke(lineWidth: 1)
-	 )
   }
 }
