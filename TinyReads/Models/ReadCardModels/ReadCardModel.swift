@@ -91,7 +91,25 @@ enum ReadCategories: String, CaseIterable, Identifiable{
 		100
 	 }
   }
-  
+
+  /// StoreKit product ID of this category's extra-cards pack, if one exists yet.
+  var extraPackStoreID: String? {
+	 switch self {
+	 case .science: StoreCategoriesConfigurationEnum.sciencePack.storeID
+	 case .history: StoreCategoriesConfigurationEnum.historyPack.storeID
+	 case .psychology: StoreCategoriesConfigurationEnum.psychologyPack.storeID
+	 case .philosophy: StoreCategoriesConfigurationEnum.philosophyPack.storeID
+	 case .finance: StoreCategoriesConfigurationEnum.financePack.storeID
+	 case .culture, .nature, .health, .space, .technology: nil
+	 }
+  }
+
+  /// Base limit, extended by 100 if the user owns this category's pack.
+  func effectiveLimit(purchasedIDs: Set<String>) -> Int {
+	 guard let packID = extraPackStoreID, purchasedIDs.contains(packID) else { return limit }
+	 return limit + 100
+  }
+
   func userDefaultKey(language: LanguageEnum) -> String {
 	 "\(language.code)_\(self.rawValue)_key"
   }

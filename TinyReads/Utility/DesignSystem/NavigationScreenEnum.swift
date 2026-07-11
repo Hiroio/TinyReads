@@ -12,4 +12,5 @@ enum SecondaryAppScreen {
   case category
   case dismissed
   case archive
+  case store
 }

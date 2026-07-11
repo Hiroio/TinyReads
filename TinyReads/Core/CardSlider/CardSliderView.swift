@@ -28,7 +28,10 @@ struct CardSliderView: View {
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
 		.overlay(alignment: .topTrailing){
-		  TopBar
+		  CloseButton
+		}
+		.overlay(alignment: .bottomTrailing){
+		  ModeButton
 		}
 		.animation(.easeInOut, value: vm.deckMode)
 		.animation(.easeInOut, value: vm.repeatDisplayReads.count)
@@ -53,30 +56,38 @@ struct CardSliderView: View {
 // MARK: - Actions
 private extension CardSliderView {
   @ViewBuilder
-  private var TopBar: some View {
-		if !active{
-		  HStack{
-			 Button{
-				active = true
-			 }label:{
-				Image(systemName: "xmark")
-				  .frame(maxWidth: .infinity, alignment: .leading)
-			 }
-			 .tinyAccessibilityButton("Close reader controls")
-			 
-			 Spacer()
-			 Button{
-				vm.changeDeckMode()
-			 }label: {
-				Image(systemName: vm.deckMode.image)
-				
-			 }
-			 .tinyAccessibilityButton(vm.deckMode.accessibilityLabel, hint: vm.deckMode.accessibilityHint)
-		  }
-		  .font(.headline.weight(.light))
-		  .padding()
-		  .foregroundStyle(themeManager.themeAssets.primary)
-		  .transition(.move(edge: .top).combined(with: .opacity))
+  private var CloseButton: some View {
+	 if !active{
+		Button{
+		  active = true
+		}label:{
+		  Image(systemName: "xmark")
 		}
+		.tinyAccessibilityButton("Close reader controls")
+		.font(.headline.weight(.light))
+		.padding()
+		.foregroundStyle(themeManager.themeAssets.primary)
+		.transition(.move(edge: .top).combined(with: .opacity))
 	 }
+  }
+
+  @ViewBuilder
+  private var ModeButton: some View {
+	 let image = vm.deckMode == .freshOnly ? themeManager.themeAssets.freshSwipeMode : themeManager.themeAssets.repeatSwipeMode
+	 if !active{
+		Button{
+		  vm.changeDeckMode()
+		}label: {
+		  Image(image)
+			 .resizable()
+			 .scaledToFit()
+			 .frame(width: 45)
+		}
+		.tinyAccessibilityButton(vm.deckMode.accessibilityLabel, hint: vm.deckMode.accessibilityHint)
+		.font(.headline.weight(.light))
+		.padding()
+		.foregroundStyle(themeManager.themeAssets.primary)
+		.transition(.move(edge: .bottom).combined(with: .opacity))
+	 }
+  }
 }

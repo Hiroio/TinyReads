@@ -10,6 +10,7 @@ import StoreKit
 
 struct StoreView: View {
   @Environment(ThemeManager.self) var themeManager
+  @Environment(StoreKitManager.self) var storeKitManager
   @State private var vm = StoreViewModel()
 
   var body: some View {
@@ -21,12 +22,12 @@ struct StoreView: View {
 				.transition(.move(edge: .leading).combined(with: .opacity))
 				.zIndex(1)
 				.allowsHitTesting(vm.state == .categories)
-				.drawingGroup()
+
 			 
 		  case .tip:
 			 TipStoreView()
 				.transition(.move(edge: .trailing).combined(with: .opacity))
-				.zIndex(1)
+//				.zIndex(1)
 				.allowsHitTesting(vm.state == .tip)
 				.drawingGroup()
 		  default:
@@ -36,24 +37,28 @@ struct StoreView: View {
 				.allowsHitTesting(vm.state == nil)
 		  }
 		  
-		  if vm.state != nil{
 		  Button{
 			 withAnimation {
 				vm.state = nil
 			 }
 		  }label:{
-			 Text("Back")
-				.secondary()
+			 Text(vm.state == nil ? "Close" : "Back")
+				.headline(weight: .light)
 				.padding()
 				.background(
 				  Image(themeManager.themeAssets.backSmallCard)
 					 .resizable()
-					 .scaledToFit()
+					 .shadow(radius: 3)
 				)
+				.drawingGroup()
 		  }
-		  .transition(.move(edge: .bottom).combined(with: .opacity))
-		  }
+		  .zIndex(2)
 		}
+	 }
+	 .task {
+		let ids = StoreTipConfigurationEnum.allCases.map(\.storeID)
+		  + StoreCategoriesConfigurationEnum.allCases.map(\.storeID)
+		await storeKitManager.loadProducts(ids: ids)
 	 }
   }
 }
@@ -61,43 +66,63 @@ struct StoreView: View {
 #Preview {
   StoreView()
 	 .environment(ThemeManager())
+	 .environment(StoreKitManager.shared)
 }
 
 
 extension StoreView{
   func StoreSection(section: StoreSectionEnum) -> some View{
-	 Button{
-		withAnimation(){
-		  vm.state = section
-		}
-	 }label:{
+	 VStack(spacing: 0){
+		Button{
+		  withAnimation(){
+			 vm.state = section
+		  }
+		}label:{
 		  Image(section.image)
 			 .resizable()
 			 .scaledToFit()
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.aspectRatio(0.7, contentMode: .fit)
+			 .frame(maxWidth: .infinity, maxHeight: .infinity)
+			 .aspectRatio(0.7, contentMode: .fit)
+			 .background(
+				Image(themeManager.themeAssets.backCard)
+				  .resizable()
+				  .scaledToFit()
+				  .scaleEffect( x: section == .tip ? 1 : -1)
+			 )
+//			 .overlay(alignment: .bottom){
+//				Text(section.title)
+//				  .headline(weight: .light)
+//				  .padding(.bottom, 35)
+//			 }
+		}
+		
 	 }
   }
   
   
   
   private var MainStoreView: some View{
-	 VStack{
-		Text("Store")
-		  .title()
+	 VStack(spacing: 5){
+		Text("Tiny Store")
+		  .font(.largeTitle.weight(.light))
+		  .fontDesign(.serif)
+		  .padding()
+		  .padding(.horizontal)
+		  .background(
+			 Image(themeManager.themeAssets.backSmallCard)
+				.resizable()
+		  )
 		HStack{
 		  StoreSection(section: .categories)
 		  
 		  StoreSection(section: .tip)
 		}
-		.padding(.vertical)
 	 }
 	 .frame(maxWidth: .infinity, maxHeight: .infinity)
-	 .padding()
 	 .aspectRatio(1, contentMode: .fit)
 	 .background(
-		Image(themeManager.themeAssets.readerCard)
-		  .resizable()
+//		Image(themeManager.themeAssets.readerCard)
+//		  .resizable()
 	 )
 	 .padding()
 	 

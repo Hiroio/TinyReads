@@ -250,7 +250,9 @@ extension ReadsDeckManager {
 		guard let category = ReadCategories(rawValue: categoryId) else { continue }
 		
 		let nextSortIndex = languageInteractions.getNextSortIndex(per: categoryId)
-		if nextSortIndex <= category.limit {
+		// cheaking for purchased categories and their limits
+		let limit = category.effectiveLimit(purchasedIDs: StoreKitManager.shared.purchasedProductIDs)
+		if nextSortIndex <= limit {
 		  result[categoryId] = nextSortIndex
 		}
 	 }

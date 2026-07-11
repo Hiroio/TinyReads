@@ -183,6 +183,24 @@ enum AppThemeAssets: String, Identifiable {
 	 }
   }
   
+  var freshSwipeMode: String{
+	 switch self {
+	 case .light:
+		"FreshModeSwipeLight"
+	 case .dark:
+		"FreshModeSwipeDark"
+	 }
+  }
+  
+  var repeatSwipeMode: String{
+	 switch self {
+	 case .light:
+		"RepeatModeSwipeLight"
+	 case .dark:
+		"RepeatModeSwipeDark"
+	 }
+  }
+  
 //  - Main Navigation
   var navigationProfile: String{
 	 switch self {
@@ -211,12 +229,12 @@ enum AppThemeAssets: String, Identifiable {
 	 }
   }
   
-  var navigationExplore: String{
+  var navigationStore: String{
 	 switch self {
 	 case .light:
-		"nav_explore_light"
+		"nav_store_light"
 	 case .dark:
-		"nav_explore_dark"
+		"nav_store_dark"
 	 }
   }
   

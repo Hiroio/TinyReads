@@ -14,6 +14,7 @@ struct TinyReadsApp: App {
   @State private var navigationManager = NavigationManager.shared
   @State private var themeManager = ThemeManager()
   @State private var userDefaultManager = UserDefaultsManager.shared
+  @State private var storeKitManager = StoreKitManager.shared
   @AppStorage("selectedLanguage") var selectedLanguage: String = "en"
   init(){
 	 FirebaseApp.configure()
@@ -28,6 +29,7 @@ struct TinyReadsApp: App {
 				.environment(navigationManager)
 				.environment(themeManager)
 				.environment(userDefaultManager)
+				.environment(storeKitManager)
 				.environment(\.locale, Locale(identifier: selectedLanguage))
         }
     }

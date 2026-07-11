@@ -8,10 +8,6 @@
 import Foundation
 import StoreKit
 
-enum StoreError: Error {
-  case failedVerification
-}
-
 @Observable
 final class StoreViewModel {
   

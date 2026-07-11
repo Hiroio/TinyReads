@@ -18,6 +18,8 @@ extension SecondaryAppScreen {
 		"Open dismissed cards"
 	 case .archive:
 		"Open saved cards"
+	 case .store:
+		"Open in app store"
 	 }
   }
   
@@ -31,6 +33,8 @@ extension SecondaryAppScreen {
 		"Shows cards you dismissed."
 	 case .archive:
 		"Shows saved and read cards."
+	 case .store:
+		"Shows app store"
 	 }
   }
 }

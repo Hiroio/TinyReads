@@ -23,6 +23,9 @@ struct SecondaryView: View {
 		  case .dismissed:
 			 DismissedView()
 				.geometryGroup()
+		  case .store:
+			 StoreView()
+				.geometryGroup()
 		  default:
 			 EmptyView()
 		  }
