@@ -68,9 +68,9 @@ extension TipStoreView{
 			 Text(tip.subtitle)
 				.secondary()
 		  }
-		  .padding(.horizontal)
+		  .padding(.horizontal, UIDevice.isIPad ? 55 : 20)
 		 
 	 }
-	 .aspectRatio(0.7, contentMode: .fit)
+	 .aspectRatio(UIDevice.isIPad ? 1 : 0.7, contentMode: .fit)
   }
 }

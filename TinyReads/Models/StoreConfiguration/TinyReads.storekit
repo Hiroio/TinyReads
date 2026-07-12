@@ -73,6 +73,81 @@
       "productID" : "com.hiroio.tinyreads.tip.extraLarge",
       "referenceName" : "Tip - Extra Large ($10)",
       "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "DC6E3040",
+      "localizations" : [
+        {
+          "description" : "100 more science cards to explore",
+          "displayName" : "Science Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.hiroio.tinyreads.category.science",
+      "referenceName" : "Category - Science Pack",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "CAB73372",
+      "localizations" : [
+        {
+          "description" : "100 more history cards to explore",
+          "displayName" : "History Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.hiroio.tinyreads.category.history",
+      "referenceName" : "Category - History Pack",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "C36AC401",
+      "localizations" : [
+        {
+          "description" : "100 more psychology cards to explore",
+          "displayName" : "Psychology Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.hiroio.tinyreads.category.psychology",
+      "referenceName" : "Category - Psychology Pack",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "79EE6B3F",
+      "localizations" : [
+        {
+          "description" : "100 more philosophy cards to explore",
+          "displayName" : "Philosophy Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.hiroio.tinyreads.category.philosophy",
+      "referenceName" : "Category - Philosophy Pack",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "006A0C54",
+      "localizations" : [
+        {
+          "description" : "100 more finance cards to explore",
+          "displayName" : "Finance Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.hiroio.tinyreads.category.finance",
+      "referenceName" : "Category - Finance Pack",
+      "type" : "NonConsumable"
     }
   ],
   "settings" : {

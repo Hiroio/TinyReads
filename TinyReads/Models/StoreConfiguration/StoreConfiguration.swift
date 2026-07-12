@@ -5,7 +5,7 @@
 //  Created by user on 06.07.2026.
 //
 
-import Foundation
+import SwiftUI
 
 protocol StoreItems{}
 
@@ -30,7 +30,7 @@ enum StoreCategoriesConfigurationEnum: String, CaseIterable, Identifiable, Store
 	 }
   }
 
-  var title: String {
+  var title: LocalizedStringKey {
 	 switch self {
 	 case .sciencePack: "Science Pack"
 	 case .historyPack: "History Pack"
@@ -40,7 +40,7 @@ enum StoreCategoriesConfigurationEnum: String, CaseIterable, Identifiable, Store
 	 }
   }
 
-  var subtitle: String {
+  var subtitle: LocalizedStringKey {
 	 switch self {
 	 case .sciencePack: "100 more science cards to explore"
 	 case .historyPack: "100 more history cards to explore"
@@ -90,7 +90,7 @@ enum StoreTipConfigurationEnum: String, CaseIterable, Identifiable, StoreItems{
 	 }
   }
 
-  var title: String {
+  var title: LocalizedStringKey {
 	 switch self {
 	 case .smallTip: "Small"
 	 case .mediumTip: "Medium"
@@ -99,7 +99,7 @@ enum StoreTipConfigurationEnum: String, CaseIterable, Identifiable, StoreItems{
 	 }
   }
 
-  var subtitle: String {
+  var subtitle: LocalizedStringKey {
 	 switch self {
 	 case .smallTip: "A little thank-you"
 	 case .mediumTip: "A generous tip"
@@ -125,7 +125,7 @@ enum StoreTipConfigurationEnum: String, CaseIterable, Identifiable, StoreItems{
 enum StoreSectionEnum{
   case categories, tip
   
-  var title: String{
+  var title: LocalizedStringKey{
 	 switch self {
 	 case .categories:
 		"Categories"

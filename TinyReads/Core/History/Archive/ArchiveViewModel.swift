@@ -25,6 +25,7 @@ final class ArchiveViewModel{
   var filteredResults: [ReadCardModel] = []
   
   private let archiveManager = ArchiveManager.shared
+  private let userDefault = UserDefaultsManager.shared
   
   var state: ArchiveState {
 	 archiveManager.state
@@ -64,6 +65,9 @@ extension ArchiveViewModel{
 
 func applyFilters() {
   var results = archiveManager.visibleCards
+  
+  results = results.filter({ $0.languageCode == userDefault.selectedLanguage.code })
+  
 		  if selectedCategory != "All" {
 			 results = results.filter { $0.categoryId == selectedCategory.lowercased() }
 		  }

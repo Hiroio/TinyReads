@@ -11,6 +11,7 @@ struct AppRootView: View {
   @Environment(\.colorScheme) var colorScheme
   @Environment(ThemeManager.self) var themeManager
   @Environment(UserDefaultsManager.self) var userDefault
+  @Environment(StoreKitManager.self) var storeKitManager
   @State private var cardSliderVM = CardSliderViewModel()
   var body: some View {
 	 MainNavigationView()
@@ -19,6 +20,17 @@ struct AppRootView: View {
 		.onAppear {
 		  themeManager.colorScheme = colorScheme
 		  themeManager.changeColorTheme()
+		}
+		.task {
+		  let ids = StoreTipConfigurationEnum.allCases.map(\.storeID)
+			 + StoreCategoriesConfigurationEnum.allCases.map(\.storeID)
+		  await storeKitManager.loadProducts(ids: ids)
+		}
+//	 Purchases
+		.onChange(of: storeKitManager.purchasedProductIDs) { _, _ in
+		  Task{
+			 await cardSliderVM.reloadCards()
+		  }
 		}
 //	 Color theme
 		.onChange(of: colorScheme) { _, newValue in
@@ -47,4 +59,5 @@ struct AppRootView: View {
 	 .environment(ThemeManager())
 	 .environment(UserDefaultsManager.shared)
 	 .environment(NavigationManager.shared)
+	 .environment(StoreKitManager.shared)
 }

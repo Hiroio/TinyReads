@@ -14,21 +14,31 @@ struct CategoryStoreView: View {
 	 VStack{
 		ScrollView{
 		  LazyVStack{
-			 ForEach(StoreCategoriesConfigurationEnum.allCases){item in
-				Button{
-				  guard let product = storeKitManager.product(for: item.storeID) else { return }
-				  Task { await storeKitManager.purchase(product) }
-				}label:{
-				  CategoryStoreItem(item)
+			 LazyVGrid(columns: Array(repeating: .init(.flexible()), count: UIDevice.isIPad ? 2 : 1)){
+				ForEach(StoreCategoriesConfigurationEnum.allCases){item in
+				  Button{
+					 guard let product = storeKitManager.product(for: item.storeID) else { return }
+					 Task { await storeKitManager.purchase(product) }
+				  }label:{
+					 CategoryStoreItem(item)
+				  }
+				  .disabled(storeKitManager.purchasingProductID == item.storeID || storeKitManager.isPurchased(item.storeID))
 				}
-				.disabled(storeKitManager.purchasingProductID == item.storeID || storeKitManager.isPurchased(item.storeID))
+				.padding(.horizontal)
+				
 			 }
-			 .padding(.horizontal)
-
+			 Button{
+				Task{
+				  await storeKitManager.restorePurchases()
+				}
+			 }label: {
+				Text("Restore Purchases")
+				  .secondary(weight: .semibold)
+				  .underline(true)
+			 }
 		  }
-		  .padding(25)
+		  .padding(UIDevice.isIPad ? 45 : 25)
 		  .frame(maxWidth: .infinity, maxHeight: .infinity)
-		  //		.aspectRatio(UIDevice.isIPad ? 0.9 : 0.7, contentMode: .fit)
 		  .background(
 			 PaperBackGround()
 				.shadow(radius: 5)
@@ -50,39 +60,60 @@ extension CategoryStoreView{
   @ViewBuilder
   func CategoryStoreItem(_ category: StoreCategoriesConfigurationEnum) -> some View{
 	 let isPurchased = storeKitManager.isPurchased(category.storeID)
-	 HStack{
-		let themeIconStyle: String = themeManager.themeAssets == .dark ? "Dark" : "Light"
-		  Image(category.icon + themeIconStyle)
-			 .resizable()
-			 .scaledToFit()
-			 .shadow(color: themeManager.themeAssets.primary, radius: 0.5)
-			 .overlay(alignment: .topTrailing){
-				Group{
-				  if isPurchased{
-					 Image(systemName: "checkmark")
-						.font(.title2.weight(.semibold))
-				  }else{
-					 Text(category.price)
-						.font(.title2.weight(.semibold))
-						.fontDesign(.serif)
-				  }
-				}
-				.foregroundStyle(.white)
-				.padding(5)
-				.background( isPurchased ? .green : themeManager.themeAssets.accent, in: .circle)
-				.padding(.trailing)
-				.rotationEffect(Angle(degrees: -10))
-			 }
+	 if UIDevice.isIPad {
 		VStack{
-		  Text(category.title)
-			 .title(weight: .semibold)
-			 .allowsTightening(true)
-			 .lineLimit(1)
-			 .minimumScaleFactor(0.7)
-		  Text(category.subtitle)
-			 .secondary()
+		  categoryIcon(category, isPurchased: isPurchased)
+		  categoryText(category)
 		}
-		.shadow(color: themeManager.themeAssets.primary, radius: 0.5)
+	 }else{
+		HStack{
+		  categoryIcon(category, isPurchased: isPurchased)
+		  categoryText(category)
+		}
 	 }
+  }
+  
+  
+  private func categoryIcon(_ category: StoreCategoriesConfigurationEnum, isPurchased: Bool) -> some View{
+	 ZStack{
+		let themeIconStyle: String = themeManager.themeAssets == .dark ? "Dark" : "Light"
+		Image(category.icon + themeIconStyle)
+		  .resizable()
+		  .scaledToFit()
+		  .aspectRatio(1, contentMode: .fit)
+		  .shadow(color: themeManager.themeAssets.primary, radius: 0.5)
+		  .overlay(alignment: .topTrailing){
+			 Group{
+				if isPurchased{
+				  Image(systemName: "checkmark")
+					 .font(.title2.weight(.semibold))
+				}else{
+				  Text(category.price)
+					 .font(.title2.weight(.semibold))
+					 .fontDesign(.serif)
+				}
+			 }
+			 .foregroundStyle(.white)
+			 .padding(UIDevice.isIPad ? 15 : 5)
+			 .background( isPurchased ? .green : themeManager.themeAssets.accent, in: .circle)
+			 .padding(.trailing)
+			 .rotationEffect(Angle(degrees: -10))
+		  }
+	 }
+  }
+  
+  
+  private func categoryText(_ category: StoreCategoriesConfigurationEnum) -> some View{
+	 VStack{
+		Text(category.title)
+		  .title(weight: .semibold)
+		  .allowsTightening(true)
+		  .lineLimit(1)
+		  .minimumScaleFactor(0.7)
+		Text(category.subtitle)
+		  .secondary()
+	 }
+	 .frame(maxWidth: .infinity)
+	 .shadow(color: themeManager.themeAssets.primary, radius: 0.5)
   }
 }

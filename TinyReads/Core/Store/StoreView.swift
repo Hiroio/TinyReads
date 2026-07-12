@@ -39,7 +39,11 @@ struct StoreView: View {
 		  
 		  Button{
 			 withAnimation {
-				vm.state = nil
+				if vm.state != nil {
+				  vm.state = nil
+				}else{
+				  NavigationManager.shared.secondary = nil
+				}
 			 }
 		  }label:{
 			 Text(vm.state == nil ? "Close" : "Back")
@@ -54,11 +58,6 @@ struct StoreView: View {
 		  }
 		  .zIndex(2)
 		}
-	 }
-	 .task {
-		let ids = StoreTipConfigurationEnum.allCases.map(\.storeID)
-		  + StoreCategoriesConfigurationEnum.allCases.map(\.storeID)
-		await storeKitManager.loadProducts(ids: ids)
 	 }
   }
 }
@@ -89,11 +88,11 @@ extension StoreView{
 				  .scaledToFit()
 				  .scaleEffect( x: section == .tip ? 1 : -1)
 			 )
-//			 .overlay(alignment: .bottom){
-//				Text(section.title)
-//				  .headline(weight: .light)
-//				  .padding(.bottom, 35)
-//			 }
+			 .overlay(alignment: .bottom){
+				Text(section.title)
+				  .headline(weight: .light)
+				  .padding(.bottom, UIDevice.isIPad ? 65 : 35)
+			 }
 		}
 		
 	 }
@@ -120,10 +119,6 @@ extension StoreView{
 	 }
 	 .frame(maxWidth: .infinity, maxHeight: .infinity)
 	 .aspectRatio(1, contentMode: .fit)
-	 .background(
-//		Image(themeManager.themeAssets.readerCard)
-//		  .resizable()
-	 )
 	 .padding()
 	 
   }

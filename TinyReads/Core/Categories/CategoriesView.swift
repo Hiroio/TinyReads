@@ -11,6 +11,7 @@ struct CategoriesView: View {
   @Environment(UserDefaultsManager.self) var userDefaults
   @Environment(ThemeManager.self) var themeManager
   @Environment(NavigationManager.self) var navigationManager
+  @Environment(StoreKitManager.self) var storeKitManager
   
   let secondary: Bool
   let onDismiss: () -> ()
@@ -22,25 +23,25 @@ struct CategoriesView: View {
   
   var body: some View {
 	 ZStack(alignment: .topLeading) {
-		
-		VStack(spacing: 24) {
-		  Text("Select Your Interests")
-			 .padding(.top)
-			 .title()
-			 .frame(maxWidth: .infinity)
-			 .padding()
+		VStack{
+		  VStack(spacing: 24) {
+			 Text("Select Your Interests")
+				.padding(.top)
+				.title()
+				.frame(maxWidth: .infinity)
+				.padding()
+			 
+			 categoryList
+		  }
+		  .padding()
+		  .frame(maxWidth: .infinity, maxHeight: .infinity)
+		  .aspectRatio(UIDevice.isIPad ? 1 : 0.7, contentMode: .fit)
+		  .background {
+			 Image(themeManager.themeAssets.backCard)
+				.resizable()
+				.allowsHitTesting(false)
+		  }
 		  
-		  categoryList
-		}
-		.padding()
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.aspectRatio(UIDevice.isIPad ? 1 : 0.7, contentMode: .fit)
-		.background {
-		  Image(themeManager.themeAssets.backCard)
-			 .resizable()
-			 .allowsHitTesting(false)
-		}
-		.overlay(
 		  Button{
 			 if secondary{
 				NavigationManager.shared.secondary = nil
@@ -56,9 +57,8 @@ struct CategoriesView: View {
 					 .resizable()
 				)
 		  }
-			 .opacity(secondary ? 1 : 0),
-		  alignment: .bottom
-		)
+		  .opacity(secondary ? 1 : 0)
+		}
 		.padding(.horizontal)
 		.shadow(radius: 5)
 	 }
@@ -103,7 +103,7 @@ private extension CategoriesView {
 				dashPhase: 0))
 			 .frame(height: 1)
 		  
-		  Text("\(userDefaults.getCategoryReadedCount(for: item))/\(item.limit)")
+		  Text("\(userDefaults.getCategoryReadedCount(for: item))/\(item.effectiveLimit(purchasedIDs: storeKitManager.purchasedProductIDs))")
 			 .fixedSize()
 			 .secondary()
 		}
@@ -125,4 +125,5 @@ private extension CategoriesView {
 	 .environment(ThemeManager())
 	 .environment(UserDefaultsManager.shared)
 	 .environment(NavigationManager.shared)
+	 .environment(StoreKitManager.shared)
 }

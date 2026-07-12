@@ -25,6 +25,7 @@ final class DismissedViewModel{
   var filteredResults: [ReadCardModel] = []
   
   private let dismissedManager = DismissedManager.shared
+  private let userDefault = UserDefaultsManager.shared
   
 }
 
@@ -54,6 +55,9 @@ extension DismissedViewModel{
   
   func applyFilters() {
 	 var results = dismissedManager.cards
+	 
+	 results = results.filter({ $0.languageCode == userDefault.selectedLanguage.code })
+	 
 			 if selectedCategory != "All" {
 				results = results.filter { $0.categoryId == selectedCategory.lowercased() }
 			 }
