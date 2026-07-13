@@ -24,14 +24,17 @@ struct ArticleView: View {
 			 Text(article.title)
 				.title(weight: .bold)
 				.padding()
+				.textSelection(.enabled)
 			 Text(article.hook)
 				.secondary()
+				.textSelection(.enabled)
 		  }
 		  .multilineTextAlignment(.center)
 		  
 		  Text(article.body)
 			 .regular(weight: .medium)
 			 .lineSpacing(7)
+			 .textSelection(.enabled)
 		  
 		  
 		  VStack{
@@ -79,20 +82,6 @@ struct ArticleView: View {
 		Group{
 		  if scrollUp{
 			 HStack(spacing: 5){
-				ShareLink(item: vm.shareText){
-				  Image(systemName: "square.and.arrow.up")
-					 .resizable()
-					 .scaledToFit()
-					 .padding(15)
-					 .foregroundStyle(themeManager.themeAssets.primary)
-					 .background(
-						Image(themeManager.themeAssets.backSmallCard)
-						  .resizable()
-						  .opacity(0.8)
-					 )
-				}
-				
-				Spacer()
 				Button{
 				  if vm.markAsSaved(){
 					 onInteractionChanged()
@@ -108,6 +97,7 @@ struct ArticleView: View {
 						  .resizable()
 					 )
 				}
+				Spacer()
 				
 				Button{
 				  withAnimation(){

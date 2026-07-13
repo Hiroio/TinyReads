@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(xcodebuild -scheme TinyReads *)"
+      "Bash(xcodebuild -scheme TinyReads *)",
+      "Bash(xcodebuild -project TinyReads.xcodeproj -scheme TinyReads *)"
     ]
   }
 }
