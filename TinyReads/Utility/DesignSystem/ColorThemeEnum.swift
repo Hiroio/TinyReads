@@ -70,6 +70,15 @@ enum AppThemeAssets: String, Identifiable {
 	 }
   }
   
+  var destructive: Color{
+	 switch self {
+	 case .light:
+		Color.destructive
+	 case .dark:
+		Color.destructive
+	 }
+  }
+  
   
   
 //  MARK: - BackGround Cards

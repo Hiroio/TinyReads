@@ -10,6 +10,8 @@ import SwiftUI
 struct ArticleView: View {
   @Environment(ThemeManager.self) var themeManager
   @State private var scrollUp: Bool = true
+  @State private var showMenu: Bool = true
+  @State private var react: CGRect? = nil
   @State private var vm: ArticleViewModel
   let onInteractionChanged: () -> ()
   init(article: ArticleRoute){
@@ -31,12 +33,23 @@ struct ArticleView: View {
 		  }
 		  .multilineTextAlignment(.center)
 		  
-		  Text(article.body)
-			 .regular(weight: .medium)
-			 .lineSpacing(7)
-			 .textSelection(.enabled)
 		  
-		  
+		  TextViewRepresantable(
+				text: article.body,
+				textColor: themeManager.themeAssets.primary,
+				selectionRect: $react,
+				selectedText: $vm.selectedText
+		  )
+		  .overlay(alignment: .top){
+				Group{
+				  if let react{
+					 SelectionMenuView(selectedText: $vm.selectedText, copy: vm.copyText)
+						.offset(y: react.minY - 65)
+						.transition(.opacity)
+						.zIndex(1)
+				  }
+				}
+			 }
 		  VStack{
 			 Text("Tags")
 				.frame(maxWidth: .infinity, alignment: .leading)
@@ -50,6 +63,7 @@ struct ArticleView: View {
 			 }
 		  }.fontDesign(.serif)
 		}
+		.animation(.easeInOut, value: react)
 		.padding(.horizontal, UIDevice.isIPad ? 50 : 10)
 		.padding(UIDevice.isIPad ? 75 : 40)
 		.background(
@@ -133,6 +147,13 @@ struct ArticleView: View {
 					 .resizable()
 					 .scaledToFill()
 				)
+		  }
+		  if vm.showConfirmation{
+			 SmallTextPopUp(text: "Text copied!", role: .success, isPresented: $vm.showConfirmation)
+				.frame(maxHeight: .infinity, alignment: .bottom)
+				.transition(.move(edge: .bottom))
+				.zIndex(2)
+				.allowsHitTesting(false)
 		  }
 		}
 	 }

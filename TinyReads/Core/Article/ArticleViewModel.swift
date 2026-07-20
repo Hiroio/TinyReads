@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import UIKit.UIPasteboard
 
 @MainActor
 @Observable
@@ -14,6 +14,8 @@ final class ArticleViewModel{
   var article: ReadCardModel
   var interactionState: ReadCardDisplayStatus
   var showState: AnimationCompletionEnum? = nil
+  var showConfirmation: Bool = false
+  var selectedText: String = ""
   
   private let coreData: CoreDataService
   
@@ -92,6 +94,17 @@ extension ArticleViewModel{
 		try await Task.sleep(for: .seconds(state ? 1.1 : 1.7))
 		self.showState = nil
 	 }
+  }
+  
+}
+
+
+
+extension ArticleViewModel{
+  
+  func copyText() -> () {
+	 UIPasteboard.general.string = selectedText
+	 showConfirmation = true
   }
   
 }
