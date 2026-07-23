@@ -11,7 +11,7 @@ import Foundation
 final class ArchiveManager{
   static let shared = ArchiveManager()
   
-  var cards: [ReadCardModel] = []
+  var cards: [DisplayReadCard] = []
   var cardsInteractions: [ReadInteractionModel] = []
   var state: ArchiveState = .saved
   
@@ -28,7 +28,11 @@ final class ArchiveManager{
 	 cardsInteractions.filter({ $0.isSaved && $0.isRead == false && $0.isSkipped == false })
   }
   
-  var visibleCards: [ReadCardModel] {
+  var dismissedCards: [ReadInteractionModel]{
+	 cardsInteractions.filter({ $0.isSkipped })
+  }
+  
+  var visibleCards: [DisplayReadCard] {
 	 filterCards(state: state)
   }
 }
@@ -38,17 +42,20 @@ extension ArchiveManager{
   
 //   Initialize start of manager
   func initializeManager() async throws  {
-	 self.cardsInteractions = fetchInteractionReads()
+	 let interactionsCards = fetchInteractionReads()
+	 self.cardsInteractions = interactionsCards
 	 let cards = try await fetchCards()
 	 
+	 let displayCards = creatingDisplayCards(interactions: interactionsCards, cards: cards)
+	 
 	 await MainActor.run {
-		self.cards = cards
+		self.cards = displayCards
 	 }
   }
   
   //  Fetching cards from coredata
   func fetchInteractionReads() -> [ReadInteractionModel]{
-	 let cardEntities = coreData.fetchSavedOrReaded().compactMap({ try? ReadInteractionModel(entity: $0)})
+	 let cardEntities = coreData.fetchReadsEntity().compactMap({ try? ReadInteractionModel(entity: $0)})
 	 return cardEntities
   }
   
@@ -61,6 +68,16 @@ extension ArchiveManager{
 	 return try await fireStore.fetchReads(ids: ids)
   }
   
+  func creatingDisplayCards(interactions: [ReadInteractionModel], cards: [ReadCardModel]) -> [DisplayReadCard]{
+	 return cards.compactMap { card in
+		if let index = interactions.firstIndex(where: {$0.id == card.id}) {
+		  let display = DisplayReadCard(card: card, interaction: interactions[index])
+		  return display
+		}
+		return nil
+	 }
+  }
+  
 //  Change archive state
   func changeState(to newState: ArchiveState) {
 	 guard state != newState else { return }
@@ -68,19 +85,17 @@ extension ArchiveManager{
   }
   
 //  Filter cards depend on state
-  func filterCards(state: ArchiveState) -> [ReadCardModel] {
+  func filterCards(state: ArchiveState) -> [DisplayReadCard] {
 	 return switch state {
+	 case .all:
+		cards
+	 case .dismissed:
+		cards.filter({$0.status == .dismissed})
 	 case .saved:
-		filterCards(with: savedCards)
+		cards.filter({$0.status == .archived})
 	 case .read:
-		filterCards(with: readCards)
+		cards.filter({$0.status == .read})
 	 }
-  }
-  
-//  Filter cards by interaction ids
-  private func filterCards(with interactions: [ReadInteractionModel]) -> [ReadCardModel] {
-	 let ids = Set(interactions.map(\.id))
-	 return cards.filter { ids.contains($0.id) }
   }
   
 //  Change Interaction

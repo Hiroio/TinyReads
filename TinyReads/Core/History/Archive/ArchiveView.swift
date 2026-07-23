@@ -12,37 +12,48 @@ struct ArchiveView: View {
   @State private var vm = ArchiveViewModel()
     var body: some View {
 		ZStack{
-		  themeManager.themeAssets.background.ignoresSafeArea()
-		  
-		  VStack(spacing: 5){
+		  VStack(spacing: 0){
 			 ArchiveSwitch(vm: vm)
 			 
-			 CustomSearchBar(searchText: $vm.searchText)
-			 Spacer()
-			 
-			 if vm.filteredResults.isEmpty{
-				VStack{
-				  Image(themeManager.themeAssets.emptyState)
-					 .resizable()
-					 .scaledToFit()
-				  Text("Can't find nothing")
-					 .title()
-					 .padding()
+			 VStack{
+				HStack{
+				  CustomSearchBar(searchText: $vm.searchText)
+				  CategoryFilterView(selectedFilter: $vm.selectedCategory)
+					 .padding(.trailing)
 				}
-				  .aspectRatio(1.5, contentMode: .fit)
-			 }else{
-				ScrollView{
-				  LazyVGrid(columns: Array(repeating: .init(.flexible()), count: UIDevice.isIPad ? 3 : 2)) {
-					 ForEach(vm.filteredResults){item in
-						ArchiveCard(read: item, state: vm.state.cardStatus) {
-						  vm.onInteractionChange(item.id)
-						}
-						.environment(vm)
-					 }
+				Spacer()
+				
+				if vm.filteredResults.isEmpty{
+				  VStack{
+					 Image(themeManager.themeAssets.emptyState)
+						.resizable()
+						.scaledToFit()
+					 Text("Can't find nothing")
+						.title()
+						.padding()
 				  }
-				  .padding(5)
+				  .aspectRatio(1.5, contentMode: .fit)
+				}else{
+				  ScrollView{
+					 LazyVGrid(columns: Array(repeating: .init(.flexible()), count: UIDevice.isIPad ? 3 : 2)) {
+						ForEach(vm.filteredResults){item in
+						  ArchiveCard(read: item.card, state: item.status) {
+							 vm.onInteractionChange(item.id)
+						  }
+						  .environment(vm)
+						}
+					 }
+					 .padding(5)
+				  }
 				}
 			 }
+			 .background(
+				themeManager.themeAssets.card.ignoresSafeArea()
+			 )
+			 .clipShape(
+				UnevenRoundedRectangle(cornerRadii: .init(topLeading: 10, topTrailing: 15))
+			 )
+			 .ignoresSafeArea(edges: .bottom)
 		  }
 		}
 		.overlay(alignment: .topLeading){
@@ -52,14 +63,12 @@ struct ArchiveView: View {
 				  NavigationManager.shared.secondary = nil
 				}
 			 }label:{
-				Image(systemName: "chevron.left")
-				  .foregroundStyle(themeManager.themeAssets.secondary)
+				Image(systemName: "xmark")
+				  .foregroundStyle(themeManager.themeAssets.accent)
 			 }
 			 
 			 Spacer()
 			 
-			 
-			 CategoryFilterView(selectedFilter: $vm.selectedCategory)
 		  }
 			 .padding()
 		}

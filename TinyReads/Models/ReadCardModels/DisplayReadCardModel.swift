@@ -44,10 +44,19 @@ enum ReadCardDisplayStatus: Equatable {
 		"SavedBack"
 	 }
   }
+  
+  static func getStatus(_ interaction: ReadInteractionModel) -> ReadCardDisplayStatus{
+	 interaction.isRead ? .read : interaction.isSkipped ? .dismissed : interaction.isSaved ? .archived : .fresh
+  }
 }
 
 
 extension DisplayReadCard{
+  init(card: ReadCardModel, interaction: ReadInteractionModel){
+	 self.card = card
+	 self.status = .getStatus(interaction)
+  }
+  
   static var onBoardingCard: [DisplayReadCard] {
 	 let firstCard: ReadCardModel = ReadCardModel(id: "onboarding_save", translationGroupId: "", categoryId: "practice", languageCode: "", title: "Swipe right to save", hook: "Keep a tiny idea for later.\nYour archive becomes a quiet shelf of thoughts.", body: "", wordCount: 180, estimatedMinutes: 1, tags: [], sortIndex: 1, isActive: true)
 	 

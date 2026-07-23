@@ -90,6 +90,10 @@ extension DeckMode {
 extension ArchiveState {
   var accessibilityLabel: LocalizedStringKey {
 	 switch self {
+	 case .all:
+		"Show all interacted cards"
+	 case .dismissed:
+		"Show dismissed cards"
 	 case .saved:
 		"Show saved cards"
 	 case .read:

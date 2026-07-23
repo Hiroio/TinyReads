@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 enum ArchiveState: String, CaseIterable, Identifiable {
-  case saved, read
+  case all, dismissed, saved, read
   
   var id: String {
 	 self.rawValue
@@ -17,6 +17,10 @@ enum ArchiveState: String, CaseIterable, Identifiable {
   
   var text: LocalizedStringKey {
 	 switch self {
+	 case .all:
+		"All"
+	 case .dismissed:
+		"Dismissed"
 	 case .saved:
 		"Saved"
 	 case .read:
@@ -24,8 +28,12 @@ enum ArchiveState: String, CaseIterable, Identifiable {
 	 }
   }
   
-  var cardStatus: ReadCardDisplayStatus {
+  var cardStatus: ReadCardDisplayStatus? {
 	 switch self {
+	 case .all:
+		  nil
+	 case .dismissed:
+		  .dismissed
 	 case .saved:
 		  .archived
 	 case .read:

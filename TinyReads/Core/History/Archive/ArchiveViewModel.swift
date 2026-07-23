@@ -10,7 +10,7 @@ import Foundation
 @MainActor
 @Observable
 final class ArchiveViewModel{
-  var reads: [ReadCardModel] = []
+  var reads: [DisplayReadCard] = []
   var error: Error? = nil
   
   var searchText = "" {
@@ -22,7 +22,7 @@ final class ArchiveViewModel{
 			 didSet { applyFilters() }
 		}
   
-  var filteredResults: [ReadCardModel] = []
+  var filteredResults: [DisplayReadCard] = []
   
   private let archiveManager = ArchiveManager.shared
   private let userDefault = UserDefaultsManager.shared
@@ -66,14 +66,14 @@ extension ArchiveViewModel{
 func applyFilters() {
   var results = archiveManager.visibleCards
   
-  results = results.filter({ $0.languageCode == userDefault.selectedLanguage.code })
+  results = results.filter({ $0.card.languageCode == userDefault.selectedLanguage.code })
   
 		  if selectedCategory != "All" {
-			 results = results.filter { $0.categoryId == selectedCategory.lowercased() }
+			 results = results.filter { $0.card.categoryId == selectedCategory.lowercased() }
 		  }
 		  
 		  if !searchText.isEmpty {
-				results = results.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
+			 results = results.filter { $0.card.title.localizedCaseInsensitiveContains(searchText) }
 		  }
 		  
 		  filteredResults = results

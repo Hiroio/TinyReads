@@ -12,34 +12,31 @@ struct ArchiveSwitch: View {
   @Bindable var vm: ArchiveViewModel
 //  MARK: For preview
     var body: some View {
-		HStack(spacing: 15){
-		  let state = vm.state == .read
+		HStack(alignment: .bottom, spacing: 0){
+		  ForEach(ArchiveState.allCases){item in
+			 let state = vm.state == item
 			 Button{
-				vm.changeState(.saved)
-			 }label:{
-				Text(ArchiveState.saved.text)
-				  .font( state ? .footnote : .headline.weight(.regular))
-				  .foregroundStyle(state ? themeManager.themeAssets.secondary : themeManager.themeAssets.accent)
-			 }
-			 .tinyAccessibilityButton(ArchiveState.saved.accessibilityLabel)
-		  
-		  Rectangle()
-			 .frame(width: 0.5, height: 25)
-			 .rotationEffect(Angle(degrees: 10))
-		  
-		  Button{
-			 vm.changeState(.read)
-			 }label:{
-				Text(ArchiveState.read.text)
-				  .font( state ? .headline.weight(.regular) : .footnote)
-				  .foregroundStyle(state ? themeManager.themeAssets.accent : themeManager.themeAssets.secondary)
-			 }
-			 .tinyAccessibilityButton(ArchiveState.read.accessibilityLabel)
-				
-		}
-		.fontDesign(.serif)
-		.animation(.easeInOut, value: vm.state)
-		.padding()
+				vm.changeState(item)
+				}label:{
+				  Text(item.text)
+					 .font( state ? .footnote.weight(.regular) : .caption)
+					 .foregroundStyle(state ?  themeManager.themeAssets.accent : themeManager.themeAssets.secondary)
+					 .padding(.vertical)
+					 .padding(.horizontal, 10)
+					 .padding(.bottom, state ? 15 : 0)
+					 .background(
+						Image(themeManager.themeAssets.topArticleCard)
+						  .resizable()
+						  .shadow(color: state ? themeManager.themeAssets.accent : .black.opacity(0.02), radius: 2, y: -1)
+						  .clipShape(.rect)
+					 )
+				}
+				.tinyAccessibilityButton(ArchiveState.read.accessibilityLabel)
+				  
+		  }
+		  .fontDesign(.serif)
+		  .animation(.easeInOut, value: vm.state)
+		  }
     }
 }
 

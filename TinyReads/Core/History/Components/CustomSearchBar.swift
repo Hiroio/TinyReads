@@ -19,9 +19,7 @@ struct CustomSearchBar: View {
 			 .fontDesign(.serif)
 			 .accentColor(theme.themeAssets.accent)
 		  
-		  Image(systemName: "magnifyingglass")
-			 .font(.title3.weight(.light))
-			 .foregroundStyle(theme.themeAssets.accent)
+		  
 		}
 		.frame(maxWidth: .infinity)
 		.scaledToFit()
