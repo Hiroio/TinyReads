@@ -10,7 +10,32 @@ import Foundation
 enum SecondaryAppScreen {
   case profile
   case category
-  case dismissed
+  case highlight
   case archive
   case store
 }
+
+
+
+enum SmallPopUpEnum {
+  case read, save, dismiss, created, copied, error
+  
+  var title: String {
+	 switch self {
+	 case .read:
+		"Marked as read!"
+	 case .save:
+		"Successfully saved!"
+	 case .dismiss:
+		"Successfully dismissed!"
+	 case .created:
+		"Highlight created!"
+	 case .copied:
+		"Text copied!"
+	 case .error:
+		"Something went Wrong!"
+	 }
+  }
+}
+
+

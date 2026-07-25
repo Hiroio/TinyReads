@@ -14,8 +14,8 @@ extension SecondaryAppScreen {
 		"Open profile"
 	 case .category:
 		"Open categories"
-	 case .dismissed:
-		"Open dismissed cards"
+	 case .highlight:
+		"Open highlighted cards"
 	 case .archive:
 		"Open saved cards"
 	 case .store:
@@ -29,8 +29,8 @@ extension SecondaryAppScreen {
 		"Shows reader settings and statistics."
 	 case .category:
 		"Choose the topics you want to read."
-	 case .dismissed:
-		"Shows cards you dismissed."
+	 case .highlight:
+		"Shows cards you highlighted."
 	 case .archive:
 		"Shows saved and read cards."
 	 case .store:

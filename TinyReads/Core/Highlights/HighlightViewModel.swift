@@ -6,3 +6,24 @@
 //
 
 import Foundation
+
+@MainActor
+@Observable
+final class HighlightViewModel{
+  var highlights: [HighlightModel] = []
+  
+  var searchText: String = ""
+  
+  private let highlightManager = HighlightManager.shared
+  
+  
+  
+  
+}
+
+
+
+
+extension HighlightViewModel{
+   
+}

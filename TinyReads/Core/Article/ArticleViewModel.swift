@@ -107,4 +107,20 @@ extension ArticleViewModel{
 	 showConfirmation = true
   }
   
+  
+  func highlight() {
+	 let highlight = HighlightModel(
+		id: UUID(),
+		text: self.selectedText,
+		note: "",
+		originalTitle: article.title,
+		originalId: article.id,
+		categoryId: article.categoryId,
+		languageCode: article.languageCode,
+		widgetIsActive: false,
+		dateCreated: Date()
+	 )
+	 
+	 NavigationManager.shared.highlight = .create(highlight)
+  }
 }

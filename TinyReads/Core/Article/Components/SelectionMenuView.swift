@@ -14,6 +14,7 @@ struct SelectionMenuView: View {
   let menuBtns: [String] = ["Copy", "Highlight"]
   
   let copy: () -> ()
+  let highlight: () -> ()
     var body: some View {
 		HStack{
 		  Button{withAnimation{copy()}}label:{
@@ -22,7 +23,11 @@ struct SelectionMenuView: View {
 			 Divider()
 				.frame(height: 35)
 		  }
-		  Button{}label:{
+		  Button{
+			 withAnimation {
+				highlight()
+			 }
+		  }label:{
 				Text("Highlight")
 				.accent(weight: .ultraLight)
 			 Divider()
@@ -58,6 +63,6 @@ struct SelectionMenuView: View {
 }
 
 #Preview {
-  SelectionMenuView(selectedText: .constant("")){}
+  SelectionMenuView(selectedText: .constant(""), copy: {}, highlight: {})
 	 .environment(ThemeManager())
 }

@@ -8,11 +8,24 @@
 import SwiftUI
 
 struct HighlightsView: View {
+  @Environment(ThemeManager.self) var themeManager
+  @State private var vm = HighlightViewModel()
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+		ZStack{
+		  VStack{
+			 HighlightGridHeader(vm: vm)
+			 
+			 CustomSearchBar(searchText: $vm.searchText)
+			 
+			 Spacer()
+			 HighlightsGrid(highlights: vm.highlights)
+		  }
+		}
     }
 }
 
 #Preview {
     HighlightsView()
+	 .environment(ThemeManager())
 }
+

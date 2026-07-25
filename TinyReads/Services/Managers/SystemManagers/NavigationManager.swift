@@ -17,6 +17,9 @@ final class NavigationManager {
   var secondary: SecondaryAppScreen? = nil
   
   var article: ArticleRoute? = nil
+  var highlight: HighlightScreenState? = nil
+  
   
   var loading: Bool = false
+  var popUpState: SmallPopUpEnum? = nil
 }

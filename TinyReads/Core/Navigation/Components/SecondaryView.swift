@@ -20,8 +20,8 @@ struct SecondaryView: View {
 		  case .archive:
 			 ArchiveView()
 				.geometryGroup()
-		  case .dismissed:
-			 DismissedView()
+		  case .highlight:
+			 HighlightsView()
 				.geometryGroup()
 		  case .store:
 			 StoreView()

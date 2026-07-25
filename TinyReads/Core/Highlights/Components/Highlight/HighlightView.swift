@@ -9,32 +9,95 @@ import SwiftUI
 
 struct HighlightView: View {
   @Environment(ThemeManager.self) var themeManager
-  @Binding var text: String
+  @State private var viewModel: HighlightActionViewModel
+  
+  init(state: HighlightScreenState){
+	 self._viewModel = State(wrappedValue: HighlightActionViewModel(highlight: state.value, state: state))
+  }
+  
     var body: some View {
-		let expanded = text.count > 150
 		VStack{
-		  Text("Highlight")
-			 .title()
+		  HStack{
+			 if viewModel.note{
+				Button{
+				  withAnimation{
+					 viewModel.note = false
+				  }
+				}label:{
+				  Image(systemName: "arrow.left")
+					 .foregroundStyle(themeManager.themeAssets.accent)
+					 .padding(10)
+					 .background(
+						Image(themeManager.themeAssets.backSmallCard)
+						  .resizable()
+					 )
+				}
+			 }
+			 
+			 Spacer()
+			 
+			 Button{
+				NavigationManager.shared.highlight = nil
+			 }label:{
+				Image(systemName: "xmark")
+				  .foregroundStyle(themeManager.themeAssets.accent)
+				  .padding(10)
+				  .background(
+					 Image(themeManager.themeAssets.backSmallCard)
+						.resizable()
+				  )
+			 }
+		  }
+			 .frame(maxWidth: .infinity)
 		  
-		  TextField("", text: $text, axis: .vertical)
-			 .padding(25)
-			 .accent(weight: .light)
-			 .kerning(1.1)
+		  if viewModel.note {
+			 HighlightNoteView(viewModel: viewModel)
+				.transition(.move(edge: .trailing))
+				.zIndex(1)
+		  }else{
+			 HighlightPreviewView(viewModel: viewModel)
+				.transition(.move(edge: .leading))
+				.zIndex(1)
+		  }
+		  
+		  
+		  
+		  if !viewModel.actionBtnText.isEmpty {
+			 if viewModel.state.value.note != viewModel.highlight.note{
+				Text("Changed")
+			 }else{
+				actionBtn
+			 }
+		  }
 		}
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.padding()
-		.aspectRatio(expanded ? 0.7 : 1.1, contentMode: .fit)
-		.background(
-		  Image(expanded ? themeManager.themeAssets.backCard : themeManager.themeAssets.backSmallCard)
-			 .resizable()
-		)
-		.padding(.horizontal, expanded ? 10 : 20)
-		.animation(.easeInOut, value: expanded)
+		.padding(.horizontal, 20)
+		.animation(.easeInOut, value: viewModel.note)
     }
+		
 }
 
 #Preview {
-  @Previewable @State var text: String = ""
-    HighlightView(text: $text)
+  HighlightView(state: .create(.preview))
 	 .environment(ThemeManager())
+}
+
+
+extension HighlightView{
+  private var actionBtn: some View {
+	 HStack{
+		Button{
+		  
+		}label:{
+		  Text(viewModel.actionBtnText)
+			 .accent(weight: .semibold)
+			 .padding()
+			 .background(
+				Image(themeManager.themeAssets.readerCard)
+				  .resizable()
+				  .shadow(radius: 1)
+			 )
+		}
+		.frame(maxWidth: .infinity)
+	 }
+  }
 }

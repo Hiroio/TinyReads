@@ -35,21 +35,21 @@ struct ArticleView: View {
 		  
 		  
 		  TextViewRepresantable(
-				text: article.body,
-				textColor: themeManager.themeAssets.primary,
-				selectionRect: $react,
-				selectedText: $vm.selectedText
+			 text: article.body,
+			 textColor: themeManager.themeAssets.primary,
+			 selectionRect: $react,
+			 selectedText: $vm.selectedText
 		  )
 		  .overlay(alignment: .top){
-				Group{
-				  if let react{
-					 SelectionMenuView(selectedText: $vm.selectedText, copy: vm.copyText)
-						.offset(y: react.minY - 65)
-						.transition(.opacity)
-						.zIndex(1)
-				  }
+			 Group{
+				if let react{
+				  SelectionMenuView(selectedText: $vm.selectedText, copy: vm.copyText, highlight: vm.highlight)
+					 .offset(y: react.minY - 65)
+					 .transition(.opacity)
+					 .zIndex(1)
 				}
 			 }
+		  }
 		  VStack{
 			 Text("Tags")
 				.frame(maxWidth: .infinity, alignment: .leading)
@@ -148,19 +148,10 @@ struct ArticleView: View {
 					 .scaledToFill()
 				)
 		  }
-		  if vm.showConfirmation{
-			 SmallTextPopUp(text: "Text copied!", role: .success, isPresented: $vm.showConfirmation)
-				.frame(maxHeight: .infinity, alignment: .bottom)
-				.transition(.move(edge: .bottom))
-				.zIndex(2)
-				.allowsHitTesting(false)
-		  }
 		}
 	 }
 	 .animation(.easeInOut, value: vm.showState != nil)
   }
-  
-  
 }
 
 @ViewBuilder
