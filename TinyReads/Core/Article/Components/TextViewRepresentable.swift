@@ -36,6 +36,13 @@ struct TextViewRepresantable: UIViewRepresentable{
 	 if uiView.text != text {
 		uiView.attributedText = Self.makeAttributedText(text: text, color: textColor)
 	 }
+
+	 if selectedText.isEmpty {
+		selectionRect = nil
+		if uiView.selectedTextRange != nil {
+		  uiView.selectedTextRange = nil
+		}
+	 }
   }
 
   func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextView, context: Context) -> CGSize? {
@@ -78,14 +85,19 @@ extension TextViewRepresantable{
 	 
 	 func textViewDidChangeSelection(_ textView: UITextView){
 		guard let range = textView.selectedTextRange else {
-		  self.parent.selectionRect = nil
-		  self.parent.selectedText = ""
+		  DispatchQueue.main.async {
+			 self.parent.selectionRect = nil
+			 self.parent.selectedText = ""
+		  }
 		  return
 		}
-		
+
 		let rect = textView.firstRect(for: range)
-		self.parent.selectionRect = rect
-		self.parent.selectedText = textView.text(in: range) ?? ""
+		let text = textView.text(in: range) ?? ""
+		DispatchQueue.main.async {
+		  self.parent.selectionRect = rect
+		  self.parent.selectedText = text
+		}
 	 }
 	 
 	 

@@ -42,13 +42,19 @@ extension HighlightActionViewModel{
 //  Handle action Btn Press
   func actionBtn(){
 	 if state.isCreate{
-		let success = createHighlight()
+		if createHighlight() {
+		  showAnimation(.created)
+		}else{
+		  showAnimation(.error)
+		}
+		NavigationManager.shared.highlight = nil
 	 }else{
-		let success = editHighlight()
+		if editHighlight() {
+		  showAnimation(.created)
+		}else{
+		  showAnimation(.error)
+		}
 	 }
-	 
-	 //	 TODO: Create mass banner for navigationManager.
-
   }
   
   
@@ -64,6 +70,10 @@ extension HighlightActionViewModel{
   private func editHighlight() -> Bool {
 	 return highlightManager.editHiglight(highlight: highlight)
 	 
+  }
+  
+  private func showAnimation(_ state: SmallPopUpEnum){
+	 NavigationManager.shared.popUpState = state
   }
 }
 

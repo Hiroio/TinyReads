@@ -13,8 +13,6 @@ import UIKit.UIPasteboard
 final class ArticleViewModel{
   var article: ReadCardModel
   var interactionState: ReadCardDisplayStatus
-  var showState: AnimationCompletionEnum? = nil
-  var showConfirmation: Bool = false
   var selectedText: String = ""
   
   private let coreData: CoreDataService
@@ -51,10 +49,10 @@ extension ArticleViewModel{
 	 if self.coreData.markRead(interaction) {
 		self.interactionState = .read
 		AnalyticsManager.shared.readCard(card: article)
-		showAnimation(true)
+		showAnimation(.read)
 		return true
 	 }else{
-		showAnimation(false)
+		showAnimation(.error)
 		return false
 	 }
   }
@@ -63,10 +61,10 @@ extension ArticleViewModel{
 	 let interaction = ReadInteractionModel(readCard: article)
 	 if self.coreData.markSaved(interaction) {
 		self.interactionState = .archived
-		showAnimation(true)
+		showAnimation(.save)
 		return true
 	 }else{
-		showAnimation(false)
+		showAnimation(.error)
 		return false
 	 }
   }
@@ -76,24 +74,16 @@ extension ArticleViewModel{
 	 
 	 if self.coreData.markDismissed(interaction){
 		self.interactionState = .dismissed
-		showAnimation(true)
+		showAnimation(.dismiss)
 		return true
 	 }else{
-		showAnimation(false)
+		showAnimation(.error)
 		return false
 	 }
   }
   
-  func showAnimation(_ state: Bool){
-	 if state{
-		self.showState = .success
-	 }else{
-		self.showState = .failure
-	 }
-	 Task{
-		try await Task.sleep(for: .seconds(state ? 1.1 : 1.7))
-		self.showState = nil
-	 }
+  func showAnimation(_ state: SmallPopUpEnum){
+		NavigationManager.shared.popUpState = state
   }
   
 }
@@ -104,7 +94,7 @@ extension ArticleViewModel{
   
   func copyText() -> () {
 	 UIPasteboard.general.string = selectedText
-	 showConfirmation = true
+	 selectedText = ""
   }
   
   
@@ -122,5 +112,6 @@ extension ArticleViewModel{
 	 )
 	 
 	 NavigationManager.shared.highlight = .create(highlight)
+	 selectedText = ""
   }
 }

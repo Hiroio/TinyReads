@@ -137,20 +137,6 @@ struct ArticleView: View {
 		},
 		alignment: .topTrailing
 	 )
-	 .overlay {
-		Group{
-		  if let state = vm.showState {
-			 CompletedAnimation(state: state)
-				.padding(40)
-				.background(
-				  Image(themeManager.themeAssets.backSmallCard)
-					 .resizable()
-					 .scaledToFill()
-				)
-		  }
-		}
-	 }
-	 .animation(.easeInOut, value: vm.showState != nil)
   }
 }
 

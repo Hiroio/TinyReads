@@ -26,7 +26,11 @@ struct HighlightsGrid: View {
 			 ScrollView{
 				LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
 				  ForEach(highlights){item in
-					 HighlightItem(item, backImage: themeManager.themeAssets.backSmallCard)
+					 Button{
+						NavigationManager.shared.highlight = .idle(item)
+					 }label:{
+						HighlightItem(item, backImage: themeManager.themeAssets.backSmallCard)
+					 }
 				  }
 				}
 			 }

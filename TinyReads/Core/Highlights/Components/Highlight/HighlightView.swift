@@ -63,11 +63,7 @@ struct HighlightView: View {
 		  
 		  
 		  if !viewModel.actionBtnText.isEmpty {
-			 if viewModel.state.value.note != viewModel.highlight.note{
-				Text("Changed")
-			 }else{
 				actionBtn
-			 }
 		  }
 		}
 		.padding(.horizontal, 20)
@@ -86,7 +82,7 @@ extension HighlightView{
   private var actionBtn: some View {
 	 HStack{
 		Button{
-		  
+		  viewModel.actionBtn()
 		}label:{
 		  Text(viewModel.actionBtnText)
 			 .accent(weight: .semibold)

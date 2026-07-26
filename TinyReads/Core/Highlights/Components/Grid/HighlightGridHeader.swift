@@ -12,7 +12,9 @@ struct HighlightGridHeader: View {
   
     var body: some View {
 		HStack{
-		  Button{}label:{
+		  Button{
+			 NavigationManager.shared.secondary = nil
+		  }label:{
 			 Image(systemName: "xmark")
 		  }
 		  .buttonStyle(SmallBtnStyle())

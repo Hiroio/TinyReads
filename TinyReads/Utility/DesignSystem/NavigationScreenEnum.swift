@@ -18,7 +18,7 @@ enum SecondaryAppScreen {
 
 
 enum SmallPopUpEnum {
-  case read, save, dismiss, created, copied, error
+  case read, save, dismiss, created, edited, copied, error
   
   var title: String {
 	 switch self {
@@ -30,6 +30,8 @@ enum SmallPopUpEnum {
 		"Successfully dismissed!"
 	 case .created:
 		"Highlight created!"
+	 case .edited:
+		"Highlight edited!"
 	 case .copied:
 		"Text copied!"
 	 case .error:

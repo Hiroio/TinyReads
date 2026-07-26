@@ -16,7 +16,9 @@ final class HighlightViewModel{
   
   private let highlightManager = HighlightManager.shared
   
-  
+  init(){
+	 self.highlights = highlightManager.fetchHighlights().map( { HighlightModel(entity: $0)} )
+  }
   
   
 }

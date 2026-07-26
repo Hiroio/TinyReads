@@ -11,8 +11,23 @@ struct SmallTextPopUp: View {
   @Environment(ThemeManager.self) var themeManager
   let role: SmallPopUpEnum
     var body: some View {
-		Text(role.title)
-		  .foregroundStyle(themeManager.themeAssets.accent)
+		HStack{
+		  Image(themeManager.themeAssets.freshSwipeMode)
+			 .resizable()
+			 .scaledToFit()
+			 .frame(height: 55)
+		  
+		  Text(role.title)
+			 .accent(weight: .medium)
+			 .fixedSize()
+			 .frame(maxWidth: .infinity)
+		  
+		  
+		  Image(themeManager.themeAssets.repeatSwipeMode)
+			 .resizable()
+			 .scaledToFit()
+			 .frame(height: 55)
+		}
 		  .frame(maxWidth: .infinity)
 		  .padding()
 		  .background(
@@ -20,9 +35,14 @@ struct SmallTextPopUp: View {
 				.resizable()
 				.shadow(radius: 2)
 		  )
-		  .padding(.horizontal, 40)
+		  .onTapGesture(perform: {
+			 withAnimation {
+				NavigationManager.shared.popUpState = nil
+			 }
+		  })
+		  .padding(.horizontal, 30)
 		  .onAppear{
-			 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
+			 DispatchQueue.main.asyncAfter(deadline: .now() + 2){
 				NavigationManager.shared.popUpState = nil
 			 }
 		  }
