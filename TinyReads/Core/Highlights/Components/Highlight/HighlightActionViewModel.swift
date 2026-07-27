@@ -14,6 +14,7 @@ final class HighlightActionViewModel{
   var text: String = ""
   var state: HighlightScreenState
   var note: Bool = false
+  var warningText: String = ""
   
   init(highlight: HighlightModel, state: HighlightScreenState){
 	 self.highlight = highlight
@@ -24,15 +25,23 @@ final class HighlightActionViewModel{
   private let highlightManager = HighlightManager.shared
   
   
-  var actionBtnText: String{
+  var actionBtnText: HighlightActionCode?{
 	 if state.isCreate {
-		return "Create"
-	 }else if note{
-		return "Save"
+		return HighlightActionCode.create
+	 }else if highlight.note != state.value.note{
+		return HighlightActionCode.edit
 	 }
-	 return ""
+	 return nil
   }
   
+  
+  var noteActionText: String{
+	 if highlight.note.isEmpty{
+		"Add Note"
+	 }else{
+		"Note"
+	 }
+  }
   
 }
 
@@ -72,8 +81,36 @@ extension HighlightActionViewModel{
 	 
   }
   
+  
+//  ------ Utility
+//  Show Animation
   private func showAnimation(_ state: SmallPopUpEnum){
 	 NavigationManager.shared.popUpState = state
+  }
+  
+//  Exit Action
+  func exitAction(){
+	 if let actionBtnText{
+		warningText = actionBtnText.warningText
+	 }else{
+		NavigationManager.shared.highlight = nil
+	 }
+  }
+  
+//  Navigation Article
+  func navigateToArticle(){
+	 Task { @MainActor [weak self] in
+		guard let self else { return }
+		guard let article = try? await FireStoreService.shared.fetchReads(ids: [highlight.originalId]).first else { return }
+
+		NavigationManager.shared.highlight = nil
+		NavigationManager.shared.secondary = nil
+		NavigationManager.shared.article = ArticleRoute(
+		  article: article,
+		  onInteractionChanged: {},
+		  isAbleToInteract: .read
+		)
+	 }
   }
 }
 
@@ -111,5 +148,29 @@ enum HighlightScreenState: Identifiable, Equatable{
   
   var isCreate: Bool{
 	 if case .create = self { true } else { false }
+  }
+}
+
+
+
+enum HighlightActionCode{
+  case create, edit
+  
+  var actionBtn: String {
+	 switch self {
+	 case .create:
+		"Create"
+	 case .edit:
+		"Save"
+	 }
+  }
+  
+  var warningText: String{
+	 switch self {
+	 case .create:
+		"If you leave now, everything you've written wont be saved."
+	 case .edit:
+		"Your changes haven't been saved. \nIf you leave now, your notes changes will be lost."
+	 }
   }
 }

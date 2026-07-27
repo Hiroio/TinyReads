@@ -15,41 +15,17 @@ struct HighlightView: View {
 	 self._viewModel = State(wrappedValue: HighlightActionViewModel(highlight: state.value, state: state))
   }
   
-    var body: some View {
+  var body: some View {
+	 ZStack{
 		VStack{
-		  HStack{
-			 if viewModel.note{
-				Button{
-				  withAnimation{
-					 viewModel.note = false
-				  }
-				}label:{
-				  Image(systemName: "arrow.left")
-					 .foregroundStyle(themeManager.themeAssets.accent)
-					 .padding(10)
-					 .background(
-						Image(themeManager.themeAssets.backSmallCard)
-						  .resizable()
-					 )
-				}
-			 }
-			 
-			 Spacer()
-			 
-			 Button{
-				NavigationManager.shared.highlight = nil
-			 }label:{
-				Image(systemName: "xmark")
-				  .foregroundStyle(themeManager.themeAssets.accent)
-				  .padding(10)
-				  .background(
-					 Image(themeManager.themeAssets.backSmallCard)
-						.resizable()
-				  )
+//		  Header
+		  HighlightHeaderView(noteIsActive: $viewModel.note){
+			 withAnimation {
+				viewModel.exitAction()
 			 }
 		  }
-			 .frame(maxWidth: .infinity)
 		  
+//		  Two workSpaces
 		  if viewModel.note {
 			 HighlightNoteView(viewModel: viewModel)
 				.transition(.move(edge: .trailing))
@@ -61,15 +37,23 @@ struct HighlightView: View {
 		  }
 		  
 		  
-		  
-		  if !viewModel.actionBtnText.isEmpty {
-				actionBtn
+//		  Bottom action
+		  if viewModel.actionBtnText != nil {
+			 actionBtn
 		  }
 		}
 		.padding(.horizontal, 20)
 		.animation(.easeInOut, value: viewModel.note)
-    }
-		
+	 }
+	 if viewModel.warningText != ""{
+		WarningPopUp(caption: $viewModel.warningText){
+		  withAnimation {
+			 NavigationManager.shared.highlight = nil
+		  }
+		}
+	 }
+  }
+  
 }
 
 #Preview {
@@ -84,7 +68,7 @@ extension HighlightView{
 		Button{
 		  viewModel.actionBtn()
 		}label:{
-		  Text(viewModel.actionBtnText)
+		  Text(viewModel.actionBtnText?.actionBtn ?? "")
 			 .accent(weight: .semibold)
 			 .padding()
 			 .background(

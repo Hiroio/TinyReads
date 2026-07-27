@@ -13,10 +13,14 @@ struct HighlightNoteView: View {
   @State private var extended: Bool = false
     var body: some View {
 		  VStack{
-			 
 			 VStack(spacing: 0){
-				Text(viewModel.highlight.originalTitle)
-				  .secondary()
+				Button{
+				  
+				}label:{
+				  Text(viewModel.highlight.originalTitle)
+					 .secondary()
+					 .underline()
+				}
 				Text(viewModel.text.capitalized)
 				  .padding(10)
 				  .overlay(

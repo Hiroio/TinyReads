@@ -9,23 +9,32 @@ import SwiftUI
 
 struct HighlightsGrid: View {
   @Environment(ThemeManager.self) var themeManager
-  let highlights: [HighlightModel]
+  @Bindable var vm: HighlightViewModel
     var body: some View {
 		VStack{
-		  if highlights.isEmpty{
-			 Image(themeManager.themeAssets.emptyState)
-				.resizable()
-				.scaledToFit()
-				.padding(45)
-			 Text("Nothing here")
-				.title()
-			 Text("Read and highlight the text\n to create some")
-				.multilineTextAlignment(.center)
-				.secondary()
+		  if vm.highlights.isEmpty{
+			 VStack{
+				Image(themeManager.themeAssets.emptyState)
+				  .resizable()
+				  .scaledToFit()
+				  .padding(45)
+				Text("Nothing here")
+				  .title()
+				Text("Read and highlight the text\n to create some")
+				  .multilineTextAlignment(.center)
+				  .secondary()
+			 }
+			 .frame(maxHeight: .infinity)
+			 .padding(40)
+			 .background(
+				PaperBackGround()
+				  .ignoresSafeArea()
+			 )
 		  }else{
 			 ScrollView{
+				CustomSearchBar(searchText: $vm.searchText)
 				LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
-				  ForEach(highlights){item in
+				  ForEach(vm.highlights){item in
 					 Button{
 						NavigationManager.shared.highlight = .idle(item)
 					 }label:{
@@ -33,15 +42,21 @@ struct HighlightsGrid: View {
 					 }
 				  }
 				}
+				.frame(maxHeight: .infinity)
+				.padding(40)
+				.background(
+				  PaperBackGround()
+					 .ignoresSafeArea()
+				)
 			 }
+		 
 		  }
 		}
     }
 }
 
 #Preview {
-  let array: [HighlightModel] = Array(0...4).map{_ in HighlightModel.previewf() }
-  HighlightsGrid(highlights: [])
+  HighlightsGrid(vm: HighlightViewModel())
 	 .environment(ThemeManager())
 }
 

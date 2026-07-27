@@ -12,6 +12,7 @@ import CoreData
 @Observable
 final class HighlightManager{
   static let shared = HighlightManager()
+  var highlights: [HighlightModel] = []
   
   let container: NSPersistentContainer
   let viewContext: NSManagedObjectContext
@@ -27,6 +28,7 @@ final class HighlightManager{
 	 self.container = container
 	 self.viewContext = container.viewContext
 	 
+	 syncHighlight()
   }
   
   
@@ -83,7 +85,11 @@ extension HighlightManager{
 	 hightlightEntity.widgetIsActive = false
 	 hightlightEntity.dateCreated = .now
 	 
-	 return self.save()
+	 if save(){
+		syncHighlight()
+		return true
+	 }
+	 return false
   }
   
 //  MARK: Edit Highlight
@@ -94,18 +100,32 @@ extension HighlightManager{
 	 entity.widgetIsActive = highlight.widgetIsActive
 	 
 	 
-	 return self.save()
+	 if save(){
+		syncHighlight()
+		return true
+	 }
+	 return false
   }
   
 //  MARK: Delete Highlight
-  func deleteHighlight(id: UUID){
-	 guard let entity = fetchSingleHighlight(id: id) else {return}
+  func deleteHighlight(id: UUID) -> Bool{
+	 guard let entity = fetchSingleHighlight(id: id) else {return false}
 	 
 	 viewContext.delete(entity)
 	 
-	 save()
+	 if save(){
+		syncHighlight()
+		return true
+	 }
+	 return false
   }
   
+//  MARK: Sync Highlight
+  func syncHighlight() {
+	 let entities = fetchHighlights()
+	 
+	 self.highlights = entities.map( { HighlightModel(entity: $0) } )
+  }
   
 //   SAVE
   @discardableResult
@@ -117,4 +137,7 @@ extension HighlightManager{
 	 }
 	 return true
   }
+  
+  
+  
 }

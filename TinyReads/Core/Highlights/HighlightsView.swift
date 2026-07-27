@@ -14,11 +14,10 @@ struct HighlightsView: View {
 		ZStack{
 		  VStack{
 			 HighlightGridHeader(vm: vm)
+		
 			 
-			 CustomSearchBar(searchText: $vm.searchText)
-			 
-			 Spacer()
-			 HighlightsGrid(highlights: vm.highlights)
+			 HighlightsGrid(vm: vm)
+			
 		  }
 		}
     }

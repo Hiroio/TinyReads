@@ -24,3 +24,17 @@ struct SmallBtnStyle: ButtonStyle{
 		.animation(.smooth, value: configuration.isPressed)
   }
 }
+
+struct CircleBtnStyle: ButtonStyle{
+  @Environment(ThemeManager.self) var themeManager
+  func makeBody(configuration: Configuration) -> some View {
+	 configuration.label
+		.padding()
+		.background(
+		  NotRoundCircle()
+			 .stroke(lineWidth: 2)
+		)
+		.scaleEffect(configuration.isPressed ? 0.85 : 1.0)
+		.animation(.smooth, value: configuration.isPressed)
+  }
+}

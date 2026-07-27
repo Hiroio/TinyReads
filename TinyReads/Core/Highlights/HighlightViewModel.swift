@@ -10,17 +10,15 @@ import Foundation
 @MainActor
 @Observable
 final class HighlightViewModel{
-  var highlights: [HighlightModel] = []
+  var highlights: [HighlightModel] { highlightManager.highlights }
   
   var searchText: String = ""
   
   private let highlightManager = HighlightManager.shared
   
   init(){
-	 self.highlights = highlightManager.fetchHighlights().map( { HighlightModel(entity: $0)} )
+	 
   }
-  
-  
 }
 
 
