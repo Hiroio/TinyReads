@@ -22,6 +22,9 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
   private let selectedLanguageKey = "selectedLanguage"
   private let onBoardingKey = "onBoardingCompletion"
   private let avaratKey = "SelectedIndexAvatar"
+
+  /// Shared with the widget extension so it can read the app's current language.
+  private let sharedDefaults = UserDefaults(suiteName: "group.com.hiroio.tinyreads") ?? .standard
   var selectedCategories: [String] {
 	 didSet {
 		UserDefaults.standard.set(selectedCategories, forKey: selectedCategoriesKey)
@@ -42,7 +45,7 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
   
   var selectedLanguage: LanguageEnum{
 	 didSet{
-		UserDefaults.standard.set(selectedLanguage.rawValue, forKey: selectedLanguageKey)
+		sharedDefaults.set(selectedLanguage.rawValue, forKey: selectedLanguageKey)
 	 }
   }
   
@@ -64,9 +67,15 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
 	 let onBoardingCompletion = UserDefaults.standard.bool(forKey: onBoardingKey)
 	 self.onBoardingCompletion = onBoardingCompletion
 	 
-	 let selectedLanguage = UserDefaults.standard.string(forKey: selectedLanguageKey) ?? ""
-	 let language = LanguageEnum(rawValue: selectedLanguage) ?? .en
-	 self.selectedLanguage = language
+	 if let sharedLanguage = sharedDefaults.string(forKey: selectedLanguageKey) {
+		self.selectedLanguage = LanguageEnum(rawValue: sharedLanguage) ?? .en
+	 } else {
+		//  migrate a pre-existing language choice from the old, app-only UserDefaults
+		let legacyLanguage = UserDefaults.standard.string(forKey: selectedLanguageKey) ?? ""
+		let migratedLanguage = LanguageEnum(rawValue: legacyLanguage) ?? .en
+		self.selectedLanguage = migratedLanguage
+		sharedDefaults.set(migratedLanguage.rawValue, forKey: selectedLanguageKey)
+	 }
 	 
 	 let avatarIndex = UserDefaults.standard.integer(forKey: avaratKey)
 	 self.selectedAvatarIndex = avatarIndex

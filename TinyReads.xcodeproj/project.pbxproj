@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CEBA5C783018C23700F5A128 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEBA5C773018C23600F5A128 /* WidgetKit.framework */; };
+		CEBA5C7A3018C23700F5A128 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEBA5C793018C23700F5A128 /* SwiftUI.framework */; };
+		CEBA5C853018C23800F5A128 /* TinyReadsWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CEBA5C763018C23600F5A128 /* TinyReadsWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CEBA5CAF3018DA9200F5A128 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CEBA5CAE3018DA9200F5A128 /* FirebaseFirestore */; };
+		CEBA5CB13018DA9500F5A128 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = CEBA5CB03018DA9500F5A128 /* FirebaseCore */; };
 		CED0D4262FC8BE6B0058C075 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CED0D4252FC8BE6B0058C075 /* FirebaseAuth */; };
 		CED0D4282FC8BE6B0058C075 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = CED0D4272FC8BE6B0058C075 /* FirebaseCore */; };
 		CED0D42A2FC8BE6B0058C075 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CED0D4292FC8BE6B0058C075 /* FirebaseFirestore */; };
@@ -22,14 +27,73 @@
 			remoteGlobalIDString = CED0D4032FC8789B0058C075;
 			remoteInfo = TinyReads;
 		};
+		CEBA5C833018C23800F5A128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CED0D3FC2FC8789B0058C075 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CEBA5C753018C23600F5A128;
+			remoteInfo = TinyReadsWidgetsExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CEBA5C863018C23800F5A128 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CEBA5C853018C23800F5A128 /* TinyReadsWidgetsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		CE9C8A662FD1FA1A00EE2165 /* TinyReadsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TinyReadsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEBA5C763018C23600F5A128 /* TinyReadsWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TinyReadsWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEBA5C773018C23600F5A128 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		CEBA5C793018C23700F5A128 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		CED0D4042FC8789B0058C075 /* TinyReads.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinyReads.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CEBA5C8A3018C23800F5A128 /* Exceptions for "TinyReadsWidgets" folder in "TinyReadsWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CEBA5C753018C23600F5A128 /* TinyReadsWidgetsExtension */;
+		};
+		CEBA5C8F3018C5E600F5A128 /* Exceptions for "TinyReads" folder in "TinyReadsWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Assets.xcassets,
+				"GoogleService-Info.plist",
+				Models/CoreData/HighlightModel.swift,
+				Models/CoreData/Highlights.xcdatamodeld,
+				Models/ReadCardModels/ReadCardModel.swift,
+				Models/StoreConfiguration/StoreConfiguration.swift,
+				Services/FireBase/FireStoreService/FirestoreProtocol.swift,
+				Services/FireBase/FireStoreService/FireStoreService.swift,
+				Utility/DesignSystem/LanguageEnum.swift,
+			);
+			target = CEBA5C753018C23600F5A128 /* TinyReadsWidgetsExtension */;
+		};
+		CEBA5C933018C63B00F5A128 /* Exceptions for "TinyReadsWidgets" folder in "TinyReads" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Entries/ArticleEntry.swift,
+				Entries/HighlightEntry.swift,
+				Providers/ArticleProvider.swift,
+				Providers/HighlightProvider.swift,
+				Widgets/ArticleWidget.swift,
+				Widgets/WidgetsView/ArticleWidgetView.swift,
+				Widgets/WidgetsView/HiglightWidgetView.swift,
+			);
+			target = CED0D4032FC8789B0058C075 /* TinyReads */;
+		};
 		CED48A0B2FF08D80008869D8 /* Exceptions for "TinyReads" folder in "TinyReads" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -51,10 +115,20 @@
 			path = TinyReadsTests;
 			sourceTree = "<group>";
 		};
+		CEBA5C7B3018C23700F5A128 /* TinyReadsWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CEBA5C933018C63B00F5A128 /* Exceptions for "TinyReadsWidgets" folder in "TinyReads" target */,
+				CEBA5C8A3018C23800F5A128 /* Exceptions for "TinyReadsWidgets" folder in "TinyReadsWidgetsExtension" target */,
+			);
+			path = TinyReadsWidgets;
+			sourceTree = "<group>";
+		};
 		CED0D4062FC8789B0058C075 /* TinyReads */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				CED48A0B2FF08D80008869D8 /* Exceptions for "TinyReads" folder in "TinyReads" target */,
+				CEBA5C8F3018C5E600F5A128 /* Exceptions for "TinyReads" folder in "TinyReadsWidgetsExtension" target */,
 			);
 			path = TinyReads;
 			sourceTree = "<group>";
@@ -66,6 +140,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEBA5C733018C23600F5A128 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEBA5C7A3018C23700F5A128 /* SwiftUI.framework in Frameworks */,
+				CEBA5C783018C23700F5A128 /* WidgetKit.framework in Frameworks */,
+				CEBA5CB13018DA9500F5A128 /* FirebaseCore in Frameworks */,
+				CEBA5CAF3018DA9200F5A128 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +174,7 @@
 			children = (
 				CED0D4062FC8789B0058C075 /* TinyReads */,
 				CE9C8A672FD1FA1A00EE2165 /* TinyReadsTests */,
+				CEBA5C7B3018C23700F5A128 /* TinyReadsWidgets */,
 				CED48A022FF0465D008869D8 /* Frameworks */,
 				CED0D4052FC8789B0058C075 /* Products */,
 			);
@@ -99,6 +185,7 @@
 			children = (
 				CED0D4042FC8789B0058C075 /* TinyReads.app */,
 				CE9C8A662FD1FA1A00EE2165 /* TinyReadsTests.xctest */,
+				CEBA5C763018C23600F5A128 /* TinyReadsWidgetsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -106,6 +193,8 @@
 		CED48A022FF0465D008869D8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CEBA5C773018C23600F5A128 /* WidgetKit.framework */,
+				CEBA5C793018C23700F5A128 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -136,6 +225,30 @@
 			productReference = CE9C8A662FD1FA1A00EE2165 /* TinyReadsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		CEBA5C753018C23600F5A128 /* TinyReadsWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEBA5C893018C23800F5A128 /* Build configuration list for PBXNativeTarget "TinyReadsWidgetsExtension" */;
+			buildPhases = (
+				CEBA5C723018C23600F5A128 /* Sources */,
+				CEBA5C733018C23600F5A128 /* Frameworks */,
+				CEBA5C743018C23600F5A128 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CEBA5C7B3018C23700F5A128 /* TinyReadsWidgets */,
+			);
+			name = TinyReadsWidgetsExtension;
+			packageProductDependencies = (
+				CEBA5CAE3018DA9200F5A128 /* FirebaseFirestore */,
+				CEBA5CB03018DA9500F5A128 /* FirebaseCore */,
+			);
+			productName = TinyReadsWidgetsExtension;
+			productReference = CEBA5C763018C23600F5A128 /* TinyReadsWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		CED0D4032FC8789B0058C075 /* TinyReads */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CED0D40F2FC8789C0058C075 /* Build configuration list for PBXNativeTarget "TinyReads" */;
@@ -143,10 +256,12 @@
 				CED0D4002FC8789B0058C075 /* Sources */,
 				CED0D4012FC8789B0058C075 /* Frameworks */,
 				CED0D4022FC8789B0058C075 /* Resources */,
+				CEBA5C863018C23800F5A128 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				CEBA5C843018C23800F5A128 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				CED0D4062FC8789B0058C075 /* TinyReads */,
@@ -177,6 +292,9 @@
 						CreatedOnToolsVersion = 26.5;
 						TestTargetID = CED0D4032FC8789B0058C075;
 					};
+					CEBA5C753018C23600F5A128 = {
+						CreatedOnToolsVersion = 26.5;
+					};
 					CED0D4032FC8789B0058C075 = {
 						CreatedOnToolsVersion = 26.5;
 					};
@@ -202,12 +320,20 @@
 			targets = (
 				CED0D4032FC8789B0058C075 /* TinyReads */,
 				CE9C8A652FD1FA1A00EE2165 /* TinyReadsTests */,
+				CEBA5C753018C23600F5A128 /* TinyReadsWidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		CE9C8A642FD1FA1A00EE2165 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEBA5C743018C23600F5A128 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -231,6 +357,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CEBA5C723018C23600F5A128 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CED0D4002FC8789B0058C075 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -245,6 +378,11 @@
 			isa = PBXTargetDependency;
 			target = CED0D4032FC8789B0058C075 /* TinyReads */;
 			targetProxy = CE9C8A6A2FD1FA1A00EE2165 /* PBXContainerItemProxy */;
+		};
+		CEBA5C843018C23800F5A128 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CEBA5C753018C23600F5A128 /* TinyReadsWidgetsExtension */;
+			targetProxy = CEBA5C833018C23800F5A128 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -288,6 +426,74 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TinyReads.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TinyReads";
+			};
+			name = Release;
+		};
+		CEBA5C873018C23800F5A128 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WU276H25JQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TinyReadsWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TinyReadsWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hiroio.tinyreads.TinyReadsWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CEBA5C883018C23800F5A128 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WU276H25JQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TinyReadsWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TinyReadsWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hiroio.tinyreads.TinyReadsWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -506,6 +712,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		CEBA5C893018C23800F5A128 /* Build configuration list for PBXNativeTarget "TinyReadsWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEBA5C873018C23800F5A128 /* Debug */,
+				CEBA5C883018C23800F5A128 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		CED0D3FF2FC8789B0058C075 /* Build configuration list for PBXProject "TinyReads" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -538,6 +753,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		CEBA5CAE3018DA9200F5A128 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CED0D4242FC8BE6B0058C075 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		CEBA5CB03018DA9500F5A128 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CED0D4242FC8BE6B0058C075 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
 		CED0D4252FC8BE6B0058C075 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CED0D4242FC8BE6B0058C075 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
