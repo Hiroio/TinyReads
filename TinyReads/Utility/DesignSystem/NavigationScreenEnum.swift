@@ -17,8 +17,42 @@ enum SecondaryAppScreen {
 
 
 
+enum WarningPopUpEnum {
+  case unsavedHighlight(HighlightActionCode)
+  case deleteHighlight
+
+  var title: String {
+	 switch self {
+	 case .unsavedHighlight:
+		"You have some unfinished business"
+	 case .deleteHighlight:
+		"Delete this highlight?"
+	 }
+  }
+
+  var caption: String {
+	 switch self {
+	 case .unsavedHighlight(let code):
+		code.warningText
+	 case .deleteHighlight:
+		"This action can't be undone."
+	 }
+  }
+
+  var confirmText: String {
+	 switch self {
+	 case .unsavedHighlight:
+		"Leave"
+	 case .deleteHighlight:
+		"Delete"
+	 }
+  }
+}
+
+
+
 enum SmallPopUpEnum {
-  case read, save, dismiss, created, edited, copied, error
+  case read, save, dismiss, created, edited, deleted, copied, error
   
   var title: String {
 	 switch self {
@@ -32,6 +66,8 @@ enum SmallPopUpEnum {
 		"Highlight created!"
 	 case .edited:
 		"Highlight edited!"
+	 case .deleted:
+		"Highlight deleted!"
 	 case .copied:
 		"Text copied!"
 	 case .error:

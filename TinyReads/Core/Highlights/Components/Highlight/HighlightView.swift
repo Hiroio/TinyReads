@@ -10,11 +10,11 @@ import SwiftUI
 struct HighlightView: View {
   @Environment(ThemeManager.self) var themeManager
   @State private var viewModel: HighlightActionViewModel
-  
+
   init(state: HighlightScreenState){
 	 self._viewModel = State(wrappedValue: HighlightActionViewModel(highlight: state.value, state: state))
   }
-  
+
   var body: some View {
 	 ZStack{
 		VStack{
@@ -24,7 +24,7 @@ struct HighlightView: View {
 				viewModel.exitAction()
 			 }
 		  }
-		  
+
 //		  Two workSpaces
 		  if viewModel.note {
 			 HighlightNoteView(viewModel: viewModel)
@@ -35,8 +35,8 @@ struct HighlightView: View {
 				.transition(.move(edge: .leading))
 				.zIndex(1)
 		  }
-		  
-		  
+
+
 //		  Bottom action
 		  if viewModel.actionBtnText != nil {
 			 actionBtn
@@ -45,15 +45,14 @@ struct HighlightView: View {
 		.padding(.horizontal, 20)
 		.animation(.easeInOut, value: viewModel.note)
 	 }
-	 if viewModel.warningText != ""{
-		WarningPopUp(caption: $viewModel.warningText){
-		  withAnimation {
-			 NavigationManager.shared.highlight = nil
-		  }
-		}
+	 .onAppear {
+		NavigationManager.shared.highlightExitAction = viewModel.exitAction
+	 }
+	 .onDisappear {
+		NavigationManager.shared.highlightExitAction = nil
 	 }
   }
-  
+
 }
 
 #Preview {

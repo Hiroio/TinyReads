@@ -33,8 +33,8 @@ struct HighlightGridHeader: View {
 			 Image(themeManager.themeAssets.widgetAction)
 				.resizable()
 				.scaledToFit()
-				.shadow(color: vm.widgetState ? themeManager.themeAssets.accent : themeManager.themeAssets.primary,radius: 1)
-				.shadow(color: vm.widgetState ? themeManager.themeAssets.accent : themeManager.themeAssets.primary,radius: 2)
+				.shadow(color: vm.widgetState ? themeManager.themeAssets.accent : .clear, radius: 1)
+				.shadow(color: vm.widgetState ? themeManager.themeAssets.accent : .clear ,radius: 2)
 		  }
 		  .buttonStyle(SmallBtnStyle())
 		  .disabled(vm.highlights.isEmpty || vm.deleteState)
@@ -47,8 +47,8 @@ struct HighlightGridHeader: View {
 			 Image(themeManager.themeAssets.deleteAction)
 				.resizable()
 				.scaledToFit()
-				.shadow(color: vm.deleteState ? themeManager.themeAssets.accent : themeManager.themeAssets.primary,radius: 1)
-				.shadow(color: vm.deleteState ? themeManager.themeAssets.accent : themeManager.themeAssets.primary,radius: 1)
+				.shadow(color: vm.deleteState ? themeManager.themeAssets.accent :  themeManager.themeAssets.primary ,radius: 1)
+				.shadow(color: vm.deleteState ? themeManager.themeAssets.accent : .clear ,radius: 1)
 		  }
 		  .disabled(vm.highlights.isEmpty || vm.widgetState)
 		  .buttonStyle(SmallBtnStyle())

@@ -9,15 +9,15 @@ import SwiftUI
 
 struct WarningPopUp: View {
   @Environment(ThemeManager.self) var themeManager
-  @Binding var caption: String
-  let leaveAction: () -> ()
+  let type: WarningPopUpEnum
+  let confirmationAction: () -> ()
   var body: some View {
 	 VStack{
 		VStack{
-		  Text("You have some unfinished business")
+		  Text(type.title)
 			 .accent(weight: .semibold)
 			 .padding(.vertical, 10)
-		  Text(caption)
+		  Text(type.caption)
 			 .secondary(weight: .light)
 		}
 		.padding()
@@ -25,7 +25,7 @@ struct WarningPopUp: View {
 		HStack(spacing: 25){
 		  Button{
 			 withAnimation(){
-				caption = ""
+				NavigationManager.shared.dismissWarning()
 			 }
 		  }label:{
 			 Text("Cancel")
@@ -33,14 +33,15 @@ struct WarningPopUp: View {
 		  }
 		  .buttonStyle(CircleBtnStyle())
 		  .foregroundStyle(themeManager.themeAssets.primary)
-		  
-		  
+
+
 		  Button{
 			 withAnimation{
-				leaveAction()
+				confirmationAction()
+				NavigationManager.shared.dismissWarning()
 			 }
 		  }label:{
-			 Text("Leave")
+			 Text(type.confirmText)
 				.accent(weight: .semibold)
 		  }
 		  .buttonStyle(CircleBtnStyle())
@@ -57,7 +58,7 @@ struct WarningPopUp: View {
 }
 
 #Preview {
-  WarningPopUp(caption: .constant("QWe qwheIUQ HWeiuhq IUEhuiq wuehqiuh, dwqjdijqw qwjdioiwq dwiqjdojwqd")){}
+  WarningPopUp(type: .deleteHighlight){}
 	 .environment(ThemeManager())
 }
 

@@ -126,6 +126,15 @@ enum AppThemeAssets: String, Identifiable {
 	 }
   }
   
+  var deleteBackSmallCard: String{
+	 switch self {
+	 case .light:
+		"deleteBackGroundCard"
+	 case .dark:
+		"deleteBackGroundCardDark"
+	 }
+  }
+  
   var topArticleCard: String{
 	 switch self {
 	 case .light:

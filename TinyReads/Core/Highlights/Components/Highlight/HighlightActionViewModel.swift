@@ -14,8 +14,7 @@ final class HighlightActionViewModel{
   var text: String = ""
   var state: HighlightScreenState
   var note: Bool = false
-  var warningText: String = ""
-  
+
   init(highlight: HighlightModel, state: HighlightScreenState){
 	 self.highlight = highlight
 	 self.text = highlight.text
@@ -93,7 +92,9 @@ extension HighlightActionViewModel{
 //  Exit Action
   func exitAction(){
 	 if let actionBtnText{
-		warningText = actionBtnText.warningText
+		NavigationManager.shared.showWarning(.unsavedHighlight(actionBtnText)) {
+		  NavigationManager.shared.highlight = nil
+		}
 	 }else{
 		NavigationManager.shared.highlight = nil
 	 }

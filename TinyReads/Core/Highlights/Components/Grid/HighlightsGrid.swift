@@ -10,7 +10,7 @@ import SwiftUI
 struct HighlightsGrid: View {
   @Environment(ThemeManager.self) var themeManager
   @Bindable var vm: HighlightViewModel
-    var body: some View {
+	var body: some View {
 		VStack{
 		  if vm.highlights.isEmpty{
 			 VStack{
@@ -35,23 +35,17 @@ struct HighlightsGrid: View {
 				CustomSearchBar(searchText: $vm.searchText)
 				LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
 				  ForEach(vm.highlights){item in
-					 
+
 					 Button{
-						NavigationManager.shared.highlight = .idle(item)
+						if vm.deleteState{
+						  NavigationManager.shared.showWarning(.deleteHighlight) {
+							 vm.deleteHighlight(highlight: item)
+						  }
+						}else{
+						  NavigationManager.shared.highlight = .idle(item)
+						}
 					 }label:{
-						HighlightItem(item, backImage: themeManager.themeAssets.backSmallCard)
-						  .overlay(
-							 ZStack{
-								if vm.deleteState{
-								  Image("DismissAction")
-									 .resizable()
-									 .scaledToFit()
-									 .allowsHitTesting(false)
-									 .transition(.scale)
-									 .padding(50)
-								}
-							 }
-						  )
+						HighlightItem(item, backImage: vm.deleteState ? themeManager.themeAssets.deleteBackSmallCard : themeManager.themeAssets.backSmallCard)
 					 }
 				  }
 				}
@@ -62,10 +56,10 @@ struct HighlightsGrid: View {
 					 .ignoresSafeArea()
 				)
 			 }
-		 
+
 		  }
 		}
-    }
+	}
 }
 
 #Preview {
@@ -82,7 +76,7 @@ func HighlightItem(_ highlight: HighlightModel, backImage: String) -> some View{
 		.multilineTextAlignment(.center)
 		.accent()
 		.lineLimit(3)
-	 
+
 	 Spacer()
 	 Text(ReadCategories(rawValue: highlight.categoryId)?.title ?? "")
 		.secondary(weight: .light)

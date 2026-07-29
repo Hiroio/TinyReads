@@ -22,4 +22,24 @@ final class NavigationManager {
   
   var loading: Bool = false
   var popUpState: SmallPopUpEnum? = nil
+
+  var warning: WarningPopUpEnum? = nil
+  var confirmationAction: (() -> Void)? = nil
+
+  //  Registered by HighlightView so the outer background tap (owned by MainNavigationView)
+  //  can go through the same unsaved-changes check as the in-view close button.
+  var highlightExitAction: (() -> Void)? = nil
+}
+
+
+extension NavigationManager {
+  func showWarning(_ type: WarningPopUpEnum, confirmationAction: @escaping () -> Void) {
+	 self.warning = type
+	 self.confirmationAction = confirmationAction
+  }
+
+  func dismissWarning() {
+	 warning = nil
+	 confirmationAction = nil
+  }
 }

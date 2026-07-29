@@ -28,4 +28,13 @@ final class HighlightViewModel{
 
 extension HighlightViewModel{
    
+  func deleteHighlight(highlight: HighlightModel) {
+	 if highlightManager.deleteHighlight(id: highlight.id){
+		NavigationManager.shared.popUpState = .deleted
+	 }else{
+		NavigationManager.shared.popUpState = .error
+	 }
+  }
+  
+  
 }
