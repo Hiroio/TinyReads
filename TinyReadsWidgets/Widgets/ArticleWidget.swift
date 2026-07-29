@@ -16,11 +16,13 @@ struct ArticleWidget: Widget {
 		  StaticConfiguration(kind: kind, provider: ArticleProvider()) { entry in
 				if #available(iOS 17.0, *) {
 					 ArticleWidgetView(entry: entry)
+					 .widgetURL(URL(string: "tinyreads://article?id=\(entry.article.id)"))
 					 .containerBackground(for: .widget){
 						Color.clear
 					 }
 				} else {
 				  ArticleWidgetView(entry: entry)
+					 .widgetURL(URL(string: "tinyreads://article?id=\(entry.article.id)"))
 				}
 		  }
 		  .configurationDisplayName("Random Article")

@@ -71,6 +71,8 @@ extension HighlightActionViewModel{
   private func createHighlight() -> Bool {
 	 guard highlight.text.isEmpty == false else { return false }
 	 
+	 AnalyticsManager.shared.highlightCreated(article: highlight.originalId)
+	 
 	 return highlightManager.createHighlight(highlight: highlight)
 
   }

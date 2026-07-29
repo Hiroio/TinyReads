@@ -13,7 +13,7 @@ struct SmallBtnStyle: ButtonStyle{
   @Environment(ThemeManager.self) var themeManager
   func makeBody(configuration: Configuration) -> some View {
 	 configuration.label
-		.padding(10)
+		.padding(5)
 		.foregroundStyle(themeManager.themeAssets.accent)
 		.background(
 		  Image(themeManager.themeAssets.readerCard)

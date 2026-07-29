@@ -210,6 +210,24 @@ enum AppThemeAssets: String, Identifiable {
 	 }
   }
   
+  var widgetAction: String{
+	 switch self{
+	 case .light:
+		"WidgetActionLight"
+	 case .dark:
+		"WidgetActionDark"
+	 }
+  }
+  
+  var deleteAction: String{
+	 switch self{
+	 case .light:
+		"DeleteActionLight"
+	 case .dark:
+		"DeleteActionDark"
+	 }
+  }
+  
 //  - Main Navigation
   var navigationProfile: String{
 	 switch self {
@@ -223,9 +241,9 @@ enum AppThemeAssets: String, Identifiable {
   var navigationSkipped: String{
 	 switch self {
 	 case .light:
-		"nav_skipped_light"
+		"nav_highlight_light"
 	 case .dark:
-		"nav_skipped_dark"
+		"nav_highlight_dark"
 	 }
   }
   

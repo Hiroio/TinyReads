@@ -90,7 +90,7 @@ extension CardSliderViewModel {
 	 cards.remove(at: index)
 	 deckManager.removeFromDeck(id)
 	 deckManager.dismissCard(card)
-	 
+	 AnalyticsManager.shared.dismissCard(card: card)
   }
   
   // Right Swipe
@@ -106,6 +106,7 @@ extension CardSliderViewModel {
 	 cards.remove(at: index)
 	 deckManager.removeFromDeck(id)
 	 deckManager.saveCard(card)
+	 AnalyticsManager.shared.saveCard(card: card)
   }
   
   func articleRoute(for id: String) -> ArticleRoute? {
@@ -156,6 +157,7 @@ extension CardSliderViewModel{
   //  For Navigation
   func openArticle(_ id: String) {
 	 guard let route = self.articleRoute(for: id) else { return }
+	 AnalyticsManager.shared.tapToRead(card: route.article)
 	 NavigationManager.shared.article = route
   }
   

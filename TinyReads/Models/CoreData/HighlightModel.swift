@@ -37,7 +37,9 @@ extension HighlightModel{
 	 self.dateCreated = entity.dateCreated ?? Date()
   }
   
-  static var preview = HighlightModel(id: UUID(), text: "qweqweqw qwdkoqw okdkrei feij feiminiw ei ifenmf einknje infei mfei",note: "",originalTitle: "Some sort of title of original topic", originalId: "qwe", categoryId: "science", languageCode: "uk", widgetIsActive: false, dateCreated: .now)
+  static var preview = HighlightModel(id: UUID(), text: "Here could be your highlighted text.",note: "",originalTitle: "From article what you read", originalId: "qwe", categoryId: "category", languageCode: "uk", widgetIsActive: false, dateCreated: .now)
+  static var noHighlight = HighlightModel(id: UUID(), text: "There's no selected highlights",note: "",originalTitle: "", originalId: "qwe", categoryId: "", languageCode: "", widgetIsActive: false, dateCreated: .now)
   static func previewf() -> HighlightModel{HighlightModel(id: UUID(), text: "qweqweqw qwdkoqw okdkrei feij feiminiw ei ifenmf einknje infei mfei",note: "",originalTitle: "Some sort of title of original topic", originalId: "qwe", categoryId: "science", languageCode: "uk", widgetIsActive: false, dateCreated: .now)}
+  
   
 }

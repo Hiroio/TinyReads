@@ -19,6 +19,11 @@ final class HighlightManager{
   
   private init(){
 	 let container = NSPersistentContainer(name: "Highlights")
+	 if let storeURL = FileManager.default
+		.containerURL(forSecurityApplicationGroupIdentifier: "group.com.hiroio.tinyreads")?
+		.appendingPathComponent("Highlights.sqlite") {
+		container.persistentStoreDescriptions.first?.url = storeURL
+	 }
 	 container.loadPersistentStores { _, error in
 		if let error{
 		  print("DEBUG: Failed to load container for Highlights: \(error.localizedDescription)")
@@ -31,6 +36,10 @@ final class HighlightManager{
 	 syncHighlight()
   }
   
+  
+  var filteredForWidget: [HighlightModel]{
+	 highlights.filter({ $0.widgetIsActive })
+  }
   
 }
 
@@ -88,6 +97,7 @@ extension HighlightManager{
 	 if save(){
 		syncHighlight()
 		return true
+		
 	 }
 	 return false
   }

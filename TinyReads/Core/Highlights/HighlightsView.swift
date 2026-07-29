@@ -10,21 +10,35 @@ import SwiftUI
 struct HighlightsView: View {
   @Environment(ThemeManager.self) var themeManager
   @State private var vm = HighlightViewModel()
-    var body: some View {
-		ZStack{
+  var body: some View {
+	 ZStack{
+		VStack{
+		  HighlightGridHeader(vm: vm)
+		  
+		  
+		  HighlightsGrid(vm: vm)
+		  
+		}
+		.overlay(alignment: .bottom){
 		  VStack{
-			 HighlightGridHeader(vm: vm)
-		
-			 
-			 HighlightsGrid(vm: vm)
-			
+			 if vm.widgetState{
+				Text("Selection for Home Widget")
+				  .accent()
+				  .padding()
+				  .padding(.horizontal, 10)
+				  .background(
+					 Image(themeManager.themeAssets.readerCard)
+						.resizable()
+				  )
+			 }
 		  }
 		}
-    }
+	 }
+  }
 }
 
 #Preview {
-    HighlightsView()
+  HighlightsView()
 	 .environment(ThemeManager())
 }
 

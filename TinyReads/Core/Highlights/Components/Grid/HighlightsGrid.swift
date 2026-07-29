@@ -35,10 +35,23 @@ struct HighlightsGrid: View {
 				CustomSearchBar(searchText: $vm.searchText)
 				LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
 				  ForEach(vm.highlights){item in
+					 
 					 Button{
 						NavigationManager.shared.highlight = .idle(item)
 					 }label:{
 						HighlightItem(item, backImage: themeManager.themeAssets.backSmallCard)
+						  .overlay(
+							 ZStack{
+								if vm.deleteState{
+								  Image("DismissAction")
+									 .resizable()
+									 .scaledToFit()
+									 .allowsHitTesting(false)
+									 .transition(.scale)
+									 .padding(50)
+								}
+							 }
+						  )
 					 }
 				  }
 				}

@@ -1,5 +1,5 @@
 //
-//  ArticleWidgetView.swift
+//  HiglightWidgetView.swift
 //  TinyReads
 //
 //  Created by user on 28.07.2026.
@@ -8,34 +8,31 @@
 import SwiftUI
 import WidgetKit
 
-
-struct ArticleWidgetView: View {
+struct HighlightWidgetView: View {
   @Environment(\.widgetFamily) var widgetFamily
   @Environment(\.colorScheme) var colorScheme
-  let entry: ArticleEntry
+  let entry: HighlightEntry
   var body: some View {
 	 VStack(spacing: 15){
 		
 		
-		Text(entry.article.title)
+		Text(entry.highlight.text)
 		  .font(font)
-		  .foregroundStyle(.primary)
+		  .foregroundStyle(colorScheme == .dark ? .accentD : .accentLight)
 		
 		
 		if widgetFamily == .systemMedium {
-		  Text(entry.article.categoryId)
-			 .font(.footnote.weight(.light))
+		  Text(entry.highlight.originalTitle)
+			 .font(.caption.weight(.light))
 			 .foregroundStyle(colorScheme == .dark ? .accentD : .accentLight)
 		}else if widgetFamily == .systemLarge{
-		  Text(entry.article.hook)
-			 .font(.caption.weight(.light))
+		  Text(entry.highlight.originalTitle)
+			 .font(.footnote.weight(.light))
 			 .lineLimit(5)
 			 .foregroundStyle(colorScheme == .dark ? .secondaryD : .secondaryLight)
-		  
-		  Text(entry.article.categoryId)
-			 .font(.footnote.weight(.light))
+		  Text(entry.highlight.categoryId)
+			 .font(.caption.weight(.light))
 			 .foregroundStyle(colorScheme == .dark ? .accentD : .accentLight)
-			 .padding(.top)
 		}
 	 }
 	 .fontDesign(.serif)
@@ -59,8 +56,4 @@ struct ArticleWidgetView: View {
   private var font: Font{
 	 return widgetFamily == .systemSmall ? .footnote.weight(.light) : widgetFamily == .systemMedium ? .title3.weight(.light) : .title2.weight(.light)
   }
-}
-
-#Preview {
-  ArticleWidgetView(entry: ArticleEntry(date: .now, article: .getForPreview()))
 }

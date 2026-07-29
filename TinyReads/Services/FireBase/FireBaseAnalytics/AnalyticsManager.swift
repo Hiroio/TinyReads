@@ -27,4 +27,34 @@ final class AnalyticsManager {
 		"card_language": card.languageCode
 	 ])
   }
+  
+  func tapToRead(card: ReadCardModel){
+	 Analytics.logEvent("card_tapped", parameters: [
+		"card_name": card.title,
+		"card_category": card.categoryId,
+		"card_language": card.languageCode
+	 ])
+  }
+  
+  func saveCard(card: ReadCardModel){
+	 Analytics.logEvent("card_saved", parameters: [
+		"card_name": card.title,
+		"card_category": card.categoryId,
+		"card_language": card.languageCode
+	 ])
+  }
+  
+  func dismissCard(card: ReadCardModel){
+	 Analytics.logEvent("card_dismissed", parameters: [
+		"card_name": card.title,
+		"card_category": card.categoryId,
+		"card_language": card.languageCode
+	 ])
+  }
+  
+  func highlightCreated(article: String){
+	 Analytics.logEvent("highlightCreate", parameters: [
+		"card_name": article
+	 ])
+  }
 }

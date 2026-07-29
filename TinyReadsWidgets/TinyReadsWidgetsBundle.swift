@@ -14,8 +14,8 @@ struct TinyReadsWidgetsBundle: WidgetBundle {
   init() {
 	 FirebaseApp.configure()
   }
-  
-    var body: some Widget {
-        ArticleWidget()
-    }
-}
+  var body: some Widget {
+	 ArticleWidget()
+	 HighlightWidget()
+  }
+}	
