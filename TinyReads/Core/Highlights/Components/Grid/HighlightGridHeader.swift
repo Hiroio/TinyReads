@@ -54,7 +54,7 @@ struct HighlightGridHeader: View {
 		  .buttonStyle(SmallBtnStyle())
 		}
 		.padding(.horizontal)
-		.frame(height: 55)
+		.frame(height: UIDevice.isIPad ? 85 : 55)
     }
 }
 

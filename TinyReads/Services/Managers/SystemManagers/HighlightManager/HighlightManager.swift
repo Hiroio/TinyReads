@@ -105,7 +105,8 @@ extension HighlightManager{
 //  MARK: Edit Highlight
   func editHiglight(highlight: HighlightModel) -> Bool{
 	 guard let entity = fetchSingleHighlight(id: highlight.id) else {return false}
-	 
+	 print(entity.widgetIsActive)
+	 print("become: \(highlight.widgetIsActive)")
 	 entity.note = highlight.note
 	 entity.widgetIsActive = highlight.widgetIsActive
 	 

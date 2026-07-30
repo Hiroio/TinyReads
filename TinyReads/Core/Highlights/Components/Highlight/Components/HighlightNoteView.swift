@@ -14,13 +14,8 @@ struct HighlightNoteView: View {
     var body: some View {
 		  VStack{
 			 VStack(spacing: 0){
-				Button{
-				  
-				}label:{
 				  Text(viewModel.highlight.originalTitle)
 					 .secondary()
-					 .underline()
-				}
 				Text(viewModel.text.capitalized)
 				  .padding(10)
 				  .overlay(
@@ -46,7 +41,7 @@ struct HighlightNoteView: View {
 				
 				NoteTextViewRepresentable(text: $viewModel.highlight.note, textColor: themeManager.themeAssets.primary, lineColor: themeManager.themeAssets.accent)
 				  .padding()
-				  .padding(.horizontal)
+				  .padding(.horizontal, UIDevice.isIPad ? 55 : 20)
 				
 				
 			 }

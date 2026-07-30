@@ -33,7 +33,8 @@ struct HighlightsGrid: View {
 		  }else{
 			 ScrollView{
 				CustomSearchBar(searchText: $vm.searchText)
-				LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
+				  .padding(.horizontal, UIDevice.isIPad ? 20 : 10)
+				LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: 0), count: 2)) {
 				  ForEach(vm.highlights){item in
 
 					 Button{
@@ -41,22 +42,37 @@ struct HighlightsGrid: View {
 						  NavigationManager.shared.showWarning(.deleteHighlight) {
 							 vm.deleteHighlight(highlight: item)
 						  }
-						}else{
+						}else if vm.widgetState{
+						  vm.activateForWidget(highlight: item)
+						  }else{
 						  NavigationManager.shared.highlight = .idle(item)
 						}
 					 }label:{
 						HighlightItem(item, backImage: vm.deleteState ? themeManager.themeAssets.deleteBackSmallCard : themeManager.themeAssets.backSmallCard)
+						  .overlay(alignment: .topLeading){
+							 ZStack{
+								if item.widgetIsActive{
+								  Image(themeManager.themeAssets.widgetAction)
+									 .resizable()
+									 .scaledToFit()
+									 .frame(height: UIDevice.isIPad ? 65 : 40 )
+								}
+							 }
+						  }
+						  .scaleEffect(item.widgetIsActive ? 0.95 : 1)
+						  .scaleEffect(vm.widgetState ? 1.05 : 1)
+						  .shadow(color: .yellow, radius: item.widgetIsActive ? 2 : 0)
 					 }
 				  }
 				}
+				.padding(.horizontal, 15)
 				.frame(maxHeight: .infinity)
-				.padding(40)
-				.background(
-				  PaperBackGround()
-					 .ignoresSafeArea()
-				)
 			 }
-
+			 .padding(UIDevice.isIPad ? 40 : 20)
+			 .background(
+				PaperBackGround()
+				  .ignoresSafeArea()
+			 )
 		  }
 		}
 	}
@@ -73,19 +89,22 @@ func HighlightItem(_ highlight: HighlightModel, backImage: String) -> some View{
   VStack{
 	 Spacer()
 	 Text(highlight.text)
+		.font(UIDevice.isIPad ? .title3 : .footnote)
 		.multilineTextAlignment(.center)
 		.accent()
 		.lineLimit(3)
 
 	 Spacer()
 	 Text(ReadCategories(rawValue: highlight.categoryId)?.title ?? "")
+		.font(UIDevice.isIPad ? .headline : .footnote)
 		.secondary(weight: .light)
   }
-  .padding()
-  .padding(.horizontal)
-  .padding(.vertical, 5)
+  .padding(UIDevice.isIPad ? 45 : 25)
+  .frame(maxWidth: .infinity, maxHeight: .infinity)
+  .aspectRatio(UIDevice.isIPad ? 1.1 : 1, contentMode: .fit)
   .background(
 	 Image(backImage)
 		.resizable()
   )
+  .drawingGroup()
 }

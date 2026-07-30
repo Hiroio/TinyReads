@@ -107,7 +107,7 @@ extension HighlightActionViewModel{
 		guard let article = try? await FireStoreService.shared.fetchReads(ids: [highlight.originalId]).first else { return }
 
 		NavigationManager.shared.highlight = nil
-		NavigationManager.shared.secondary = nil
+//		NavigationManager.shared.secondary = nil
 		NavigationManager.shared.article = ArticleRoute(
 		  article: article,
 		  onInteractionChanged: {},

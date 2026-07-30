@@ -38,7 +38,6 @@ struct TextViewRepresantable: UIViewRepresentable{
 	 }
 
 	 if selectedText.isEmpty {
-		selectionRect = nil
 		if uiView.selectedTextRange != nil {
 		  uiView.selectedTextRange = nil
 		}
