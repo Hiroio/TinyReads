@@ -51,6 +51,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		CE4C120A301C6D5E008822F9 /* TinyReadsWidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TinyReadsWidgetsExtension.entitlements; sourceTree = "<group>"; };
 		CE9C8A662FD1FA1A00EE2165 /* TinyReadsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TinyReadsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEBA5C763018C23600F5A128 /* TinyReadsWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TinyReadsWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEBA5C773018C23600F5A128 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -75,6 +76,7 @@
 				Models/CoreData/Highlights.xcdatamodeld,
 				Models/ReadCardModels/ReadCardModel.swift,
 				Models/StoreConfiguration/StoreConfiguration.swift,
+				PrivacyInfo.xcprivacy,
 				Services/FireBase/FireStoreService/FirestoreProtocol.swift,
 				Services/FireBase/FireStoreService/FireStoreService.swift,
 				Services/Managers/SystemManagers/HighlightManager/HighlightManager.swift,
@@ -175,6 +177,7 @@
 		CED0D3FB2FC8789B0058C075 = {
 			isa = PBXGroup;
 			children = (
+				CE4C120A301C6D5E008822F9 /* TinyReadsWidgetsExtension.entitlements */,
 				CED0D4062FC8789B0058C075 /* TinyReads */,
 				CE9C8A672FD1FA1A00EE2165 /* TinyReadsTests */,
 				CEBA5C7B3018C23700F5A128 /* TinyReadsWidgets */,
@@ -437,6 +440,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = TinyReadsWidgetsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WU276H25JQ;
@@ -449,7 +453,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hiroio.tinyreads.TinyReadsWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -471,6 +475,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = TinyReadsWidgetsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WU276H25JQ;
@@ -483,7 +488,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hiroio.tinyreads.TinyReadsWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -647,7 +652,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hiroio.tinyreads;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -688,7 +693,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hiroio.tinyreads;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;

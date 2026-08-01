@@ -25,18 +25,21 @@ struct HighlightWidgetView: View {
 		  Text(entry.highlight.originalTitle)
 			 .font(.caption.weight(.light))
 			 .foregroundStyle(colorScheme == .dark ? .accentD : .accentLight)
+			 .frame(alignment: .leading)
+		  
 		}else if widgetFamily == .systemLarge{
 		  Text(entry.highlight.originalTitle)
 			 .font(.footnote.weight(.light))
 			 .lineLimit(5)
-			 .foregroundStyle(colorScheme == .dark ? .secondaryD : .secondaryLight)
+			 .foregroundStyle(colorScheme == .dark ? .primaryD.opacity(0.8) : .primaryLight.opacity(0.8))
 		  Text(entry.highlight.categoryId)
 			 .font(.caption.weight(.light))
 			 .foregroundStyle(colorScheme == .dark ? .accentD : .accentLight)
+			 
 		}
 	 }
 	 .fontDesign(.serif)
-	 .multilineTextAlignment(.center)
+	 .multilineTextAlignment(widgetFamily == .systemSmall ? .leading : .center)
 	 .padding()
 	 .padding(.horizontal, widgetFamily != .systemSmall ? 15 : 0)
 	 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -54,6 +57,6 @@ struct HighlightWidgetView: View {
   }
   
   private var font: Font{
-	 return widgetFamily == .systemSmall ? .footnote.weight(.light) : widgetFamily == .systemMedium ? .title3.weight(.light) : .title2.weight(.light)
+	 return widgetFamily == .systemSmall ? .caption.weight(.light) : widgetFamily == .systemMedium ? .body.weight(.light) : .title2.weight(.light)
   }
 }

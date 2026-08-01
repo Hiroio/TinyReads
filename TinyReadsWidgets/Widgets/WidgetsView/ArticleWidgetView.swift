@@ -39,7 +39,7 @@ struct ArticleWidgetView: View {
 		}
 	 }
 	 .fontDesign(.serif)
-	 .multilineTextAlignment(.center)
+	 .multilineTextAlignment(widgetFamily == .systemSmall ? .leading : .center)
 	 .padding()
 	 .padding(.horizontal, widgetFamily != .systemSmall ? 15 : 0)
 	 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -57,7 +57,7 @@ struct ArticleWidgetView: View {
   }
   
   private var font: Font{
-	 return widgetFamily == .systemSmall ? .footnote.weight(.light) : widgetFamily == .systemMedium ? .title3.weight(.light) : .title2.weight(.light)
+	 return widgetFamily == .systemSmall ? .caption.weight(.light) : widgetFamily == .systemMedium ? .body.weight(.light) : .title2.weight(.light)
   }
 }
 

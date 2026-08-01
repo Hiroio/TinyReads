@@ -24,12 +24,15 @@ final class HighlightManager{
 		.appendingPathComponent("Highlights.sqlite") {
 		container.persistentStoreDescriptions.first?.url = storeURL
 	 }
+	 let storeLoaded = DispatchSemaphore(value: 0)
 	 container.loadPersistentStores { _, error in
 		if let error{
 		  print("DEBUG: Failed to load container for Highlights: \(error.localizedDescription)")
 		}
+		storeLoaded.signal()
 	 }
-	 
+	 storeLoaded.wait()
+
 	 self.container = container
 	 self.viewContext = container.viewContext
 	 
@@ -52,7 +55,8 @@ extension HighlightManager{
 //  MARK: - Fetch
   func fetchHighlights() -> [HighlightEntity]{
 	 let request: NSFetchRequest<HighlightEntity> = NSFetchRequest(entityName: "HighlightEntity")
-	 
+	 request.shouldRefreshRefetchedObjects = true
+
 	 do{
 		let entities = try viewContext.fetch(request)
 		return entities
@@ -64,10 +68,11 @@ extension HighlightManager{
   
   func fetchSingleHighlight(id: UUID) -> HighlightEntity?{
 	 let request: NSFetchRequest<HighlightEntity> = NSFetchRequest(entityName: "HighlightEntity")
-	 
+	 request.shouldRefreshRefetchedObjects = true
+
 	 let predicate = NSPredicate(format: "id == %@", id as CVarArg)
 	 request.predicate = predicate
-	 
+
 	 do{
 		let entity = try viewContext.fetch(request).first
 		return entity
@@ -105,8 +110,6 @@ extension HighlightManager{
 //  MARK: Edit Highlight
   func editHiglight(highlight: HighlightModel) -> Bool{
 	 guard let entity = fetchSingleHighlight(id: highlight.id) else {return false}
-	 print(entity.widgetIsActive)
-	 print("become: \(highlight.widgetIsActive)")
 	 entity.note = highlight.note
 	 entity.widgetIsActive = highlight.widgetIsActive
 	 

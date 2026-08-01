@@ -58,7 +58,7 @@ extension HighlightActionViewModel{
 		NavigationManager.shared.highlight = nil
 	 }else{
 		if editHighlight() {
-		  showAnimation(.created)
+		  showAnimation(.edited)
 		}else{
 		  showAnimation(.error)
 		}
@@ -78,7 +78,13 @@ extension HighlightActionViewModel{
   
 //  ------ Edit
   private func editHighlight() -> Bool {
-	 return highlightManager.editHiglight(highlight: highlight)
+	 
+	 if highlightManager.editHiglight(highlight: highlight){
+		self.state = .idle(highlight)
+		return true
+	 }else{
+		return false
+	 }
 	 
   }
   

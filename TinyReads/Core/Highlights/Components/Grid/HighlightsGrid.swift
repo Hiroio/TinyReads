@@ -12,30 +12,27 @@ struct HighlightsGrid: View {
   @Bindable var vm: HighlightViewModel
 	var body: some View {
 		VStack{
-		  if vm.highlights.isEmpty{
+		  CustomSearchBar(searchText: $vm.searchText)
+			 .padding(.horizontal, UIDevice.isIPad ? 20 : 10)
+			 .disabled(vm.highlights.isEmpty)
+
+		  if vm.searchResult.isEmpty{
 			 VStack{
 				Image(themeManager.themeAssets.emptyState)
 				  .resizable()
 				  .scaledToFit()
 				  .padding(45)
-				Text("Nothing here")
+				Text(vm.highlights.isEmpty ? "Nothing here" : "No matches")
 				  .title()
-				Text("Read and highlight the text\n to create some")
+				Text(vm.highlights.isEmpty ? "Read and highlight the text\n to create some" : "Try a different search")
 				  .multilineTextAlignment(.center)
 				  .secondary()
 			 }
 			 .frame(maxHeight: .infinity)
-			 .padding(40)
-			 .background(
-				PaperBackGround()
-				  .ignoresSafeArea()
-			 )
 		  }else{
 			 ScrollView{
-				CustomSearchBar(searchText: $vm.searchText)
-				  .padding(.horizontal, UIDevice.isIPad ? 20 : 10)
 				LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: 0), count: 2)) {
-				  ForEach(vm.highlights){item in
+				  ForEach(vm.searchResult){item in
 
 					 Button{
 						if vm.deleteState{
@@ -63,18 +60,21 @@ struct HighlightsGrid: View {
 						  .scaleEffect(vm.widgetState ? 1.05 : 1)
 						  .shadow(color: .yellow, radius: item.widgetIsActive ? 2 : 0)
 					 }
+					 .buttonStyle(.plain)
 				  }
 				}
 				.padding(.horizontal, 15)
 				.frame(maxHeight: .infinity)
 			 }
-			 .padding(UIDevice.isIPad ? 40 : 20)
-			 .background(
-				PaperBackGround()
-				  .ignoresSafeArea()
-			 )
 		  }
+			 
 		}
+		.padding(UIDevice.isIPad ? 40 : 20)
+		.background(
+		  PaperBackGround()
+			 .ignoresSafeArea()
+		)
+		.animation(.easeInOut, value: vm.highlights)
 	}
 }
 

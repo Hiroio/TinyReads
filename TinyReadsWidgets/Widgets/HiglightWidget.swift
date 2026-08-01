@@ -31,7 +31,7 @@ struct HighlightWidget: Widget {
 }
 
 #Preview(as: .systemSmall) {
-  ArticleWidget()
+  HighlightWidget()
 } timeline: {
-  ArticleEntry(date: .now, article: .getForPreview())
+  HighlightEntry(date: .now, highlight: .preview)
 }

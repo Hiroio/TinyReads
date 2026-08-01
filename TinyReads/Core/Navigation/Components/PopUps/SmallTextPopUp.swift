@@ -42,7 +42,7 @@ struct SmallTextPopUp: View {
 		  })
 		  .padding(.horizontal, 30)
 		  .onAppear{
-			 DispatchQueue.main.asyncAfter(deadline: .now() + 2){
+			 DispatchQueue.main.asyncAfter(deadline: .now() + 1.8){
 				NavigationManager.shared.popUpState = nil
 			 }
 		  }
