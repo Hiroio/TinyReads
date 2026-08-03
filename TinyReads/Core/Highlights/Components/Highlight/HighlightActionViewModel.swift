@@ -5,7 +5,7 @@
 //  Created by user on 24.07.2026.
 //
 
-import Foundation
+import SwiftUI
 
 
 @Observable
@@ -34,7 +34,7 @@ final class HighlightActionViewModel{
   }
   
   
-  var noteActionText: String{
+  var noteActionText: LocalizedStringKey{
 	 if highlight.note.isEmpty{
 		"Add Note"
 	 }else{
@@ -165,7 +165,7 @@ enum HighlightScreenState: Identifiable, Equatable{
 enum HighlightActionCode{
   case create, edit
   
-  var actionBtn: String {
+  var actionBtn: LocalizedStringKey {
 	 switch self {
 	 case .create:
 		"Create"
@@ -173,8 +173,8 @@ enum HighlightActionCode{
 		"Save"
 	 }
   }
-  
-  var warningText: String{
+
+  var warningText: LocalizedStringKey{
 	 switch self {
 	 case .create:
 		"If you leave now, everything you've written wont be saved."

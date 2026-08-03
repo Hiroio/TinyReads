@@ -5,7 +5,7 @@
 //  Created by user on 18.06.2026.
 //
 
-import Foundation
+import SwiftUI
 
 enum SecondaryAppScreen {
   case profile
@@ -21,7 +21,7 @@ enum WarningPopUpEnum {
   case unsavedHighlight(HighlightActionCode)
   case deleteHighlight
 
-  var title: String {
+  var title: LocalizedStringKey {
 	 switch self {
 	 case .unsavedHighlight:
 		"You have some unfinished business"
@@ -30,7 +30,7 @@ enum WarningPopUpEnum {
 	 }
   }
 
-  var caption: String {
+  var caption: LocalizedStringKey {
 	 switch self {
 	 case .unsavedHighlight(let code):
 		code.warningText
@@ -39,7 +39,7 @@ enum WarningPopUpEnum {
 	 }
   }
 
-  var confirmText: String {
+  var confirmText: LocalizedStringKey {
 	 switch self {
 	 case .unsavedHighlight:
 		"Leave"
@@ -54,7 +54,7 @@ enum WarningPopUpEnum {
 enum SmallPopUpEnum {
   case read, save, dismiss, created, edited, deleted, copied, error
   
-  var title: String {
+  var title: LocalizedStringKey {
 	 switch self {
 	 case .read:
 		"Marked as read!"

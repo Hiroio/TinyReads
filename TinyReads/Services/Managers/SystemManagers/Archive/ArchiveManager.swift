@@ -13,7 +13,7 @@ final class ArchiveManager{
   
   var cards: [DisplayReadCard] = []
   var cardsInteractions: [ReadInteractionModel] = []
-  var state: ArchiveState = .saved
+  var state: ArchiveState = .all
   
   
   private let coreData = CoreDataService.shared
