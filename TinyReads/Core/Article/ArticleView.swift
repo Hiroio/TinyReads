@@ -37,8 +37,11 @@ struct ArticleView: View {
 		  TextViewRepresantable(
 			 text: article.body,
 			 textColor: themeManager.themeAssets.primary,
+			 highlightColor: themeManager.themeAssets.accent.opacity(0.2),
+			 textToHighlight: vm.relatedHighlights,
 			 selectionRect: $react,
-			 selectedText: $vm.selectedText
+			 selectedText: $vm.selectedText,
+			 selectedHighlight: $vm.selectedHighlight
 		  )
 		  .overlay(alignment: .top){
 			 Group{
@@ -49,6 +52,11 @@ struct ArticleView: View {
 					 .zIndex(1)
 				}
 			 }
+		  }
+		  .onChange(of: vm.selectedHighlight) { _, newValue in
+			 guard let newValue else { return }
+			 NavigationManager.shared.highlight = .idle(newValue)
+			 vm.selectedHighlight = nil
 		  }
 		  VStack{
 			 Text("Tags")

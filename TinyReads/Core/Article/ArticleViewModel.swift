@@ -13,9 +13,12 @@ import UIKit.UIPasteboard
 final class ArticleViewModel{
   var article: ReadCardModel
   var interactionState: ReadCardDisplayStatus
+  
   var selectedText: String = ""
+  var selectedHighlight: HighlightModel? = nil
   
   private let coreData: CoreDataService
+  private let highlightManager: HighlightManager = .shared
   
   init(article: ArticleRoute){
 	 self.article = article.article
@@ -28,14 +31,8 @@ final class ArticleViewModel{
 	 return interactionState == .archived || interactionState == .read
   }
   
-  var shareText: String {
-	 """
-	 Tiny Read: \(article.title)
-
-	 \(article.hook)
-
-	 Short reads for curious minds.
-	 """
+  var relatedHighlights: [HighlightModel]{
+	 highlightManager.highlights.filter({ $0.originalId == article.id })
   }
   
 }

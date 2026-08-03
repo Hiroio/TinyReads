@@ -13,6 +13,15 @@ struct AppRootView: View {
   @Environment(UserDefaultsManager.self) var userDefault
   @Environment(StoreKitManager.self) var storeKitManager
   @State private var cardSliderVM = CardSliderViewModel()
+  
+  init(){
+	 let _ = HighlightManager.shared
+	 
+	 let archiveInit = ArchiveManager.shared
+	 Task{
+		try? await archiveInit.initializeManager()
+	 }
+  }
   var body: some View {
 	 MainNavigationView()
 		.environment(cardSliderVM)

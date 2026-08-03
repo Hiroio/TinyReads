@@ -19,7 +19,7 @@ struct HighlightGridHeader: View {
 			 Image(systemName: "xmark")
 				.resizable()
 				.scaledToFit()
-				.padding(15)
+				.padding(UIDevice.isIPad ? 25 : 15)
 		  }
 		  .buttonStyle(SmallBtnStyle())
 		  

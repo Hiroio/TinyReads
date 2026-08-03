@@ -18,7 +18,7 @@ struct CategoryFilterView: View {
 			 filterActive.toggle()
 		  }
 		}label:{
-		  Text(selectedFilter)
+		  Text(displayText(for: selectedFilter))
 			 .accent()
 		}
 		  .overlay(alignment: .topTrailing){
@@ -30,7 +30,7 @@ struct CategoryFilterView: View {
 							 filterActive = false
 						  }
 						}label: {
-						  Text(item)
+						  Text(displayText(for: item))
 							 .font(.caption)
 							 .fontDesign(.serif)
 							 .foregroundStyle(selectedFilter == item ? themeManager.themeAssets.accent : themeManager.themeAssets.secondary)
@@ -38,7 +38,7 @@ struct CategoryFilterView: View {
 							 .frame(maxWidth: .infinity)
 							 .contentShape(.rect)
 							 .fixedSize()
-							 
+
 						}
 					 }
 				  }
@@ -51,6 +51,11 @@ struct CategoryFilterView: View {
 				  .opacity(filterActive ? 1 : 0)
 				}
     }
+
+  private func displayText(for category: String) -> LocalizedStringKey {
+	 guard category != "All" else { return "All" }
+	 return ReadCategories(rawValue: category.lowercased())?.title ?? LocalizedStringKey(category)
+  }
 }
 
 #Preview {

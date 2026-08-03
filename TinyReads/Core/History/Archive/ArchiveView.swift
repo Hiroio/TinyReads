@@ -65,7 +65,9 @@ struct ArchiveView: View {
 			 }label:{
 				Image(systemName: "xmark")
 				  .foregroundStyle(themeManager.themeAssets.accent)
+				  .padding(5)
 			 }
+			 .buttonStyle(SmallBtnStyle())
 			 
 			 Spacer()
 			 

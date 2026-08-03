@@ -79,7 +79,7 @@ struct OnboardingView: View {
 // MARK: - Components
 private extension OnboardingView {
   // Header subtitle
-  var helpText: String {
+  var helpText: LocalizedStringKey {
 	 switch step {
 	 case .welcome:
 		"Short reads for curious minds."

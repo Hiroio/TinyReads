@@ -10,7 +10,9 @@ import Foundation
 @MainActor
 @Observable
 final class ArchiveViewModel{
-  var reads: [DisplayReadCard] = []
+  var reads: [DisplayReadCard] {
+	 archiveManager.cards
+  }
   var error: Error? = nil
   
   var searchText = "" {
@@ -48,10 +50,6 @@ extension ArchiveViewModel{
 	 applyFilters()
   }
   
-//  SYNC CARDS WITH MANAGER USING STATE
-  func syncCardsFromManager() {
-	 self.reads = archiveManager.visibleCards
-  }
   
   func onInteractionChange(_ id: String) {
 	 archiveManager.applyInteractionChange(id)

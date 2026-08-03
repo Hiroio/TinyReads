@@ -50,6 +50,7 @@ struct WarningPopUp: View {
 		.padding(.bottom, 15)
 	 }
 	 .padding()
+	 .padding(.horizontal) 
 	 .background(
 		Image(themeManager.themeAssets.backSmallCard)
 		  .resizable()

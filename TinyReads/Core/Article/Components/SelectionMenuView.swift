@@ -23,6 +23,8 @@ struct SelectionMenuView: View {
 			 Divider()
 				.frame(height: 35)
 		  }
+		  
+		  let disableHighlightCreation = selectedText.trimmingCharacters(in: .whitespacesAndNewlines).count <= 5
 		  Button{
 			 withAnimation {
 				highlight()
@@ -33,6 +35,9 @@ struct SelectionMenuView: View {
 			 Divider()
 				.frame(height: 35)
 		  }
+		  .disabled(disableHighlightCreation)
+		  .opacity(disableHighlightCreation ? 0.6 : 1)
+		  
 		  
 		  if isExpanded{
 			 ShareLink(item: selectedText, subject: Text("share selection with Tiny Reads"), message: Text("Tiny Reads - \(selectedText.prefix(10))")){

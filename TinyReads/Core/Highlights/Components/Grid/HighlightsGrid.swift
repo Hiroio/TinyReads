@@ -12,10 +12,34 @@ struct HighlightsGrid: View {
   @Bindable var vm: HighlightViewModel
 	var body: some View {
 		VStack{
+//		  Search for Higlight
 		  CustomSearchBar(searchText: $vm.searchText)
 			 .padding(.horizontal, UIDevice.isIPad ? 20 : 10)
 			 .disabled(vm.highlights.isEmpty)
 
+//		  Filter categories
+		  ScrollView(.horizontal){
+			 LazyHStack{
+				ForEach(vm.availableHighlightsCategories, id: \.id){item in
+				  let selected = vm.unSelectedFilterCategories.contains(item)
+				  Button{
+					 vm.handleFilterCategory(category: item)
+				  }label:{
+					 Text(item.title)
+						.font(.footnote.weight(.light))
+						.foregroundStyle(selected ? themeManager.themeAssets.secondary : themeManager.themeAssets.accent)
+						.underline(!selected)
+						.fontDesign(.serif)
+						.padding(5)
+						.shadow(color: themeManager.themeAssets.accent.opacity(0.5),radius: 5)
+				  }
+				}
+			 }
+		  }
+		  .fixedSize(horizontal: false, vertical: true)
+		  .padding(.horizontal, UIDevice.isIPad ? 35 : 20)
+		  
+//		  Grid
 		  if vm.searchResult.isEmpty{
 			 VStack{
 				Image(themeManager.themeAssets.emptyState)
@@ -24,7 +48,7 @@ struct HighlightsGrid: View {
 				  .padding(45)
 				Text(vm.highlights.isEmpty ? "Nothing here" : "No matches")
 				  .title()
-				Text(vm.highlights.isEmpty ? "Read and highlight the text\n to create some" : "Try a different search")
+				Text(vm.highlights.isEmpty ? "Read and highlight the text\n to create some" : "Try adjusting your search or filters")
 				  .multilineTextAlignment(.center)
 				  .secondary()
 			 }
@@ -69,12 +93,13 @@ struct HighlightsGrid: View {
 		  }
 			 
 		}
-		.padding(UIDevice.isIPad ? 40 : 20)
+		.padding(UIDevice.isIPad ? 50 : 20)
 		.background(
 		  PaperBackGround()
 			 .ignoresSafeArea()
 		)
-		.animation(.easeInOut, value: vm.highlights)
+		.animation(.easeInOut, value: vm.searchResult)
+		.animation(.easeInOut, value: vm.unSelectedFilterCategories)
 	}
 }
 

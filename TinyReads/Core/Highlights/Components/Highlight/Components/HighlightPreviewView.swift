@@ -28,8 +28,10 @@ struct HighlightPreviewView: View {
 			 .padding(25)
 			 .accent(weight: .medium)
 			 .kerning(1.1)
-			 .lineSpacing(2)
+			 .lineSpacing(1.5)
 			 .frame(maxHeight: .infinity)
+			 .allowsTightening(true)
+			 .minimumScaleFactor(0.7)
 			 .multilineTextAlignment(.center)
 		  
 		  Spacer()
