@@ -27,7 +27,6 @@ struct StoreView: View {
 		  case .tip:
 			 TipStoreView()
 				.transition(.move(edge: .trailing).combined(with: .opacity))
-//				.zIndex(1)
 				.allowsHitTesting(vm.state == .tip)
 				.drawingGroup()
 		  default:
@@ -92,6 +91,8 @@ extension StoreView{
 				Text(section.title)
 				  .headline(weight: .light)
 				  .padding(.bottom, UIDevice.isIPad ? 65 : 35)
+				  .allowsTightening(true)
+				  .minimumScaleFactor(0.6)
 			 }
 		}
 		

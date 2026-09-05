@@ -72,6 +72,17 @@
 			membershipExceptions = (
 				Assets.xcassets,
 				"GoogleService-Info.plist",
+				Models/Categories/ReadCategories.swift,
+				Models/Categories/SubCategories/CultureSubCategory.swift,
+				Models/Categories/SubCategories/FinanceSubCategory.swift,
+				Models/Categories/SubCategories/HealthSubCategory.swift,
+				Models/Categories/SubCategories/HistorySubCategory.swift,
+				Models/Categories/SubCategories/NatureSubCategory.swift,
+				Models/Categories/SubCategories/PhilosophySubCategory.swift,
+				Models/Categories/SubCategories/PsychologySubCategory.swift,
+				Models/Categories/SubCategories/ScienceSubCategory.swift,
+				Models/Categories/SubCategories/SpaceSubCategory.swift,
+				Models/Categories/SubCategories/TechnologySubCategory.swift,
 				Models/CoreData/HighlightModel.swift,
 				Models/CoreData/Highlights.xcdatamodeld,
 				Models/ReadCardModels/ReadCardModel.swift,
@@ -652,7 +663,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hiroio.tinyreads;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -693,7 +704,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hiroio.tinyreads;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;

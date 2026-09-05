@@ -56,18 +56,20 @@ extension TipStoreView{
 		  .shadow(color: themeManager.themeAssets.primary, radius: 1)
 		  VStack(alignment: .leading){
 			 HStack{
-				Text(tip.title)
-				  .title()
-				  .fixedSize()
+				Text("Donate")
+				  .headline()
+				  .minimumScaleFactor(0.45)
+				  .frame(maxWidth: .infinity, alignment: .leading)
 				Text(tip.price)
-				  .font(.title3)
+				  .font(.headline)
 				  .accent(weight: .bold)
-				  .fontDesign(.serif)
-				  .frame(maxWidth: .infinity, alignment: .trailing)
 			 }
 			 Text(tip.subtitle)
-				.secondary()
+				.font(.caption2)
+				.minimumScaleFactor(0.45)
+				.foregroundStyle(themeManager.themeAssets.secondary)
 		  }
+		  .fontDesign(.serif)
 		  .padding(.horizontal, UIDevice.isIPad ? 55 : 20)
 		 
 	 }
