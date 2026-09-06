@@ -14,6 +14,8 @@ enum NatureSubCategory: String, ReadSubCategory {
 	 self == .universal ? "" : "_\(rawValue)"
   }
 
+  var category: String { ReadCategories.nature.rawValue }
+
   var storeId: String? {
 	 switch self {
 	 case .universal: nil
@@ -23,6 +25,13 @@ enum NatureSubCategory: String, ReadSubCategory {
   var title: LocalizedStringKey {
 	 switch self {
 	 case .universal: "Universal"
+	 }
+  }
+
+  //  No dedicated Nature store icon yet — placeholder until real art exists.
+  var image: String {
+	 switch self {
+	 case .universal: "ScienceStore01Light"
 	 }
   }
 

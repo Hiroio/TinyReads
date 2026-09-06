@@ -14,6 +14,8 @@ enum FinanceSubCategory: String, ReadSubCategory {
 	 self == .universal ? "" : "_\(rawValue)"
   }
 
+  var category: String { ReadCategories.finance.rawValue }
+
   var storeId: String? {
 	 switch self {
 	 case .universal: nil
@@ -25,6 +27,12 @@ enum FinanceSubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .universal: "Universal"
 	 case .howMoneyWorks: "How Money Works"
+	 }
+  }
+
+  var image: String {
+	 switch self {
+	 case .universal, .howMoneyWorks: "FinanceStore01Light"
 	 }
   }
 

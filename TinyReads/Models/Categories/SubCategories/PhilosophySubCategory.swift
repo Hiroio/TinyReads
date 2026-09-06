@@ -14,6 +14,8 @@ enum PhilosophySubCategory: String, ReadSubCategory {
 	 self == .universal ? "" : "_\(rawValue)"
   }
 
+  var category: String { ReadCategories.philosophy.rawValue }
+
   var storeId: String? {
 	 switch self {
 	 case .universal: nil
@@ -25,6 +27,12 @@ enum PhilosophySubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .universal: "Universal"
 	 case .stoicism: "Stoicism"
+	 }
+  }
+
+  var image: String {
+	 switch self {
+	 case .universal, .stoicism: "PhilosophyStore01Light"
 	 }
   }
 

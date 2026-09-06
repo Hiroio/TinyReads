@@ -14,6 +14,8 @@ enum SpaceSubCategory: String, ReadSubCategory {
 	 self == .universal ? "" : "_\(rawValue)"
   }
 
+  var category: String { ReadCategories.space.rawValue }
+
   var storeId: String? {
 	 switch self {
 	 case .universal: nil
@@ -23,6 +25,13 @@ enum SpaceSubCategory: String, ReadSubCategory {
   var title: LocalizedStringKey {
 	 switch self {
 	 case .universal: "Universal"
+	 }
+  }
+
+  //  No dedicated Space store icon yet — placeholder until real art exists.
+  var image: String {
+	 switch self {
+	 case .universal: "ScienceStore01Light"
 	 }
   }
 

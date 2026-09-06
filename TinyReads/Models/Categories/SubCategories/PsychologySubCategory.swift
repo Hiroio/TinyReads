@@ -14,6 +14,8 @@ enum PsychologySubCategory: String, ReadSubCategory {
 	 self == .universal ? "" : "_\(rawValue)"
   }
 
+  var category: String { ReadCategories.psychology.rawValue }
+
   var storeId: String? {
 	 switch self {
 	 case .universal: nil
@@ -25,6 +27,12 @@ enum PsychologySubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .universal: "Universal"
 	 case .cognitiveBiases: "Cognitive Biases"
+	 }
+  }
+
+  var image: String {
+	 switch self {
+	 case .universal, .cognitiveBiases: "PsychologyStore01Light"
 	 }
   }
 

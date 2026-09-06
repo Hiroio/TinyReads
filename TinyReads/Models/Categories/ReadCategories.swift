@@ -95,7 +95,15 @@ enum ReadCategories: String, CaseIterable, Identifiable{
 
 protocol ReadSubCategory: CaseIterable, Identifiable {
   var id: String { get }
+  var category: String { get }
   var storeId: String? { get }
   var title: LocalizedStringKey { get }
+  var image: String { get }
   var count: Int { get }
+}
+
+extension ReadSubCategory {
+  /// Stable key for progress-tracking dictionaries ([String: Int]) and Firestore document IDs —
+  /// equals `category` alone for Universal (since `id` is "" there), preserving existing users' progress.
+  var coreDataId: String { "\(category)\(id)" }
 }

@@ -14,6 +14,8 @@ enum HistorySubCategory: String, ReadSubCategory {
 	 self == .universal ? "" : "_\(rawValue)"
   }
 
+  var category: String { ReadCategories.history.rawValue }
+
   var storeId: String? {
 	 switch self {
 	 case .universal: nil
@@ -25,6 +27,12 @@ enum HistorySubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .universal: "Universal"
 	 case .ancientRome: "Ancient Rome"
+	 }
+  }
+
+  var image: String {
+	 switch self {
+	 case .universal, .ancientRome: "HistoryStore01Light"
 	 }
   }
 

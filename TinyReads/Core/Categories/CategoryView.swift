@@ -10,12 +10,10 @@ import SwiftUI
 struct CategoryView: View {
   @Environment(ThemeManager.self) var themeManager
   let category: ReadCategories
-
-  // MARK: Mock data — temporary, until real subCategory content exists for this shelf.
   private let mockItems = ["Universal", "Item 2", "Item 3"]
 
   //  Real-content shelf variants, cycled through for visual variety.
-  private let middleShelfAssets = ["CategoriesMiddle1", "CategoriesMiddle2", "CategoriesMiddle4", "CategoriesMiddle5"]
+  private let middleShelfAssets = ["CategoriesMiddle4", "CategoriesMiddle5"]
 
   //  Groups mock items 2-per-shelf; last shelf may have only 1 item.
   private var shelvesOfItems: [[String?]] {
@@ -30,59 +28,74 @@ struct CategoryView: View {
   }
 
   var body: some View {
-	 VStack {
-		Text(category.title)
-		  .font(.title2)
-
-		HStack {
-		  Image(systemName: "chevron.left")
-
-		  GeometryReader { geo in
-			 ScrollView {
-				VStack(spacing: 0) {
-				  Image("CategoriesTop")
-					 .resizable()
-					 .aspectRatio(1920.0 / 1080.0, contentMode: .fit)
-
-				  ForEach(Array(shelvesOfItems.enumerated()), id: \.offset) { index, items in
-					 shelfRow(items: items, assetName: middleShelfAssets[index % middleShelfAssets.count])
+	 ZStack{
+		VStack {
+		  Text(category.title)
+			 .font(.title2)
+		  HStack {
+			 Image(systemName: "chevron.left")
+			 
+			 GeometryReader { geo in
+				ScrollView {
+				  VStack(spacing: 0) {
+					 Text(category.title)
+						.font(.title2.weight(.semibold))
+						.padding(.bottom)
+					 ForEach(Array(shelvesOfItems.enumerated()), id: \.offset) { index, items in
+						let assetName = index == 0 ? "CategoriesTop2" : middleShelfAssets[(index - 1) % middleShelfAssets.count]
+						
+						
+						shelfRow(items: items, assetName: assetName, first: index == 0)
+					 }
+					 
+					 //  Always one empty "on the way" shelf at the very bottom.
+					 shelfRow(items: [], assetName: "CategoriesMiddle3", isOnTheWay: true, first: false)
+					 
 				  }
-
-				  //  Always one empty "on the way" shelf at the very bottom.
-				  shelfRow(items: [], assetName: "CategoriesMiddle3", isOnTheWay: true)
+				  .frame(minHeight: geo.size.height, alignment: .bottom)
 				}
-				.frame(minHeight: geo.size.height, alignment: .bottom)
+				.scrollBounceBehavior(.basedOnSize)
+				.compositingGroup()
 			 }
-			 .compositingGroup()
-			 .shadow(radius: 5)
+			 
+			 Image(systemName: "chevron.right")
 		  }
-
-		  Image(systemName: "chevron.right")
 		}
+		.ignoresSafeArea(edges: .bottom)
+		.fontDesign(.serif)
 	 }
-	 .fontDesign(.serif)
   }
 
   @ViewBuilder
-  private func shelfRow(items: [String?], assetName: String, isOnTheWay: Bool = false) -> some View {
+  private func shelfRow(items: [String?], assetName: String, isOnTheWay: Bool = false, first: Bool) -> some View {
 	 ZStack {
 		Image(assetName)
 		  .resizable()
 		  .aspectRatio(1920.0 / 1080.0, contentMode: .fit)
+		  .opacity(0.8)
 
 		if !isOnTheWay {
-		  HStack(spacing: 20) {
-			 ForEach(Array(items.enumerated()), id: \.offset) { _, title in
+		  HStack(spacing: 45) {
+			 ForEach(Array(items.enumerated()), id: \.offset) { index, title in
 				if let title {
-				  Text(title)
-					 .frame(maxWidth: .infinity)
+				  let second = index % 2 == 0
+				  VStack{
+					 Image("PhilosophyStore01Light")
+						.resizable()
+						.scaledToFit()
+						.frame(maxWidth: .infinity)
+						.scaleEffect(1.3)
+						.scaleEffect(x: second ? 1 : -1)
+						.shadow(radius: 1)
+						.padding(.bottom, first ? 5 : 10)
+				  }
 				} else {
 				  Color.clear
 					 .frame(maxWidth: .infinity)
 				}
 			 }
 		  }
-		  .padding(.horizontal, 60)
+		  .padding(.horizontal, 45)
 		}
 	 }
   }

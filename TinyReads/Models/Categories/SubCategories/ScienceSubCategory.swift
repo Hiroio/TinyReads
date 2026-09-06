@@ -14,6 +14,8 @@ enum ScienceSubCategory: String, ReadSubCategory {
 	 self == .universal ? "" : "_\(rawValue)"
   }
 
+  var category: String { ReadCategories.science.rawValue }
+
   var storeId: String? {
 	 switch self {
 	 case .universal: nil
@@ -23,6 +25,12 @@ enum ScienceSubCategory: String, ReadSubCategory {
   var title: LocalizedStringKey {
 	 switch self {
 	 case .universal: "Universal"
+	 }
+  }
+
+  var image: String {
+	 switch self {
+	 case .universal: "ScienceStore01Light"
 	 }
   }
 
