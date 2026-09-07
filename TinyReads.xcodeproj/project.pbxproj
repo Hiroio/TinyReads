@@ -81,7 +81,6 @@
 				Models/Categories/SubCategories/PhilosophySubCategory.swift,
 				Models/Categories/SubCategories/PsychologySubCategory.swift,
 				Models/Categories/SubCategories/ScienceSubCategory.swift,
-				Models/Categories/SubCategories/SpaceSubCategory.swift,
 				Models/Categories/SubCategories/TechnologySubCategory.swift,
 				Models/CoreData/HighlightModel.swift,
 				Models/CoreData/Highlights.xcdatamodeld,

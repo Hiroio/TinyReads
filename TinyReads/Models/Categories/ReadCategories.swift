@@ -13,7 +13,7 @@ import SwiftUI
 
 // MARK: Category Enum
 enum ReadCategories: String, CaseIterable, Identifiable{
-  case science, history, culture, psychology, philosophy, nature, finance, health, space, technology
+  case science, history, culture, psychology, philosophy, nature, finance, health, technology
   
   var id: String { self.rawValue}
   
@@ -35,8 +35,6 @@ enum ReadCategories: String, CaseIterable, Identifiable{
 		"Finance"
 	 case .health:
 		"Health"
-	 case .space:
-		"Space"
 	 case .technology:
 		"Technology"
 	 }
@@ -57,7 +55,7 @@ enum ReadCategories: String, CaseIterable, Identifiable{
 	 case .psychology: StoreCategoriesConfigurationEnum.psychologyPack.storeID
 	 case .philosophy: StoreCategoriesConfigurationEnum.philosophyPack.storeID
 	 case .finance: StoreCategoriesConfigurationEnum.financePack.storeID
-	 case .culture, .nature, .health, .space, .technology: nil
+	 case .culture, .nature, .health, .technology: nil
 	 }
   }
 
@@ -82,7 +80,6 @@ enum ReadCategories: String, CaseIterable, Identifiable{
 	 case .nature: NatureSubCategory.allCases
 	 case .finance: FinanceSubCategory.allCases
 	 case .health: HealthSubCategory.allCases
-	 case .space: SpaceSubCategory.allCases
 	 case .technology: TechnologySubCategory.allCases
 	 }
   }
@@ -94,7 +91,11 @@ enum ReadCategories: String, CaseIterable, Identifiable{
 
 
 protocol ReadSubCategory: CaseIterable, Identifiable {
+  /// Unique per case within the enum — used only for SwiftUI identity (ForEach etc).
   var id: String { get }
+  /// "" for a Universal-equivalent bucket, "_xxx" otherwise — used only to build `coreDataId`.
+  /// Two different cases (e.g. Science's .universal and .space) are allowed to share the same suffix.
+  var idSuffix: String { get }
   var category: String { get }
   var storeId: String? { get }
   var title: LocalizedStringKey { get }
@@ -104,6 +105,6 @@ protocol ReadSubCategory: CaseIterable, Identifiable {
 
 extension ReadSubCategory {
   /// Stable key for progress-tracking dictionaries ([String: Int]) and Firestore document IDs —
-  /// equals `category` alone for Universal (since `id` is "" there), preserving existing users' progress.
-  var coreDataId: String { "\(category)\(id)" }
+  /// equals `category` alone when `idSuffix` is "", preserving existing users' progress.
+  var coreDataId: String { "\(category)\(idSuffix)" }
 }

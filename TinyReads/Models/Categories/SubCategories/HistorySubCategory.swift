@@ -10,7 +10,9 @@ import SwiftUI
 enum HistorySubCategory: String, ReadSubCategory {
   case universal, ancientRome
 
-  var id: String {
+  var id: String { rawValue }
+
+  var idSuffix: String {
 	 self == .universal ? "" : "_\(rawValue)"
   }
 

@@ -10,7 +10,9 @@ import SwiftUI
 enum CultureSubCategory: String, ReadSubCategory {
   case universal, japan, rome, viking
 
-  var id: String {
+  var id: String { rawValue }
+
+  var idSuffix: String {
 	 self == .universal ? "" : "_\(rawValue)"
   }
 

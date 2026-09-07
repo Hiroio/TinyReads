@@ -10,7 +10,9 @@ import SwiftUI
 enum FinanceSubCategory: String, ReadSubCategory {
   case universal, howMoneyWorks
 
-  var id: String {
+  var id: String { rawValue }
+
+  var idSuffix: String {
 	 self == .universal ? "" : "_\(rawValue)"
   }
 

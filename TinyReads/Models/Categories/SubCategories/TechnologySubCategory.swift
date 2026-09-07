@@ -10,7 +10,9 @@ import SwiftUI
 enum TechnologySubCategory: String, ReadSubCategory {
   case universal
 
-  var id: String {
+  var id: String { rawValue }
+
+  var idSuffix: String {
 	 self == .universal ? "" : "_\(rawValue)"
   }
 

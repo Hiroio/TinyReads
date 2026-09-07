@@ -10,7 +10,9 @@ import SwiftUI
 enum PhilosophySubCategory: String, ReadSubCategory {
   case universal, stoicism
 
-  var id: String {
+  var id: String { rawValue }
+
+  var idSuffix: String {
 	 self == .universal ? "" : "_\(rawValue)"
   }
 

@@ -10,7 +10,9 @@ import SwiftUI
 enum PsychologySubCategory: String, ReadSubCategory {
   case universal, cognitiveBiases
 
-  var id: String {
+  var id: String { rawValue }
+
+  var idSuffix: String {
 	 self == .universal ? "" : "_\(rawValue)"
   }
 
