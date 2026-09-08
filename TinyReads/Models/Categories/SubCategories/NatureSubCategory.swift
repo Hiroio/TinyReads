@@ -8,38 +8,43 @@
 import SwiftUI
 
 enum NatureSubCategory: String, ReadSubCategory {
-  case universal
+  case natureUniversal, ocean
 
   var id: String { rawValue }
 
   var idSuffix: String {
-	 self == .universal ? "" : "_\(rawValue)"
+	 self == .natureUniversal ? "" : "_\(rawValue)"
   }
 
   var category: String { ReadCategories.nature.rawValue }
 
+  var parentCategory: ReadCategories { .nature }
+
   var storeId: String? {
 	 switch self {
-	 case .universal: nil
+	 case .natureUniversal: nil
+	 case .ocean: ""
 	 }
   }
 
   var title: LocalizedStringKey {
 	 switch self {
-	 case .universal: "Universal"
+	 case .natureUniversal: "Universal"
+	 case .ocean: "Ocean"
 	 }
   }
 
-  //  No dedicated Nature store icon yet — placeholder until real art exists.
   var image: String {
 	 switch self {
-	 case .universal: "ScienceStore01Light"
+	 case .natureUniversal: "Nature"
+	 case .ocean: "Nature"
 	 }
   }
 
   var count: Int {
 	 switch self {
-	 case .universal: 100
+	 case .natureUniversal: 100
+	 case .ocean: 80
 	 }
   }
 }

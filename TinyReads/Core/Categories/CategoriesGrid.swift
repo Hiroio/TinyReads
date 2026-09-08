@@ -11,6 +11,7 @@ struct CategoriesGrid: View {
   @Environment(ThemeManager.self) var themeManager
   @State private var animate = false
   @State private var gridState: Bool = false
+  @State private var selectedCategory: ReadCategories? = nil
     var body: some View {
 		VStack{
 		  ScrollView(showsIndicators: false){
@@ -18,25 +19,14 @@ struct CategoriesGrid: View {
 				.font(.title.weight(.black))
 				.padding(.bottom, 35)
 			 
-			 LazyVGrid(columns: Array(repeating: .init(.flexible()), count: gridState ? 3 : 2)){
-				ForEach(ReadCategories.allCases){ category in
-				  VStack(spacing: 0){
-					 Image("\(category.rawValue.capitalized)\(themeManager.colorScheme == .light ? "Light" : "Dark")")
-						.resizable()
-						.scaledToFit()
-					 Text(category.title)
-						.font(.headline.weight(.bold))
-				  }
-				}
+			 if let selectedCategory{
+				SubCategoriesView(category: selectedCategory, gridState: $gridState)
+				  .offset(y: animate ? 0 : 1000)
+			 }else{
+				CategoryGrid(gridState: $gridState, action: animateCategory)
+				.transition(.move(edge: .bottom))
+				.offset(y: animate ? 0 : 1000)
 			 }
-			 .padding(10)
-			 .padding(.bottom)
-			 .background {
-				PaperBackGround()
-				  .scaleEffect(x: 1.1)
-			 }
-			 .geometryGroup()
-			 .offset(y: animate ? 0 : 1000)
 		  }
 		}
 		.fontDesign(.serif)
@@ -48,8 +38,12 @@ struct CategoriesGrid: View {
 		.overlay(alignment: .top){
 		  HStack{
 			 Group{
-				Image(systemName: "xmark")
-				  .padding(10)
+				Button{
+				  animateCategory(category: nil)
+				}label:{
+				  Image(systemName: selectedCategory != nil ? "chevron.left" : "xmark")
+					 .padding(10)
+				}
 				
 				Spacer()
 				
@@ -59,7 +53,6 @@ struct CategoriesGrid: View {
 				  }
 				}label:{
 				  Image(systemName: gridState ? "rectangle.grid.3x2.fill" : "rectangle.grid.2x2.fill")
-					 .foregroundStyle(themeManager.themeAssets.accent)
 					 .padding(10)
 				}
 			 }
@@ -69,9 +62,30 @@ struct CategoriesGrid: View {
 				  .shadow(radius: 1)
 			 )
 			 .padding(.horizontal)
+			 .foregroundStyle(themeManager.themeAssets.accent)
 		  }
 		}
+		.animation(.easeInOut, value: selectedCategory == nil)
     }
+  
+  private func animateCategory(category: ReadCategories?){
+	 Task{
+		withAnimation(.easeInOut(duration: 0.3)){
+		  animate = false
+		}
+		try await Task.sleep(for: .seconds(0.2))
+		actionWithCategory(category: category)
+		try await Task.sleep(for: .seconds(0.05))
+		
+		withAnimation(.easeInOut(duration: 0.4)) {
+		  animate = true
+		}
+	 }
+  }
+  
+  func actionWithCategory(category: ReadCategories?){
+	 selectedCategory = category
+  }
 }
 
 #Preview {

@@ -15,7 +15,7 @@ struct SecondaryView: View {
 		  case .profile:
 			 ProfileView()
 		  case .category:
-				CategoriesView()
+			 CategoriesGrid()
 				.geometryGroup()
 		  case .archive:
 			 ArchiveView()

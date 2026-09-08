@@ -204,6 +204,7 @@ extension ReadsDeckManager {
 	 var interaction = ReadInteractionModel(
 		id: card.id,
 		categoryId: card.categoryId,
+		subCategoryId: card.subCategoryId,
 		languageCode: card.languageCode,
 		sortIndex: card.sortIndex
 	 )
@@ -221,6 +222,7 @@ extension ReadsDeckManager {
 	 var interaction = ReadInteractionModel(
 		id: card.id,
 		categoryId: card.categoryId,
+		subCategoryId: card.subCategoryId,
 		languageCode: card.languageCode,
 		sortIndex: card.sortIndex
 	 )
@@ -245,13 +247,13 @@ extension ReadsDeckManager {
 	 var result: [String: Int] = [:]
 	 let languageCode = userDefaults.selectedLanguage.code
 	 let languageInteractions = readsInteractions.filter { $0.languageCode == languageCode }
+	 let subCategories = ReadCategories.allCases.flatMap({ $0.subCategories })
 	 
 	 for categoryId in categories {
-		guard let category = ReadCategories(rawValue: categoryId) else { continue }
+		guard let category = subCategories.first(where: {$0.id == categoryId}) else { continue }
 		
-		let nextSortIndex = languageInteractions.getNextSortIndex(per: categoryId)
-		// cheaking for purchased categories and their limits
-		let limit = category.effectiveLimit(purchasedIDs: StoreKitManager.shared.purchasedProductIDs)
+		let nextSortIndex = languageInteractions.getNextSortIndex(per: category)
+		let limit = category.count
 		if nextSortIndex <= limit {
 		  result[categoryId] = nextSortIndex
 		}

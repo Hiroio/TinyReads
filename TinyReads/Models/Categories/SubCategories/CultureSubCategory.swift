@@ -8,50 +8,47 @@
 import SwiftUI
 
 enum CultureSubCategory: String, ReadSubCategory {
-  case universal, japan, rome, viking
+  case cultureUniversal, japan, french
 
   var id: String { rawValue }
 
   var idSuffix: String {
-	 self == .universal ? "" : "_\(rawValue)"
+	 self == .cultureUniversal ? "" : "_\(rawValue)"
   }
 
   var category: String { ReadCategories.culture.rawValue }
 
+  var parentCategory: ReadCategories { .culture }
+
   var storeId: String? {
 	 switch self {
-	 case .universal: nil
+	 case .cultureUniversal: nil
 	 case .japan: "com.hiroio.tinyreads.subcategory.culture.japan"
-	 case .rome: ""
-	 case .viking: ""
+	 case .french: ""
 	 }
   }
 
   var title: LocalizedStringKey {
 	 switch self {
-	 case .universal: "Universal"
+	 case .cultureUniversal: "Universal"
 	 case .japan: "Japan"
-	 case .rome: "Rome"
-	 case .viking: "Vikings"
+	 case .french: "Rome"
 	 }
   }
 
-  //  Test-only placeholders — reused Store icons, not final art.
   var image: String {
 	 switch self {
-	 case .universal: "PhilosophyStore01Light"
-	 case .japan: "HistoryStore01Light"
-	 case .rome: "FinanceStore01Light"
-	 case .viking: "PsychologyStore01Light"
+	 case .cultureUniversal: "Culture"
+	 case .japan: "Japan"
+	 case .french: "French"
 	 }
   }
 
   var count: Int {
 	 switch self {
-	 case .universal: 100
-	 case .japan: 50
-	 case .rome: 80
-	 case .viking: 80
+	 case .cultureUniversal: 100
+	 case .japan: 80
+	 case .french: 80
 	 }
   }
 }

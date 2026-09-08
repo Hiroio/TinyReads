@@ -69,6 +69,22 @@ enum ReadCategories: String, CaseIterable, Identifiable{
 	 "\(language.code)_\(self.rawValue)_key"
   }
 
+  /// The Universal-equivalent subCategory for this category — used only to migrate the old,
+  /// pre-subcategory `selectedCategories` (category-id) values into the subCategory-id model.
+  var migration: any ReadSubCategory {
+	 switch self {
+	 case .science: ScienceSubCategory.scienceUniversal
+	 case .history: HistorySubCategory.historyUniversal
+	 case .culture: CultureSubCategory.cultureUniversal
+	 case .psychology: PsychologySubCategory.psychologyUniversal
+	 case .philosophy: PhilosophySubCategory.philosophyUniversal
+	 case .nature: NatureSubCategory.natureUniversal
+	 case .finance: FinanceSubCategory.financeUniversal
+	 case .health: HealthSubCategory.healthUniversal
+	 case .technology: TechnologySubCategory.technologyUniversal
+	 }
+  }
+
   /// All subCategories ("books") available on this category's shelf.
   var subCategories: [any ReadSubCategory] {
 	 switch self {
@@ -97,6 +113,10 @@ protocol ReadSubCategory: CaseIterable, Identifiable {
   /// Two different cases (e.g. Science's .universal and .space) are allowed to share the same suffix.
   var idSuffix: String { get }
   var category: String { get }
+  /// Which shelf/cabinet this subCategory is shown under. Normally matches `category`,
+  /// but can diverge (e.g. Science's `.space` case has category "space" for Firestore continuity,
+  /// yet still belongs on the Science shelf).
+  var parentCategory: ReadCategories { get }
   var storeId: String? { get }
   var title: LocalizedStringKey { get }
   var image: String { get }
@@ -108,3 +128,13 @@ extension ReadSubCategory {
   /// equals `category` alone when `idSuffix` is "", preserving existing users' progress.
   var coreDataId: String { "\(category)\(idSuffix)" }
 }
+
+/// Resolves a subCategory by its `coreDataId` — the single mechanism for migrating any legacy,
+/// category-only id (old `selectedCategories` entries, old Core Data `categoryId`) into the new
+/// subCategory model. Unlike `ReadCategories(rawValue:).migration`, this also correctly resolves
+/// "space" — a category-level id that predates the Space→Science merge and no longer matches any
+/// `ReadCategories` case — because `ScienceSubCategory.space.coreDataId` is still "space".
+func subCategory(forCoreDataId coreDataId: String) -> (any ReadSubCategory)? {
+  ReadCategories.allCases.flatMap(\.subCategories).first(where: { $0.coreDataId == coreDataId })
+}
+

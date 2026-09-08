@@ -8,40 +8,47 @@
 import SwiftUI
 
 enum PhilosophySubCategory: String, ReadSubCategory {
-  case universal, stoicism
+  case philosophyUniversal, stoicism, existentialism
 
   var id: String { rawValue }
 
   var idSuffix: String {
-	 self == .universal ? "" : "_\(rawValue)"
+	 self == .philosophyUniversal ? "" : "_\(rawValue)"
   }
 
   var category: String { ReadCategories.philosophy.rawValue }
 
+  var parentCategory: ReadCategories { .philosophy }
+
   var storeId: String? {
 	 switch self {
-	 case .universal: nil
+	 case .philosophyUniversal: nil
 	 case .stoicism: "com.hiroio.tinyreads.subcategory.philosophy.stoicism"
+	 case .existentialism: ""
 	 }
   }
 
   var title: LocalizedStringKey {
 	 switch self {
-	 case .universal: "Universal"
+	 case .philosophyUniversal: "Universal"
 	 case .stoicism: "Stoicism"
+	 case .existentialism: "Existentialism"
 	 }
   }
 
   var image: String {
 	 switch self {
-	 case .universal, .stoicism: "PhilosophyStore01Light"
+	 case .philosophyUniversal: "Philosophy"
+	 case .stoicism: "Stoicism"
+	 case .existentialism: "Existentialism"
 	 }
   }
 
   var count: Int {
 	 switch self {
-	 case .universal: 200
-	 case .stoicism: 50
+	 case .philosophyUniversal: 200
+	 case .stoicism: 80
+	 case .existentialism: 80
 	 }
   }
 }

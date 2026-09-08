@@ -8,40 +8,47 @@
 import SwiftUI
 
 enum HistorySubCategory: String, ReadSubCategory {
-  case universal, ancientRome
+  case historyUniversal, ancientRome, egypt
 
   var id: String { rawValue }
 
   var idSuffix: String {
-	 self == .universal ? "" : "_\(rawValue)"
+	 self == .historyUniversal ? "" : "_\(rawValue)"
   }
 
   var category: String { ReadCategories.history.rawValue }
 
+  var parentCategory: ReadCategories { .history }
+
   var storeId: String? {
 	 switch self {
-	 case .universal: nil
+	 case .historyUniversal: nil
 	 case .ancientRome: "com.hiroio.tinyreads.subcategory.history.ancientRome"
+	 default: ""
 	 }
   }
 
   var title: LocalizedStringKey {
 	 switch self {
-	 case .universal: "Universal"
+	 case .historyUniversal: "Universal"
 	 case .ancientRome: "Ancient Rome"
+	 case .egypt: "Ancient Egypt"
 	 }
   }
 
   var image: String {
 	 switch self {
-	 case .universal, .ancientRome: "HistoryStore01Light"
+	 case .historyUniversal : "History"
+	 case .ancientRome: "Rome"
+	 case .egypt: "Egypt"
 	 }
   }
 
   var count: Int {
 	 switch self {
-	 case .universal: 200
-	 case .ancientRome: 50
+	 case .historyUniversal: 200
+	 case .ancientRome: 80
+	 case .egypt: 80
 	 }
   }
 }

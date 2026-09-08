@@ -8,40 +8,47 @@
 import SwiftUI
 
 enum PsychologySubCategory: String, ReadSubCategory {
-  case universal, cognitiveBiases
+  case psychologyUniversal, cognitiveBiases, trauma
 
   var id: String { rawValue }
 
   var idSuffix: String {
-	 self == .universal ? "" : "_\(rawValue)"
+	 self == .psychologyUniversal ? "" : "_\(rawValue)"
   }
 
   var category: String { ReadCategories.psychology.rawValue }
 
+  var parentCategory: ReadCategories { .psychology }
+
   var storeId: String? {
 	 switch self {
-	 case .universal: nil
+	 case .psychologyUniversal: nil
 	 case .cognitiveBiases: "com.hiroio.tinyreads.subcategory.psychology.cognitiveBiases"
+	 case .trauma: ""
 	 }
   }
 
   var title: LocalizedStringKey {
 	 switch self {
-	 case .universal: "Universal"
+	 case .psychologyUniversal: "Universal"
 	 case .cognitiveBiases: "Cognitive Biases"
+	 case .trauma: "Trauma"
 	 }
   }
 
   var image: String {
 	 switch self {
-	 case .universal, .cognitiveBiases: "PsychologyStore01Light"
+	 case .psychologyUniversal: "Psychology"
+	 case .cognitiveBiases: "Cognitive"
+	 case .trauma: "Trauma"
 	 }
   }
 
   var count: Int {
 	 switch self {
-	 case .universal: 200
-	 case .cognitiveBiases: 50
+	 case .psychologyUniversal: 200
+	 case .cognitiveBiases: 80
+	 case .trauma: 80
 	 }
   }
 }

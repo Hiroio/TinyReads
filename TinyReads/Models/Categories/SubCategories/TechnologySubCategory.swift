@@ -8,38 +8,43 @@
 import SwiftUI
 
 enum TechnologySubCategory: String, ReadSubCategory {
-  case universal
+  case technologyUniversal, artificial
 
   var id: String { rawValue }
 
   var idSuffix: String {
-	 self == .universal ? "" : "_\(rawValue)"
+	 self == .technologyUniversal ? "" : "_\(rawValue)"
   }
 
   var category: String { ReadCategories.technology.rawValue }
 
+  var parentCategory: ReadCategories { .technology }
+
   var storeId: String? {
 	 switch self {
-	 case .universal: nil
+	 case .technologyUniversal: nil
+	 case .artificial: ""
 	 }
   }
 
   var title: LocalizedStringKey {
 	 switch self {
-	 case .universal: "Universal"
+	 case .technologyUniversal: "Universal"
+	 case .artificial: "AI"
 	 }
   }
 
-  //  No dedicated Technology store icon yet — placeholder until real art exists.
   var image: String {
 	 switch self {
-	 case .universal: "ScienceStore01Light"
+	 case .technologyUniversal: "Technology"
+	 case .artificial: "Technology"
 	 }
   }
 
   var count: Int {
 	 switch self {
-	 case .universal: 100
+	 case .technologyUniversal: 100
+	 case .artificial: 80
 	 }
   }
 }

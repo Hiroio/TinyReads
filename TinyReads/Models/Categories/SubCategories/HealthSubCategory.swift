@@ -8,38 +8,43 @@
 import SwiftUI
 
 enum HealthSubCategory: String, ReadSubCategory {
-  case universal
+  case healthUniversal, sleep
 
   var id: String { rawValue }
 
   var idSuffix: String {
-	 self == .universal ? "" : "_\(rawValue)"
+	 self == .healthUniversal ? "" : "_\(rawValue)"
   }
 
   var category: String { ReadCategories.health.rawValue }
 
+  var parentCategory: ReadCategories { .health }
+
   var storeId: String? {
 	 switch self {
-	 case .universal: nil
+	 case .healthUniversal: nil
+	 case .sleep: ""
 	 }
   }
 
   var title: LocalizedStringKey {
 	 switch self {
-	 case .universal: "Universal"
+	 case .healthUniversal: "Universal"
+	 case .sleep: "Sleep"
 	 }
   }
 
-  //  No dedicated Health store icon yet — placeholder until real art exists.
   var image: String {
 	 switch self {
-	 case .universal: "ScienceStore01Light"
+	 case .healthUniversal: "Health"
+	 case .sleep: "Health"
 	 }
   }
 
   var count: Int {
 	 switch self {
-	 case .universal: 100
+	 case .healthUniversal: 100
+	 case .sleep: 80
 	 }
   }
 }

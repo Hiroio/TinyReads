@@ -9,6 +9,8 @@ import Foundation
 
 protocol UserDefaultsManagerProtocol{
   var selectedCategories: [String] { get set }
+  /// SubCategory ids (`ReadSubCategory.id`) selected by the user — supersedes `selectedCategories`.
+  var selectedSubCategories: [String] { get set }
   var selectedLanguage: LanguageEnum { get set }
 }
 
@@ -18,6 +20,7 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
   static let shared = UserDefaultsManager()
   
   private let selectedCategoriesKey = "selectedCategories"
+  private let selectedSubCategoriesKey = "selectedSubCategories"
   private let selectedColorThemeKey = "selectedColorTheme"
   private let selectedLanguageKey = "selectedLanguage"
   private let onBoardingKey = "onBoardingCompletion"
@@ -30,7 +33,13 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
 		UserDefaults.standard.set(selectedCategories, forKey: selectedCategoriesKey)
 	 }
   }
-  
+
+  var selectedSubCategories: [String] {
+	 didSet {
+		UserDefaults.standard.set(selectedSubCategories, forKey: selectedSubCategoriesKey)
+	 }
+  }
+
   var selectedColorTheme: AppTheme {
 	 didSet {
 		UserDefaults.standard.set(selectedColorTheme.rawValue, forKey: selectedColorThemeKey)
@@ -60,7 +69,18 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
   private init() {
 	 let selectedCategory = UserDefaults.standard.array(forKey: selectedCategoriesKey) as? [String] ?? []
 	 self.selectedCategories = selectedCategory
-	 
+
+	 if let storedSubCategories = UserDefaults.standard.array(forKey: selectedSubCategoriesKey) as? [String] {
+		self.selectedSubCategories = storedSubCategories
+	 } else {
+		//  migrate the old, category-level selection into the new subCategory-id model —
+		//  each legacy category id becomes the subCategory whose coreDataId matches it
+		//  (that category's Universal, or "space" itself for the pre-merge Space category).
+		let migratedSubCategories = selectedCategory.compactMap { subCategory(forCoreDataId: $0)?.id }
+		self.selectedSubCategories = migratedSubCategories
+		UserDefaults.standard.set(migratedSubCategories, forKey: selectedSubCategoriesKey)
+	 }
+
 	 let colorTheme = UserDefaults.standard.string(forKey: selectedColorThemeKey) ?? ""
 	 self.selectedColorTheme = AppTheme(rawValue: colorTheme) ?? .system
 	 
@@ -115,10 +135,12 @@ extension UserDefaultsManager{
 // MARK: MOCK USERDEFAULT FOR TESTING
 final class MockUserDefaultsManager: UserDefaultsManagerProtocol {
 	 var selectedCategories: [String] = []
+  var selectedSubCategories: [String] = []
   var selectedLanguage: LanguageEnum = .en
-  
-  init(selectedCategories: [String] = [], selectedLanguage: LanguageEnum = .en){
+
+  init(selectedCategories: [String] = [], selectedSubCategories: [String] = [], selectedLanguage: LanguageEnum = .en){
 	 self.selectedCategories = selectedCategories
+	 self.selectedSubCategories = selectedSubCategories
 	 self.selectedLanguage = selectedLanguage
   }
 }

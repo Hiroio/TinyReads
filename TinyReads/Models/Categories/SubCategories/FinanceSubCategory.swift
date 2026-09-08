@@ -8,39 +8,41 @@
 import SwiftUI
 
 enum FinanceSubCategory: String, ReadSubCategory {
-  case universal, howMoneyWorks
+  case financeUniversal, howMoneyWorks
 
   var id: String { rawValue }
 
   var idSuffix: String {
-	 self == .universal ? "" : "_\(rawValue)"
+	 self == .financeUniversal ? "" : "_\(rawValue)"
   }
 
   var category: String { ReadCategories.finance.rawValue }
 
+  var parentCategory: ReadCategories { .finance }
+
   var storeId: String? {
 	 switch self {
-	 case .universal: nil
+	 case .financeUniversal: nil
 	 case .howMoneyWorks: "com.hiroio.tinyreads.subcategory.finance.howMoneyWorks"
 	 }
   }
 
   var title: LocalizedStringKey {
 	 switch self {
-	 case .universal: "Universal"
+	 case .financeUniversal: "Universal"
 	 case .howMoneyWorks: "How Money Works"
 	 }
   }
 
   var image: String {
 	 switch self {
-	 case .universal, .howMoneyWorks: "FinanceStore01Light"
+	 case .financeUniversal, .howMoneyWorks: "Finance"
 	 }
   }
 
   var count: Int {
 	 switch self {
-	 case .universal: 200
+	 case .financeUniversal: 200
 	 case .howMoneyWorks: 50
 	 }
   }

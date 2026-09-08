@@ -10,6 +10,7 @@ import Foundation
 struct ReadInteractionModel: Identifiable, Codable {
   var id: String
   let categoryId: String
+  let subCategoryId: String?
   let languageCode: String
   let sortIndex: Int
   
@@ -27,9 +28,10 @@ struct ReadInteractionModel: Identifiable, Codable {
   var skipCount: Int
   
   
-  init(id: String, categoryId: String, languageCode: String, sortIndex: Int){
+  init(id: String, categoryId: String, subCategoryId: String?, languageCode: String, sortIndex: Int){
 	 self.id = id
 	 self.categoryId = categoryId
+	 self.subCategoryId = subCategoryId
 	 self.languageCode = languageCode
 	 self.sortIndex = sortIndex
 	 
@@ -62,8 +64,11 @@ extension ReadInteractionModel {
 		throw ReadInteractionModelError.missingLanguageCode
 	 }
 	 
+	 let subCategory = entity.subCategoryId ?? TinyReads.subCategory(forCoreDataId: categoryId)?.id
+	 
 	 self.id = id
 	 self.categoryId = categoryId
+	 self.subCategoryId = subCategory
 	 self.languageCode = languageCode
 	 self.sortIndex = Int(entity.sortIndex)
 	 
@@ -83,6 +88,7 @@ extension ReadInteractionModel {
   init(readCard: ReadCardModel){
 	 self.id = readCard.id
 	 self.categoryId = readCard.categoryId
+	 self.subCategoryId = readCard.subCategoryId
 	 self.languageCode = readCard.languageCode
 	 self.sortIndex = readCard.sortIndex
 	 

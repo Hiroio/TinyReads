@@ -12,6 +12,7 @@ nonisolated struct ReadCardModel: Identifiable, Codable {
 	 let id: String
 	 let translationGroupId: String
 	 let categoryId: String
+  let subCategoryId: String?
 	 let languageCode: String
 	 let title: String
 	 let hook: String
@@ -38,6 +39,7 @@ extension ReadCardModel: Equatable {
 		  id: "1",
 		  translationGroupId: "",
 		  categoryId: "philosophy",
+		  subCategoryId: "philosophyUniversal",
 		  languageCode: "uk",
 		  title: "Чому ми продовжуємо дивитися поганий фільм до кінця?",
 		  hook: "Ви заплатили за квиток і вже через 20 хвилин розумієте, що фільм жахливий. Але ви залишаєтеся, бо “вже ж заплатили”. Це омана незворотних витрат, і вона змушує нас приймати погані рішення щодня.",
@@ -53,6 +55,7 @@ extension ReadCardModel: Equatable {
 		  id: "psychology_en_001",
 		  translationGroupId: "psychology_en_001",
 		  categoryId: "psychology",
+		  subCategoryId: "psychologyUniversal",
 		  languageCode: "en",
 		  title: "Why Do We Only See What We Believe?",
 		  hook: "Have you ever noticed that once you believe something, you start seeing evidence for it everywhere? This isn't a coincidence; it's your brain playing a clever trick on you.",
