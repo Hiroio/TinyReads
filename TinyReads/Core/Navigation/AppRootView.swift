@@ -32,7 +32,7 @@ struct AppRootView: View {
 		}
 		.task {
 		  let ids = StoreTipConfigurationEnum.allCases.map(\.storeID)
-			 + StoreCategoriesConfigurationEnum.allCases.map(\.storeID)
+			 + ReadCategories.allCases.flatMap(\.subCategories).compactMap(\.storeId)
 		  await storeKitManager.loadProducts(ids: ids)
 		}
 //	 Purchases
@@ -55,7 +55,7 @@ struct AppRootView: View {
 		  }
 		})
 //	 Categories
-		.onChange(of: userDefault.selectedCategories, { _, _ in
+		.onChange(of: userDefault.selectedSubCategories, { _, _ in
 		  Task{
 			 await cardSliderVM.reloadCards()
 		  }

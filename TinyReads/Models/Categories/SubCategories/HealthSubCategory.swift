@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum HealthSubCategory: String, ReadSubCategory {
-  case healthUniversal, sleep
+  case healthUniversal, sleep, immuneSystem
 
   var id: String { rawValue }
 
@@ -23,7 +23,8 @@ enum HealthSubCategory: String, ReadSubCategory {
   var storeId: String? {
 	 switch self {
 	 case .healthUniversal: nil
-	 case .sleep: ""
+	 case .sleep: "com.hiroio.tinyreads.subcategory.health.sleep"
+	 case .immuneSystem: "com.hiroio.tinyreads.subcategory.health.immuneSystem"
 	 }
   }
 
@@ -31,13 +32,15 @@ enum HealthSubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .healthUniversal: "Universal"
 	 case .sleep: "Sleep"
+	 case .immuneSystem: "Immune System"
 	 }
   }
 
   var image: String {
 	 switch self {
 	 case .healthUniversal: "Health"
-	 case .sleep: "Health"
+	 case .sleep: "Sleep"
+	 case .immuneSystem: "ImmuneSystem"
 	 }
   }
 
@@ -45,6 +48,7 @@ enum HealthSubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .healthUniversal: 100
 	 case .sleep: 80
+	 default: 80
 	 }
   }
 }

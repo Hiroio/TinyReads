@@ -30,50 +30,40 @@ struct OnboardingView: View {
 		  }
 		  .padding(.horizontal, 24)
 		  
-		  ZStack {
+		  switch step {
+		  case .welcome:
+			 loadingOverlay
+		  case .practice:
 			 SliderOnBoarding {
 				step = .categories
 			 }
-			 .onboardingPage(isVisible: step == .practice)
-			 
-			 CategoriesView(secondary: false)
-				.onboardingPage(isVisible: step == .categories)
-		  }
-		  let selectedCategoryActive = userDefaults.selectedCategories.count > 0
-		  if step == .categories{
+			 .aspectRatio(1/1.5 ,contentMode: .fit)
+			 .transition(.opacity)
+		  case .categories:
 			 VStack{
-				Button{
-				  if selectedCategoryActive{
-					 userDefaults.onBoardingCompletion = true
-				  }
-				}label: {
-				  Text("Complete")
-					 .foregroundStyle(themeManager.themeAssets.card)
-					 .padding()
-					 .background(
-						RoundedRectangle(cornerRadius: 30)
-						  .fill(themeManager.themeAssets.accent)
-					 )
-				}
-				.disabled(!selectedCategoryActive)
-				.opacity(!selectedCategoryActive ? 0.5 : 1)
-				Text("Choose at least one category to start")
-				  .font(.caption)
-				  .foregroundStyle(themeManager.themeAssets.secondary)
+				OnBoardingCategoryView()
+				  .geometryGroup()
+				  .frame(maxWidth: .infinity, maxHeight: .infinity)
+				  .aspectRatio(1/1.5 ,contentMode: .fit)
+				compelitionBtn
 			 }
+			 .transition(.move(edge: .bottom))
+		  case .finale:
+			 EmptyView()
 		  }
+		  
+		 
 		}
 		.padding(.top, 32)
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		loadingOverlay
 	 }
-	 .animation(.easeInOut(duration: 0.8), value: userDefaults.selectedCategories.count)
-	 .animation(.easeInOut(duration: 0.45), value: step)
 	 .animation(.easeInOut(duration: 0.4), value: isLoading)
+	 
 	 .task {
 		await startIntro()
 	 }
   }
+  //	 .animation(.easeInOut(duration: 0.8), value: userDefaults.selectedCategories.count)
+  
 }
 
 // MARK: - Components
@@ -115,6 +105,30 @@ private extension OnboardingView {
 	 try? await Task.sleep(for: .seconds(1))
 	 step = .practice
   }
+  
+  private var compelitionBtn: some View{
+	 VStack{
+		let selectedCategoryActive = userDefaults.selectedSubCategories.count > 0
+		Button{
+		  if selectedCategoryActive{
+			 userDefaults.onBoardingCompletion = true
+		  }
+		}label: {
+		  Text("Complete")
+			 .foregroundStyle(themeManager.themeAssets.card)
+			 .padding()
+			 .background(
+				RoundedRectangle(cornerRadius: 30)
+				  .fill(themeManager.themeAssets.accent)
+			 )
+		}
+		.disabled(!selectedCategoryActive)
+		.opacity(!selectedCategoryActive ? 0.5 : 1)
+		Text("Choose at least one category to start")
+		  .font(.caption)
+		  .foregroundStyle(themeManager.themeAssets.secondary)
+	 }
+  }
 }
 
 // MARK: - Helpers
@@ -130,7 +144,7 @@ private extension View {
 	 self
 		.opacity(isVisible ? 1 : 0)
 		.scaleEffect(isVisible ? 1 : 0.96)
-		.offset(y: isVisible ? 0 : 18)
+		.offset(y: isVisible ? 0 : 200)
 		.allowsHitTesting(isVisible)
 		.accessibilityHidden(!isVisible)
   }

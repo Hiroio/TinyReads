@@ -26,6 +26,7 @@ struct CardSliderView: View {
 				.transition(.move(edge: .trailing))
 		  }
 		}
+		.aspectRatio(1/1.5,contentMode: .fit)
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
 		.overlay(alignment: .topTrailing){
 		  CloseButton

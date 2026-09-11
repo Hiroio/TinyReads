@@ -1,174 +1,363 @@
 {
-  "appPolicies" : {
-    "eula" : "",
-    "policies" : [
+  "appPolicies": {
+    "eula": "",
+    "policies": [
       {
-        "locale" : "en_US",
-        "policyText" : "",
-        "policyURL" : ""
+        "locale": "en_US",
+        "policyText": "",
+        "policyURL": ""
       }
     ]
   },
-  "identifier" : "510E1DA6",
-  "nonRenewingSubscriptions" : [
-
-  ],
-  "products" : [
+  "identifier": "510E1DA6",
+  "nonRenewingSubscriptions": [],
+  "products": [
     {
-      "displayPrice" : "0.99",
-      "familyShareable" : false,
-      "internalID" : "80EB0F4C",
-      "localizations" : [
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "80EB0F4C",
+      "localizations": [
         {
-          "description" : "A little thank-you to support TinyReads.",
-          "displayName" : "Small Tip",
-          "locale" : "en_US"
+          "description": "A little thank-you to support TinyReads.",
+          "displayName": "Small Tip",
+          "locale": "en_US"
         }
       ],
-      "productID" : "com.hiroio.tinyreads.tip.small",
-      "referenceName" : "Tip - Small ($1)",
-      "type" : "Consumable"
+      "productID": "com.hiroio.tinyreads.tip.small",
+      "referenceName": "Tip - Small ($1)",
+      "type": "Consumable"
     },
     {
-      "displayPrice" : "2.99",
-      "familyShareable" : false,
-      "internalID" : "659CB39D",
-      "localizations" : [
+      "displayPrice": "2.99",
+      "familyShareable": false,
+      "internalID": "659CB39D",
+      "localizations": [
         {
-          "description" : "A generous tip to help us keep building.",
-          "displayName" : "Medium Tip",
-          "locale" : "en_US"
+          "description": "A generous tip to help us keep building.",
+          "displayName": "Medium Tip",
+          "locale": "en_US"
         }
       ],
-      "productID" : "com.hiroio.tinyreads.tip.medium",
-      "referenceName" : "Tip - Medium ($3)",
-      "type" : "Consumable"
+      "productID": "com.hiroio.tinyreads.tip.medium",
+      "referenceName": "Tip - Medium ($3)",
+      "type": "Consumable"
     },
     {
-      "displayPrice" : "4.99",
-      "familyShareable" : false,
-      "internalID" : "931EF4B7",
-      "localizations" : [
+      "displayPrice": "4.99",
+      "familyShareable": false,
+      "internalID": "931EF4B7",
+      "localizations": [
         {
-          "description" : "A big thank-you for supporting TinyReads.",
-          "displayName" : "Large Tip",
-          "locale" : "en_US"
+          "description": "A big thank-you for supporting TinyReads.",
+          "displayName": "Large Tip",
+          "locale": "en_US"
         }
       ],
-      "productID" : "com.hiroio.tinyreads.tip.large",
-      "referenceName" : "Tip - Large ($5)",
-      "type" : "Consumable"
+      "productID": "com.hiroio.tinyreads.tip.large",
+      "referenceName": "Tip - Large ($5)",
+      "type": "Consumable"
     },
     {
-      "displayPrice" : "9.99",
-      "familyShareable" : false,
-      "internalID" : "E434EDD1",
-      "localizations" : [
+      "displayPrice": "9.99",
+      "familyShareable": false,
+      "internalID": "E434EDD1",
+      "localizations": [
         {
-          "description" : "Love TinyReads? This tip means the world to us.",
-          "displayName" : "Extra Large Tip",
-          "locale" : "en_US"
+          "description": "Love TinyReads? This tip means the world to us.",
+          "displayName": "Extra Large Tip",
+          "locale": "en_US"
         }
       ],
-      "productID" : "com.hiroio.tinyreads.tip.extraLarge",
-      "referenceName" : "Tip - Extra Large ($10)",
-      "type" : "Consumable"
+      "productID": "com.hiroio.tinyreads.tip.extraLarge",
+      "referenceName": "Tip - Extra Large ($10)",
+      "type": "Consumable"
     },
     {
-      "displayPrice" : "2.99",
-      "familyShareable" : false,
-      "internalID" : "DC6E3040",
-      "localizations" : [
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "787D5A74",
+      "localizations": [
         {
-          "description" : "100 more science cards to explore",
-          "displayName" : "Science Pack",
-          "locale" : "en_US"
+          "description": "80 Physics cards to explore",
+          "displayName": "Physics",
+          "locale": "en_US"
         }
       ],
-      "productID" : "com.hiroio.tinyreads.category.science",
-      "referenceName" : "Category - Science Pack",
-      "type" : "NonConsumable"
+      "productID": "com.hiroio.tinyreads.subcategory.science.physics",
+      "referenceName": "SubCategory - Science Physics",
+      "type": "NonConsumable"
     },
     {
-      "displayPrice" : "2.99",
-      "familyShareable" : false,
-      "internalID" : "CAB73372",
-      "localizations" : [
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "1E7A9CB1",
+      "localizations": [
         {
-          "description" : "100 more history cards to explore",
-          "displayName" : "History Pack",
-          "locale" : "en_US"
+          "description": "80 Neuro Science cards to explore",
+          "displayName": "Neuro Science",
+          "locale": "en_US"
         }
       ],
-      "productID" : "com.hiroio.tinyreads.category.history",
-      "referenceName" : "Category - History Pack",
-      "type" : "NonConsumable"
+      "productID": "com.hiroio.tinyreads.subcategory.science.neuroscience",
+      "referenceName": "SubCategory - Science Neuro Science",
+      "type": "NonConsumable"
     },
     {
-      "displayPrice" : "2.99",
-      "familyShareable" : false,
-      "internalID" : "C36AC401",
-      "localizations" : [
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "BFE4BF93",
+      "localizations": [
         {
-          "description" : "100 more psychology cards to explore",
-          "displayName" : "Psychology Pack",
-          "locale" : "en_US"
+          "description": "80 Ancient Rome cards to explore",
+          "displayName": "Ancient Rome",
+          "locale": "en_US"
         }
       ],
-      "productID" : "com.hiroio.tinyreads.category.psychology",
-      "referenceName" : "Category - Psychology Pack",
-      "type" : "NonConsumable"
+      "productID": "com.hiroio.tinyreads.subcategory.history.ancientRome",
+      "referenceName": "SubCategory - History Ancient Rome",
+      "type": "NonConsumable"
     },
     {
-      "displayPrice" : "2.99",
-      "familyShareable" : false,
-      "internalID" : "79EE6B3F",
-      "localizations" : [
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "597A4F2F",
+      "localizations": [
         {
-          "description" : "100 more philosophy cards to explore",
-          "displayName" : "Philosophy Pack",
-          "locale" : "en_US"
+          "description": "80 Ancient Egypt cards to explore",
+          "displayName": "Ancient Egypt",
+          "locale": "en_US"
         }
       ],
-      "productID" : "com.hiroio.tinyreads.category.philosophy",
-      "referenceName" : "Category - Philosophy Pack",
-      "type" : "NonConsumable"
+      "productID": "com.hiroio.tinyreads.subcategory.history.ancientEgypt",
+      "referenceName": "SubCategory - History Ancient Egypt",
+      "type": "NonConsumable"
     },
     {
-      "displayPrice" : "2.99",
-      "familyShareable" : false,
-      "internalID" : "006A0C54",
-      "localizations" : [
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "337618D7",
+      "localizations": [
         {
-          "description" : "100 more finance cards to explore",
-          "displayName" : "Finance Pack",
-          "locale" : "en_US"
+          "description": "80 Japan cards to explore",
+          "displayName": "Japan",
+          "locale": "en_US"
         }
       ],
-      "productID" : "com.hiroio.tinyreads.category.finance",
-      "referenceName" : "Category - Finance Pack",
-      "type" : "NonConsumable"
+      "productID": "com.hiroio.tinyreads.subcategory.culture.japan",
+      "referenceName": "SubCategory - Culture Japan",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "6DBC8E80",
+      "localizations": [
+        {
+          "description": "80 France cards to explore",
+          "displayName": "France",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.culture.france",
+      "referenceName": "SubCategory - Culture France",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "05AEC474",
+      "localizations": [
+        {
+          "description": "80 Cognitive Biases cards to explore",
+          "displayName": "Cognitive Biases",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.psychology.cognitiveBiases",
+      "referenceName": "SubCategory - Psychology Cognitive Biases",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "8413081F",
+      "localizations": [
+        {
+          "description": "80 Trauma cards to explore",
+          "displayName": "Trauma",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.psychology.trauma",
+      "referenceName": "SubCategory - Psychology Trauma",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "E53465A6",
+      "localizations": [
+        {
+          "description": "80 Stoicism cards to explore",
+          "displayName": "Stoicism",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.philosophy.stoicism",
+      "referenceName": "SubCategory - Philosophy Stoicism",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "ED271470",
+      "localizations": [
+        {
+          "description": "80 Existentialism cards to explore",
+          "displayName": "Existentialism",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.philosophy.existentialism",
+      "referenceName": "SubCategory - Philosophy Existentialism",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "51B66B61",
+      "localizations": [
+        {
+          "description": "80 How Money Works cards to explore",
+          "displayName": "How Money Works",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.finance.howMoneyWorks",
+      "referenceName": "SubCategory - Finance How Money Works",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "0B4D458C",
+      "localizations": [
+        {
+          "description": "80 Ocean cards to explore",
+          "displayName": "Ocean",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.nature.oceanMarineLife",
+      "referenceName": "SubCategory - Nature Ocean & Marine Life",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "B574A035",
+      "localizations": [
+        {
+          "description": "80 Sleep cards to explore",
+          "displayName": "Sleep",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.health.sleep",
+      "referenceName": "SubCategory - Health Sleep",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "353171CF",
+      "localizations": [
+        {
+          "description": "80 AI cards to explore",
+          "displayName": "AI",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.technology.artificialIntelligence",
+      "referenceName": "SubCategory - Technology Artificial Intelligence",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "16B6F9E5",
+      "localizations": [
+        {
+          "description": "80 Financial Crashes cards to explore",
+          "displayName": "Financial Crashes",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.finance.financialCrashes",
+      "referenceName": "SubCategory - Finance Financial Crashes",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "6FE65847",
+      "localizations": [
+        {
+          "description": "80 Arctic cards to explore",
+          "displayName": "Arctic",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.nature.arcticAntarctic",
+      "referenceName": "SubCategory - Nature Arctic",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "CD608938",
+      "localizations": [
+        {
+          "description": "80 Immune System cards to explore",
+          "displayName": "Immune System",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.health.immuneSystem",
+      "referenceName": "SubCategory - Health Immune System",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "EAF7AB34",
+      "localizations": [
+        {
+          "description": "80 Internet cards to explore",
+          "displayName": "Internet",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.technology.internet",
+      "referenceName": "SubCategory - Technology Internet",
+      "type": "NonConsumable"
     }
   ],
-  "settings" : {
-    "_askToBuyEnabled" : false,
-    "_billingGracePeriodEnabled" : false,
-    "_billingIssuesEnabled" : false,
-    "_disableDialogs" : false,
-    "_failTransactionsEnabled" : false,
-    "_locale" : "en_US",
-    "_renewalBillingIssuesEnabled" : false,
-    "_storefront" : "USA",
-    "_storeKitErrors" : [
-
-    ],
-    "_timeRate" : 0
+  "settings": {
+    "_askToBuyEnabled": false,
+    "_billingGracePeriodEnabled": false,
+    "_billingIssuesEnabled": false,
+    "_disableDialogs": false,
+    "_failTransactionsEnabled": false,
+    "_locale": "en_US",
+    "_renewalBillingIssuesEnabled": false,
+    "_storefront": "USA",
+    "_storeKitErrors": [],
+    "_timeRate": 0
   },
-  "subscriptionGroups" : [
-
-  ],
-  "version" : {
-    "major" : 5,
-    "minor" : 0
+  "subscriptionGroups": [],
+  "version": {
+    "major": 5,
+    "minor": 0
   }
 }

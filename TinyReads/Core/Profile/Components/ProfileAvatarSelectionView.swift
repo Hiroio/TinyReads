@@ -12,12 +12,12 @@ struct ProfileAvatarSelectionView: View {
   @Environment(UserDefaultsManager.self) var userDefault
   let onDismiss: () -> ()
     var body: some View {
-		ScrollView{
+		ScrollView(showsIndicators: false){
 		  LazyVStack{
 			 Text("Avatars")
 				.title(weight: .semibold)
 				.frame(maxWidth: .infinity)
-			 LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: 15), count: 2), spacing: 15){
+			 LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: 15), count: UIDevice.isIPad ? 3 : 2), spacing: 15){
 				ForEach(0...19, id: \.self){index in
 				  let active = index == userDefault.selectedAvatarIndex
 				  Button{
@@ -40,11 +40,12 @@ struct ProfileAvatarSelectionView: View {
 				}
 			 }
 		  }
-		  .padding(UIDevice.isIPad ? 70 : 40)
 		  .frame(maxHeight: .infinity)
+		  .aspectRatio(1/1.5,contentMode: .fit)
 		  .ignoresSafeArea(edges: .bottom)
 		  .background(
 			 PaperBackGround()
+				.scaleEffect(x: 1.1)
 		  )
 		}
 		.overlay(alignment: .topTrailing) {

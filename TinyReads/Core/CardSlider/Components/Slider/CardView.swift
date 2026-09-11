@@ -24,9 +24,16 @@ struct CardView: View {
   var body: some View {
 		VStack(spacing: 10){
 		  VStack(spacing: 15){
-			 if let category = ReadCategories(rawValue: card.categoryId){
-				Text(category.title)
-				  .secondary()
+			 VStack{
+				if let category = ReadCategories(rawValue: card.categoryId){
+				  Text(category.title)
+					 .headline()
+				  if let subCategorie = category.getSubCategory( card.subCategoryId){
+					 Text(subCategorie.title)
+						.font(.footnote)
+						.foregroundStyle(themeManager.themeAssets.accent)
+				  }
+				}
 			 }
 			 Text(card.title)
 				.title()
@@ -35,6 +42,8 @@ struct CardView: View {
 				.secondary()
 				.padding(.horizontal)
 				.allowsTightening(true)
+			 
+			 
 		  }
 		  .multilineTextAlignment(.center)
 		  .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -73,6 +82,7 @@ struct CardView: View {
 		)
 		.compositingGroup()
 		.shadow(radius: 5)
+		.fontDesign(.serif)
   }
 }
 

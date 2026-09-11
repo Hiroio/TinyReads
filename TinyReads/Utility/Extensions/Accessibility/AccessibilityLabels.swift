@@ -46,8 +46,6 @@ extension ProfileActionBarEnum {
 		"Change language"
 	 case .theme:
 		"Change theme"
-	 case .categories:
-		"Change categories"
 	 case .avatars:
 		"Change avatar"
 	 }
@@ -59,8 +57,6 @@ extension ProfileActionBarEnum {
 		"Opens language selection."
 	 case .theme:
 		"Opens theme selection."
-	 case .categories:
-		"Opens category selection."
 	 case .avatars:
 		"Opens avatar selection."
 	 }

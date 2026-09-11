@@ -36,7 +36,7 @@ enum ScienceSubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .scienceUniversal, .space: nil
 	 case .physics: "com.hiroio.tinyreads.subcategory.science.physics"
-	 case .neuroscience: ""
+	 case .neuroscience: "com.hiroio.tinyreads.subcategory.science.neuroscience"
 	 }
   }
   
@@ -53,7 +53,7 @@ enum ScienceSubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .scienceUniversal: "Science"
 	 case .physics: "Physics"
-	 case .space: "Science"
+	 case .space: "Space"
 	 case .neuroscience: "NeuroScience"
 	 }
   }

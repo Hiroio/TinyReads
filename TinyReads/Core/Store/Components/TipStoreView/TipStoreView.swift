@@ -12,6 +12,7 @@ struct TipStoreView: View {
   @Environment(StoreKitManager.self) var storeKitManager
     var body: some View {
 		  VStack{
+			 Header
 			 LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: 10), count: 2), spacing: 10){
 				ForEach(StoreTipConfigurationEnum.allCases){item in
 				  Button{
@@ -74,5 +75,25 @@ extension TipStoreView{
 		 
 	 }
 	 .aspectRatio(UIDevice.isIPad ? 1 : 0.7, contentMode: .fit)
+  }
+  
+  
+  private var Header: some View{
+	 VStack{
+		Text("If you’d like to support the author")
+		  .font(.footnote.weight(.medium))
+	 }
+	 .frame(maxWidth: .infinity)
+		.overlay(alignment: .trailing) {
+		  Button{
+			 NavigationManager.shared.secondary = nil
+		  }label:{
+			 Image(systemName: "xmark")
+				.foregroundStyle(themeManager.themeAssets.accent)
+				.font(.headline)
+		  }
+		  .padding(.trailing)
+		}
+		.fontDesign(.serif)
   }
 }

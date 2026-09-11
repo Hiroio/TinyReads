@@ -72,10 +72,11 @@ struct ArticleView: View {
 		  }.fontDesign(.serif)
 		}
 		.animation(.easeInOut, value: react)
-		.padding(.horizontal, UIDevice.isIPad ? 50 : 10)
+//		.padding(.horizontal, UIDevice.isIPad ? 50 : 10)
 		.padding(UIDevice.isIPad ? 75 : 40)
 		.background(
 		  PaperBackGround()
+			 .scaleEffect(x: 1.1)
 		)
 	 }
 	 .onScrollGeometryChange(for: CGFloat.self) { geometry in

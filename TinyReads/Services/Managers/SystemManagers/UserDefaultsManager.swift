@@ -68,9 +68,9 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
   
   private init() {
 	 let selectedCategory = UserDefaults.standard.array(forKey: selectedCategoriesKey) as? [String] ?? []
-	 self.selectedCategories = selectedCategory
 
 	 if let storedSubCategories = UserDefaults.standard.array(forKey: selectedSubCategoriesKey) as? [String] {
+		self.selectedCategories = selectedCategory
 		self.selectedSubCategories = storedSubCategories
 	 } else {
 		//  migrate the old, category-level selection into the new subCategory-id model —
@@ -79,6 +79,12 @@ final class UserDefaultsManager: UserDefaultsManagerProtocol {
 		let migratedSubCategories = selectedCategory.compactMap { subCategory(forCoreDataId: $0)?.id }
 		self.selectedSubCategories = migratedSubCategories
 		UserDefaults.standard.set(migratedSubCategories, forKey: selectedSubCategoriesKey)
+
+		//  legacy key has served its purpose — drop it so nothing reads a stale,
+		//  category-level selection again. (didSet does not fire inside init, so the
+		//  stored value is removed explicitly.)
+		self.selectedCategories = []
+		UserDefaults.standard.removeObject(forKey: selectedCategoriesKey)
 	 }
 
 	 let colorTheme = UserDefaults.standard.string(forKey: selectedColorThemeKey) ?? ""
@@ -117,17 +123,17 @@ extension UserDefaultsManager{
   
 //  MARK: For Category Numbers
   /// getting number
-  func getCategoryReadedCount(for category: ReadCategories, language: LanguageEnum? = nil) -> Int{
+  func getCategoryReadedCount(for subCategory: any ReadSubCategory, language: LanguageEnum? = nil) -> Int{
 	 let language = language ?? selectedLanguage
-	 return UserDefaults.standard.integer(forKey: category.userDefaultKey(language: language))
+	 return UserDefaults.standard.integer(forKey: subCategory.userDefaultKey(language: language))
   }
   /// setting number
-  func setCategoryReadedCount(for category: String, index: Int, language: LanguageEnum? = nil){
-	 guard let category = ReadCategories(rawValue: category) else { return }
+  func setCategoryReadedCount(for subCategoryId: String, index: Int, language: LanguageEnum? = nil){
+	 guard let subCategory = TinyReads.subCategory(forId: subCategoryId) else { return }
 	 let language = language ?? selectedLanguage
-	 guard getCategoryReadedCount(for: category, language: language) < index else { return }
-	 
-	 UserDefaults.standard.set(index, forKey: category.userDefaultKey(language: language))
+	 guard getCategoryReadedCount(for: subCategory, language: language) < index else { return }
+
+	 UserDefaults.standard.set(index, forKey: subCategory.userDefaultKey(language: language))
   }
 }
 

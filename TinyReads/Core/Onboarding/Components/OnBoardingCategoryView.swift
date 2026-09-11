@@ -8,81 +8,10 @@
 import SwiftUI
 
 struct OnBoardingCategoryView: View {
+  @Environment(ThemeManager.self) var themeManager
   @Environment(UserDefaultsManager.self) var userDefaults
-  @State private var categoriesToSelect: [any ReadSubCategory] = []
-
-	 var body: some View {
-		ScrollView{
-		  LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 3)) {
-			 ForEach(categoriesToSelect, id: \.id){ subCategory in
-				Button{
-				  withAnimation {
-					 toggle(subCategory)
-				  }
-				}label:{
-				  VStack(spacing: 6){
-					 Image(subCategory.image)
-						.resizable()
-						.scaledToFit()
-						.overlay{
-						  if isSelected(subCategory){
-							 Color.black.opacity(0.35)
-							 Image(systemName: "checkmark.circle.fill")
-								.font(.title2)
-								.foregroundStyle(.white)
-						  }
-						}
-						.clipShape(.rect(cornerRadius: 8))
-
-					 Text(subCategory.title)
-						.font(.caption)
-				  }
-				}
-				.buttonStyle(.plain)
-			 }
-		  }
-		  .padding()
-		}
-		.onAppear{
-		  animate()
-		}
-	 }
-
-  private func isSelected(_ subCategory: any ReadSubCategory) -> Bool {
-	 userDefaults.selectedSubCategories.contains(subCategory.id)
-  }
-
-  private func toggle(_ subCategory: any ReadSubCategory) {
-	 if let index = userDefaults.selectedSubCategories.firstIndex(of: subCategory.id) {
-		userDefaults.selectedSubCategories.remove(at: index)
-	 } else {
-		userDefaults.selectedSubCategories.append(subCategory.id)
-	 }
-  }
-
-	 private func animate(){
-		for (index, subCategory) in freeSubCategories().enumerated() {
-		  Task{
-			 try await Task.sleep(for: .seconds(Double(index) * 0.1))
-			 withAnimation {
-				self.categoriesToSelect.append(subCategory)
-			 }
-		  }
-		}
-	 }
-}
-
-#Preview {
-  OnBoardingCategoryView()
-	 .environment(UserDefaultsManager.shared)
-}
-
-
-
-extension OnBoardingCategoryView{
-  private func freeSubCategories() -> [any ReadSubCategory] {
-	 [
-		CultureSubCategory.cultureUniversal,
+  @State private var categoriesToSelect: [any ReadSubCategory] = [
+	 CultureSubCategory.cultureUniversal,
 		FinanceSubCategory.financeUniversal,
 		HealthSubCategory.healthUniversal,
 		HistorySubCategory.historyUniversal,
@@ -92,5 +21,63 @@ extension OnBoardingCategoryView{
 		ScienceSubCategory.scienceUniversal,
 		TechnologySubCategory.technologyUniversal
 	 ]
+  
+  var body: some View {
+	 LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 3)) {
+		ForEach(categoriesToSelect, id: \.id){ subCategory in
+		  Button{
+			 withAnimation {
+				toggle(subCategory)
+			 }
+		  }label:{
+			 VStack(spacing: 0){
+				let active = userDefaults.selectedSubCategories.contains(subCategory.id)
+				Image("\(subCategory.image)\(themeManager.colorScheme == .light ? "Light" : "Dark")")
+				  .resizable()
+				  .scaledToFit()
+				  .shadow(color: active ? themeManager.themeAssets.accent : .clear,radius: 5)
+				  .shadow(color: active ? themeManager.themeAssets.accent : .clear,radius: 5)
+				
+				  .overlay(alignment: .topTrailing){
+					 if isSelected(subCategory){
+						Image(systemName: "checkmark")
+						  .font(.title2.weight(.medium))
+						  .foregroundStyle(themeManager.themeAssets.background)
+						  .shadow(color: themeManager.themeAssets.primary, radius: 2)
+						  .padding(15)
+					 }
+				  }
+				
+				Text(subCategory.category.capitalized)
+				  .font(.footnote.weight(.semibold))
+				  .offset(y: -10)
+			 }
+		  }
+		  .buttonStyle(.plain)
+		}
+	 }
+	 .padding(25)
+	 .background(
+		PaperBackGround()
+		  .scaleEffect(x: 1.1)
+	 )
   }
+  
+  private func isSelected(_ subCategory: any ReadSubCategory) -> Bool {
+	 userDefaults.selectedSubCategories.contains(subCategory.id)
+  }
+  
+  private func toggle(_ subCategory: any ReadSubCategory) {
+	 if let index = userDefaults.selectedSubCategories.firstIndex(of: subCategory.id) {
+		userDefaults.selectedSubCategories.remove(at: index)
+	 } else {
+		userDefaults.selectedSubCategories.append(subCategory.id)
+	 }
+  }
+}
+
+#Preview {
+  OnBoardingCategoryView()
+	 .environment(ThemeManager())
+	 .environment(UserDefaultsManager.shared)
 }

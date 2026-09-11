@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum NatureSubCategory: String, ReadSubCategory {
-  case natureUniversal, ocean
+  case natureUniversal, oceanMarineLife, arcticAntarctic
 
   var id: String { rawValue }
 
@@ -23,28 +23,32 @@ enum NatureSubCategory: String, ReadSubCategory {
   var storeId: String? {
 	 switch self {
 	 case .natureUniversal: nil
-	 case .ocean: ""
+	 case .oceanMarineLife: "com.hiroio.tinyreads.subcategory.nature.oceanMarineLife"
+	 case .arcticAntarctic: "com.hiroio.tinyreads.subcategory.nature.arcticAntarctic"
 	 }
   }
 
   var title: LocalizedStringKey {
 	 switch self {
 	 case .natureUniversal: "Universal"
-	 case .ocean: "Ocean"
+	 case .oceanMarineLife: "Ocean"
+	 case .arcticAntarctic: "Arctic"
 	 }
   }
 
   var image: String {
 	 switch self {
 	 case .natureUniversal: "Nature"
-	 case .ocean: "Nature"
+	 case .oceanMarineLife: "Ocean"
+	 case .arcticAntarctic: "Arctic"
 	 }
   }
 
   var count: Int {
 	 switch self {
 	 case .natureUniversal: 100
-	 case .ocean: 80
+	 case .oceanMarineLife: 80
+	 default: 80
 	 }
   }
 }

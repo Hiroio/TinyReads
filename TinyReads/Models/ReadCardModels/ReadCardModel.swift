@@ -28,6 +28,18 @@ nonisolated struct ReadCardModel: Identifiable, Codable {
 nonisolated struct RootReads: Codable { let reads: [ReadCardModel] }
 
 
+extension ReadCardModel {
+  /// The card's subCategory, falling back to the legacy category-only id for documents that
+  /// predate the `subCategoryId` field (Space, and anything not backfilled yet).
+  var resolvedSubCategory: (any ReadSubCategory)? {
+	 if let subCategoryId {
+		return subCategory(forId: subCategoryId)
+	 }
+	 return subCategory(forCoreDataId: categoryId)
+  }
+}
+
+
 extension ReadCardModel: Equatable {
   static func == (lhs: ReadCardModel, rhs: ReadCardModel) -> Bool {
 	 lhs.id == rhs.id

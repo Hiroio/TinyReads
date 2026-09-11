@@ -84,7 +84,9 @@ extension CardSliderViewModel {
 	 
 	 let card = cards[index].card
 	 if cards[index].status == .fresh{
-		userDefaultManager.setCategoryReadedCount(for: card.categoryId, index: card.sortIndex, language: LanguageEnum(rawValue: card.languageCode))
+		if let subCategoryId = card.subCategoryId {
+		  userDefaultManager.setCategoryReadedCount(for: subCategoryId, index: card.sortIndex, language: LanguageEnum(rawValue: card.languageCode))
+		}
 		keepDeckAliveAfterSwipe()
 	 }
 	 cards.remove(at: index)
@@ -98,9 +100,11 @@ extension CardSliderViewModel {
 	 guard let index = cards.firstIndex(where: { $0.id == id }) else { return }
 	 let card = cards[index].card
 	 if cards[index].status == .fresh{
-		userDefaultManager.setCategoryReadedCount(for: card.categoryId, index: card.sortIndex, language: LanguageEnum(rawValue: card.languageCode))
+		if let subCategoryId = card.subCategoryId {
+		  userDefaultManager.setCategoryReadedCount(for: subCategoryId, index: card.sortIndex, language: LanguageEnum(rawValue: card.languageCode))
+		}
 		trackCategoryCompletionIfNeeded(card: card)
-		
+
 		keepDeckAliveAfterSwipe()
 	 }
 	 cards.remove(at: index)
@@ -138,9 +142,9 @@ extension CardSliderViewModel{
   
   // Check if all cards readed.
   func checkIfCategoryLimitsNotReached() -> Bool{
-	 for i in deckManager.categories{
-		if let category = ReadCategories(rawValue: i){
-		  if userDefaultManager.getCategoryReadedCount(for: category) != category.limit{
+	 for i in deckManager.selectedSubCategoryIds{
+		if let subCategory = TinyReads.subCategory(forId: i){
+		  if userDefaultManager.getCategoryReadedCount(for: subCategory) != subCategory.count{
 			 return true
 		  }
 		}
@@ -182,9 +186,9 @@ extension CardSliderViewModel{
   
 //  For Analytics
   private func trackCategoryCompletionIfNeeded(card: ReadCardModel){
-	 guard let category = ReadCategories(rawValue: card.categoryId) else { return }
-	 guard card.sortIndex == category.limit else { return }
+	 guard let subCategory = card.resolvedSubCategory else { return }
+	 guard card.sortIndex == subCategory.count else { return }
 	 
-	 AnalyticsManager.shared.categoryCompleted(categoryId: category.rawValue, language: card.languageCode)
+	 AnalyticsManager.shared.categoryCompleted(categoryId: subCategory.id, language: card.languageCode)
   }
 }

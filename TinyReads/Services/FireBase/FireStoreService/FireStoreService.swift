@@ -93,7 +93,7 @@ extension FireStoreService{
 	 
     let reads: [ReadCardModel] = try await readsCollection
       .whereField("languageCode", isEqualTo: languageCode)
-      .whereField("categoryId", isEqualTo: categoryId)
+      .whereField("subCategoryId", isEqualTo: categoryId)
       .whereField("isActive", isEqualTo: true)
       .whereField("sortIndex", isGreaterThan: previousSortIndex)
       .order(by: "sortIndex", descending: false)

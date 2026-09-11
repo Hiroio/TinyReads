@@ -24,7 +24,7 @@ enum PsychologySubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .psychologyUniversal: nil
 	 case .cognitiveBiases: "com.hiroio.tinyreads.subcategory.psychology.cognitiveBiases"
-	 case .trauma: ""
+	 case .trauma: "com.hiroio.tinyreads.subcategory.psychology.trauma"
 	 }
   }
 

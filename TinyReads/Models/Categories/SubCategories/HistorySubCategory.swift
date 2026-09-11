@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum HistorySubCategory: String, ReadSubCategory {
-  case historyUniversal, ancientRome, egypt
+  case historyUniversal, ancientRome, ancientEgypt
 
   var id: String { rawValue }
 
@@ -24,7 +24,7 @@ enum HistorySubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .historyUniversal: nil
 	 case .ancientRome: "com.hiroio.tinyreads.subcategory.history.ancientRome"
-	 default: ""
+	 case .ancientEgypt: "com.hiroio.tinyreads.subcategory.history.ancientEgypt"
 	 }
   }
 
@@ -32,7 +32,7 @@ enum HistorySubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .historyUniversal: "Universal"
 	 case .ancientRome: "Ancient Rome"
-	 case .egypt: "Ancient Egypt"
+	 case .ancientEgypt: "Ancient Egypt"
 	 }
   }
 
@@ -40,7 +40,7 @@ enum HistorySubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .historyUniversal : "History"
 	 case .ancientRome: "Rome"
-	 case .egypt: "Egypt"
+	 case .ancientEgypt: "Egypt"
 	 }
   }
 
@@ -48,7 +48,7 @@ enum HistorySubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .historyUniversal: 200
 	 case .ancientRome: 80
-	 case .egypt: 80
+	 case .ancientEgypt: 80
 	 }
   }
 }

@@ -52,9 +52,9 @@ final class ReadsDeckManager {
 
 // MARK: - Derived Deck State
 extension ReadsDeckManager {
-  /// Category ids selected by user.
-  var categories: [String] {
-	 userDefaults.selectedCategories
+  /// SubCategory ids selected by user.
+  var selectedSubCategoryIds: [String] {
+	 userDefaults.selectedSubCategories
   }
   /// Language selected by user
   var language: LanguageEnum {
@@ -101,13 +101,16 @@ extension ReadsDeckManager {
   /// 3. fetch one Firestore batch,
   /// 4. append unique reads or expose a UI-friendly error.
   func fetchFreshReads() async {
-	 guard !fetchIsActive else { return }
-	 
-	 await MainActor.run {
+	 let startedFetch = await MainActor.run { () -> Bool in
+		guard !self.fetchIsActive else { return false }
+		
 		self.fetchIsActive = true
 		self.errorState = nil
 		self.fetchInteractionReads()
+		return true
 	 }
+	 
+	 guard startedFetch else { return }
 	 
 	 do {
 		let categoryProgress = try filterInteractions()
@@ -144,10 +147,10 @@ extension ReadsDeckManager {
   
   /// Loads viewedCards which user has interaction.
   func loadViewedCardsForSelectedCategories() async {
-	 let interactedCards = self.readsInteractions.filter {
-		$0.languageCode == userDefaults.selectedLanguage.rawValue
-		&& categories.contains($0.categoryId)
-		&& ($0.isSaved || $0.isSkipped || $0.isRead)
+	 let interactedCards = self.readsInteractions.filter { item in
+		item.languageCode == userDefaults.selectedLanguage.rawValue
+		&& selectedSubCategoryIds.contains(where: {id in id == item.subCategoryId })
+		&& (item.isSaved || item.isSkipped || item.isRead)
 	 }
 	 let ids = interactedCards.map { $0.id }
 	 
@@ -199,7 +202,7 @@ extension ReadsDeckManager {
   /// Saves a card to the user's archive.
   @discardableResult
   func saveCard(_ card: ReadCardModel) -> Bool {
-	 guard !readsInteractions.contains(where: { card.id == $0.id && !$0.isSaved }) else { return true }
+	 guard !readsInteractions.contains(where: { card.id == $0.id && $0.isSaved }) else { return true }
 	 
 	 var interaction = ReadInteractionModel(
 		id: card.id,
@@ -228,7 +231,6 @@ extension ReadsDeckManager {
 	 )
 	 interaction.isSkipped = true
 	 interaction.skippedAt = .now
-	 interaction.skipCount += 1
 	 
 	 let saved = coreDataManager.markDismissed(interaction)
 	 if saved { fetchInteractionReads() }
@@ -242,20 +244,19 @@ extension ReadsDeckManager {
   /// gettings dict where ["Category" : latest fresh index]
   /// fresh - means not swiped
   func filterInteractions() throws -> [String: Int] {
-	 guard !categories.isEmpty else { throw CardError.noCategories }
+	 guard !selectedSubCategoryIds.isEmpty else { throw CardError.noCategories }
 	 
 	 var result: [String: Int] = [:]
 	 let languageCode = userDefaults.selectedLanguage.code
 	 let languageInteractions = readsInteractions.filter { $0.languageCode == languageCode }
-	 let subCategories = ReadCategories.allCases.flatMap({ $0.subCategories })
 	 
-	 for categoryId in categories {
-		guard let category = subCategories.first(where: {$0.id == categoryId}) else { continue }
+	 for id in selectedSubCategoryIds {
+		guard let subCategory = subCategory(forId: id) else { continue }
 		
-		let nextSortIndex = languageInteractions.getNextSortIndex(per: category)
-		let limit = category.count
+		let nextSortIndex = languageInteractions.getNextSortIndex(per: subCategory)
+		let limit = subCategory.count
 		if nextSortIndex <= limit {
-		  result[categoryId] = nextSortIndex
+		  result[id] = nextSortIndex
 		}
 	 }
 	 

@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum TechnologySubCategory: String, ReadSubCategory {
-  case technologyUniversal, artificial
+  case technologyUniversal, artificialIntelligence, internet
 
   var id: String { rawValue }
 
@@ -23,28 +23,32 @@ enum TechnologySubCategory: String, ReadSubCategory {
   var storeId: String? {
 	 switch self {
 	 case .technologyUniversal: nil
-	 case .artificial: ""
+	 case .artificialIntelligence: "com.hiroio.tinyreads.subcategory.technology.artificialIntelligence"
+	 case .internet: "com.hiroio.tinyreads.subcategory.technology.internet"
 	 }
   }
 
   var title: LocalizedStringKey {
 	 switch self {
 	 case .technologyUniversal: "Universal"
-	 case .artificial: "AI"
+	 case .artificialIntelligence: "AI"
+	 case .internet: "Internet"
 	 }
   }
 
   var image: String {
 	 switch self {
 	 case .technologyUniversal: "Technology"
-	 case .artificial: "Technology"
+	 case .artificialIntelligence: "AI"
+	 case .internet: "Internet"
 	 }
   }
 
   var count: Int {
 	 switch self {
 	 case .technologyUniversal: 100
-	 case .artificial: 80
+	 case .artificialIntelligence: 80
+	 default: 80
 	 }
   }
 }

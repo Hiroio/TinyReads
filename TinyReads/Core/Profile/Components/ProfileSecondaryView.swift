@@ -42,36 +42,6 @@ struct ProfileSecondaryView: View {
 		}
 		.zIndex(2)
 		.allowsHitTesting(self.profileActionCard != nil)
-	 case .categories:
-		ZStack{
-		  Color.black.opacity(0.1).ignoresSafeArea().onTapGesture {
-			 self.profileActionCard = nil
-		  }
-		  .tinyAccessibilityHidden()
-		  CategoriesView(secondary: false) {
-			 withAnimation{
-				self.profileActionCard = nil
-			 }
-		  }
-		  .overlay(alignment: .bottom){
-			 Button{
-				withAnimation{
-				  self.profileActionCard = nil
-				}
-			 }label:{
-				Text("Close")
-				  .accent()
-				  .padding()
-				  .background(
-					 Image(themeManager.themeAssets.backSmallCard)
-						.resizable()
-				  )
-			 }
-		  }
-		  .transition(.opacity)
-		}
-		.zIndex(2)
-		.allowsHitTesting(self.profileActionCard != nil)
 	 case .avatars:
 		ZStack{
 		  Color.black.opacity(0.1).ignoresSafeArea().onTapGesture {

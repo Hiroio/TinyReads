@@ -30,10 +30,11 @@ struct ProfileView: View {
 		.padding()
 		.padding(.horizontal, UIDevice.isIPad ? 20 : 5)
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.aspectRatio(UIDevice.isIPad ? 1.7 : 0.9 ,contentMode: .fit)
+		.aspectRatio(UIDevice.isIPad ? 1.5 : 0.9 ,contentMode: .fit)
 		.background(
 		  Image(themeManager.themeAssets.readerCard)
 			 .resizable()
+			 .scaleEffect(y: 1.1)
 			 .shadow(radius: 5)
 		)
 		.overlay(alignment: .topTrailing){
@@ -113,14 +114,14 @@ extension ProfileView{
   private var CategoryShowCase: some View{
 	 ScrollView{
 		LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)){
-		  ForEach(userDefaultManager.selectedCategories, id: \.self){item in
-			 if let category = ReadCategories(rawValue: item){
+		  ForEach(userDefaultManager.selectedSubCategories, id: \.self){item in
+			 if let subCategory = subCategory(forId: item){
 				HStack{
 				  Circle()
 					 .fill(themeManager.themeAssets.secondary)
 					 .frame(width: 2)
 				  
-				  Text(category.title)
+				  Text(subCategory.title)
 					 .secondary()
 				}
 			 }

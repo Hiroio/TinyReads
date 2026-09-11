@@ -24,7 +24,7 @@ struct SecondaryView: View {
 			 HighlightsView()
 				.geometryGroup()
 		  case .store:
-			 StoreView()
+			 TipStoreView()
 				.geometryGroup()
 		  default:
 			 EmptyView()

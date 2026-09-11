@@ -52,7 +52,7 @@ enum WarningPopUpEnum {
 
 
 enum SmallPopUpEnum {
-  case read, save, dismiss, created, edited, deleted, copied, error
+  case read, save, dismiss, created, edited, deleted, copied, purchased, noConnection, error
   
   var title: LocalizedStringKey {
 	 switch self {
@@ -70,6 +70,10 @@ enum SmallPopUpEnum {
 		"Highlight deleted!"
 	 case .copied:
 		"Text copied!"
+	 case .purchased:
+		"Purchase complete!"
+	 case .noConnection:
+		"No internet connection!"
 	 case .error:
 		"Something went Wrong!"
 	 }

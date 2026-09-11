@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum CultureSubCategory: String, ReadSubCategory {
-  case cultureUniversal, japan, french
+  case cultureUniversal, japan, france
 
   var id: String { rawValue }
 
@@ -24,7 +24,7 @@ enum CultureSubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .cultureUniversal: nil
 	 case .japan: "com.hiroio.tinyreads.subcategory.culture.japan"
-	 case .french: ""
+	 case .france: "com.hiroio.tinyreads.subcategory.culture.france"
 	 }
   }
 
@@ -32,7 +32,7 @@ enum CultureSubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .cultureUniversal: "Universal"
 	 case .japan: "Japan"
-	 case .french: "Rome"
+	 case .france: "France"
 	 }
   }
 
@@ -40,7 +40,7 @@ enum CultureSubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .cultureUniversal: "Culture"
 	 case .japan: "Japan"
-	 case .french: "French"
+	 case .france: "French"
 	 }
   }
 
@@ -48,7 +48,7 @@ enum CultureSubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .cultureUniversal: 100
 	 case .japan: 80
-	 case .french: 80
+	 case .france: 80
 	 }
   }
 }

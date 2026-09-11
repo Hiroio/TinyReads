@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SliderOnBoarding: View {
   let onFinished: () -> ()
-  @State private var animationDragGesture: CGFloat = 0
+  @State private var animationDragGesture: CGFloat = 5
   
   @State private var cards: [DisplayReadCard] = DisplayReadCard.onBoardingCard
   
@@ -23,7 +23,12 @@ struct SliderOnBoarding: View {
 		  .offset(x: animationDragGesture)
 		  .onAppear{
 			 withAnimation(.easeInOut(duration: 1).delay(1).repeatForever()) {
-				animationDragGesture = cards.count > 1 ? 10 : -10
+				animationDragGesture = cards.count > 1 ? 20 : -20
+			 }
+		  }
+		  .onChange(of: cards){_, _ in
+			 withAnimation(.easeInOut(duration: 1).delay(1).repeatForever()) {
+				animationDragGesture = cards.count > 1 ? 20 : -20
 			 }
 		  }
 		  .frame(maxWidth: .infinity, maxHeight: .infinity)

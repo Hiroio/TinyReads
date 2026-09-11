@@ -24,7 +24,7 @@ enum PhilosophySubCategory: String, ReadSubCategory {
 	 switch self {
 	 case .philosophyUniversal: nil
 	 case .stoicism: "com.hiroio.tinyreads.subcategory.philosophy.stoicism"
-	 case .existentialism: ""
+	 case .existentialism: "com.hiroio.tinyreads.subcategory.philosophy.existentialism"
 	 }
   }
 
