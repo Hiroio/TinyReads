@@ -36,16 +36,9 @@ struct SmallTextPopUp: View {
 				.shadow(radius: 2)
 		  )
 		  .onTapGesture(perform: {
-			 withAnimation {
-				NavigationManager.shared.popUpState = nil
-			 }
+			 NavigationManager.shared.hidePopUp()
 		  })
 		  .padding(.horizontal, 30)
-		  .onAppear{
-			 DispatchQueue.main.asyncAfter(deadline: .now() + 1.8){
-				NavigationManager.shared.popUpState = nil
-			 }
-		  }
 		  
     }
 }

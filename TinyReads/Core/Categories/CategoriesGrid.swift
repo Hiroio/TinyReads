@@ -25,7 +25,7 @@ struct CategoriesGrid: View {
 			 }
 			 Button{
 				Task{
-				  await StoreKitManager.shared.restorePurchases()
+				  await StoreKitManager.shared.restorePurchases(source: "categories")
 				}
 			 }label:{
 				Text("Restore Purchases")

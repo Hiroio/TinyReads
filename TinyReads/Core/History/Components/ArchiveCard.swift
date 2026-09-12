@@ -25,8 +25,16 @@ struct ArchiveCard: View {
 		  Text(read.title)
 			 .secondary(weight: .bold)
 			 .multilineTextAlignment(.center)
-		  Text(read.categoryId)
-			 .secondary(weight: .light)
+		  if let category = ReadCategories(rawValue: read.categoryId){
+			 Text(category.title)
+				.secondary(weight: .light)
+			 
+			 if let subCategories = category.getSubCategory(read.subCategoryId){
+				Text(subCategories.title)
+				  .font(.caption2)
+				  .foregroundStyle(themeManager.themeAssets.accent)
+			 }
+		  }
 		}
 		.padding(.horizontal, 30)
 		.padding(.trailing)
@@ -41,7 +49,7 @@ struct ArchiveCard: View {
 		.compositingGroup()
 		.shadow(radius: 3)
 		.allowsTightening(true)
-		
+		.fontDesign(.serif)
 	 }
   }
 }

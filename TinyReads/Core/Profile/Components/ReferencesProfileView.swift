@@ -32,7 +32,7 @@ struct ReferencesProfileView: View {
 		  
 		  Button{
 			 Task{
-				await storeKit.restorePurchases()
+				await storeKit.restorePurchases(source: "profile")
 			 }
 		  }label:{
 			 Text("Restore Purchases")

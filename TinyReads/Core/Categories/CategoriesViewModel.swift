@@ -66,10 +66,13 @@ extension CategoriesViewModel {
     guard let storeId = subCategory.storeId else { return toggle(subCategory) }
     guard !storeManager.isPurchased(storeId) else { return toggle(subCategory) }
 
+    AnalyticsManager.shared.bookLockedTapped(subCategory)
+
     guard let product = storeManager.product(for: storeId) else {
       //  StoreKit shows no sheet of its own when the product never loaded (offline at launch),
       //  so the tap has to say something itself — and retry, so the next one can buy.
       showPopUp(.noConnection)
+      AnalyticsManager.shared.purchaseFailed(productId: storeId, reason: "product_unavailable")
       Task { await storeManager.loadProducts(ids: [storeId]) }
       return
     }
@@ -89,14 +92,16 @@ extension CategoriesViewModel {
   }
 
   private func showPopUp(_ state: SmallPopUpEnum) {
-    NavigationManager.shared.popUpState = state
+    NavigationManager.shared.showPopUp(state)
   }
 
   private func toggle(_ subCategory: any ReadSubCategory) {
     if let index = userDefaults.selectedSubCategories.firstIndex(of: subCategory.id) {
       userDefaults.selectedSubCategories.remove(at: index)
+      AnalyticsManager.shared.bookSelectionChanged(subCategory, selected: false, source: "shelf")
     } else {
       userDefaults.selectedSubCategories.append(subCategory.id)
+      AnalyticsManager.shared.bookSelectionChanged(subCategory, selected: true, source: "shelf")
     }
   }
 }

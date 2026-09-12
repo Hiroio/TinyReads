@@ -92,7 +92,7 @@ extension HighlightActionViewModel{
 //  ------ Utility
 //  Show Animation
   private func showAnimation(_ state: SmallPopUpEnum){
-	 NavigationManager.shared.popUpState = state
+	 NavigationManager.shared.showPopUp(state)
   }
   
 //  Exit Action

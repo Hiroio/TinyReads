@@ -36,6 +36,7 @@ struct OnboardingView: View {
 		  case .practice:
 			 SliderOnBoarding {
 				step = .categories
+				AnalyticsManager.shared.onboardingStep("categories")
 			 }
 			 .aspectRatio(1/1.5 ,contentMode: .fit)
 			 .transition(.opacity)
@@ -57,6 +58,7 @@ struct OnboardingView: View {
 		.padding(.top, 32)
 	 }
 	 .animation(.easeInOut(duration: 0.4), value: isLoading)
+	 .animation(.easeInOut(duration: 0.4), value: step)
 	 
 	 .task {
 		await startIntro()
@@ -104,6 +106,7 @@ private extension OnboardingView {
 	 
 	 try? await Task.sleep(for: .seconds(1))
 	 step = .practice
+	 AnalyticsManager.shared.onboardingStep("practice")
   }
   
   private var compelitionBtn: some View{
@@ -111,6 +114,7 @@ private extension OnboardingView {
 		let selectedCategoryActive = userDefaults.selectedSubCategories.count > 0
 		Button{
 		  if selectedCategoryActive{
+			 AnalyticsManager.shared.onboardingCompleted(booksCount: userDefaults.selectedSubCategories.count)
 			 userDefaults.onBoardingCompletion = true
 		  }
 		}label: {

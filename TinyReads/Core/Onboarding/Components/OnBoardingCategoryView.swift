@@ -70,8 +70,10 @@ struct OnBoardingCategoryView: View {
   private func toggle(_ subCategory: any ReadSubCategory) {
 	 if let index = userDefaults.selectedSubCategories.firstIndex(of: subCategory.id) {
 		userDefaults.selectedSubCategories.remove(at: index)
+		AnalyticsManager.shared.bookSelectionChanged(subCategory, selected: false, source: "onboarding")
 	 } else {
 		userDefaults.selectedSubCategories.append(subCategory.id)
+		AnalyticsManager.shared.bookSelectionChanged(subCategory, selected: true, source: "onboarding")
 	 }
   }
 }

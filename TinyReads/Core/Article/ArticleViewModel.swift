@@ -80,7 +80,7 @@ extension ArticleViewModel{
   }
   
   func showAnimation(_ state: SmallPopUpEnum){
-		NavigationManager.shared.popUpState = state
+		NavigationManager.shared.showPopUp(state)
   }
   
 }

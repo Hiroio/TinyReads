@@ -68,6 +68,8 @@ extension StoreKitManager{
 	 purchasingProductID = product.id
 	 defer{ purchasingProductID = nil }
 
+	 AnalyticsManager.shared.purchaseStarted(productId: product.id)
+
 	 do{
 		let result = try await product.purchase()
 
@@ -76,14 +78,21 @@ extension StoreKitManager{
 		  let transaction = try checkVerified(verification)
 		  await updatePurchasedProducts(with: transaction)
 		  await transaction.finish()
+		  AnalyticsManager.shared.purchaseCompleted(product: product, transactionId: transaction.id)
 		  return true
-		case .userCancelled, .pending:
+		case .userCancelled:
+		  AnalyticsManager.shared.purchaseCancelled(productId: product.id)
+		  return false
+		case .pending:
+		  AnalyticsManager.shared.purchaseFailed(productId: product.id, reason: "pending")
 		  return false
 		@unknown default:
+		  AnalyticsManager.shared.purchaseFailed(productId: product.id, reason: "unknown")
 		  return false
 		}
 	 }catch{
 		errorMessage = "The purchase couldn't be completed."
+		AnalyticsManager.shared.purchaseFailed(productId: product.id, reason: "error")
 		return false
 	 }
   }
@@ -98,12 +107,21 @@ extension StoreKitManager{
   }
 
   @MainActor
-  func restorePurchases() async{
+  /// `source` only feeds analytics — it says which screen the restore was started from.
+  func restorePurchases(source: String) async{
+	 AnalyticsManager.shared.restoreTapped(source: source)
+	 let ownedBefore = purchasedProductIDs
+
 	 do{
 		try await AppStore.sync()
 		await loadPurchasedProducts()
+		AnalyticsManager.shared.restoreCompleted(
+		  source: source,
+		  restoredCount: purchasedProductIDs.subtracting(ownedBefore).count
+		)
 	 }catch{
 		errorMessage = "Couldn't restore your purchases."
+		AnalyticsManager.shared.purchaseFailed(productId: "restore", reason: "error")
 	 }
   }
 

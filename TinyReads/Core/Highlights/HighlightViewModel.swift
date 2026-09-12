@@ -48,10 +48,10 @@ extension HighlightViewModel{
   
   func deleteHighlight(highlight: HighlightModel) {
 	 if highlightManager.deleteHighlight(id: highlight.id){
-		NavigationManager.shared.popUpState = .deleted
+		NavigationManager.shared.showPopUp(.deleted)
 		WidgetCenter.shared.reloadTimelines(ofKind: "Highlight Widget")
 	 }else{
-		NavigationManager.shared.popUpState = .error
+		NavigationManager.shared.showPopUp(.error)
 	 }
   }
   
@@ -62,7 +62,7 @@ extension HighlightViewModel{
 	 if highlightManager.editHiglight(highlight: highlightToEdit){
 		WidgetCenter.shared.reloadTimelines(ofKind: "Highlight Widget")
 	 }else{
-		NavigationManager.shared.popUpState = .error
+		NavigationManager.shared.showPopUp(.error)
 	 }
   }
   

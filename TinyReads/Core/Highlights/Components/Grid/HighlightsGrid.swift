@@ -96,6 +96,7 @@ struct HighlightsGrid: View {
 		.padding(UIDevice.isIPad ? 50 : 20)
 		.background(
 		  PaperBackGround()
+			 .scaleEffect(x: 1.1)
 			 .ignoresSafeArea()
 		)
 		.animation(.easeInOut, value: vm.searchResult)
