@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum ProfileActionBarEnum: String, Identifiable, CaseIterable{
-  case language, theme, avatars
+  case language, stamp, theme, avatars
   
   var id: String {self.rawValue}
   
@@ -18,6 +18,8 @@ enum ProfileActionBarEnum: String, Identifiable, CaseIterable{
 		"LanguageActionIcon"
 	 case .theme:
 		"ThemeActionIcon"
+	 case .stamp:
+		"StampFrame"
 	 case .avatars:
 		""
 	 }
@@ -27,7 +29,7 @@ enum ProfileActionBarEnum: String, Identifiable, CaseIterable{
 struct ProfileActionBar: View {
   @Environment(ThemeManager.self) var themeManager
   @Binding var profileActionCard: ProfileActionBarEnum?
-  let buttons: [ProfileActionBarEnum] = [.language, .theme]
+  let buttons: [ProfileActionBarEnum] = [.language, .stamp, .theme]
     var body: some View {
 		HStack{
 		  ForEach(buttons){item in

@@ -43,10 +43,6 @@ struct ProfileAvatarSelectionView: View {
 		  .frame(maxHeight: .infinity)
 		  .aspectRatio(1/1.5,contentMode: .fit)
 		  .ignoresSafeArea(edges: .bottom)
-		  .background(
-			 PaperBackGround()
-				.scaleEffect(x: 1.1)
-		  )
 		}
 		.overlay(alignment: .topTrailing) {
 		  Button{onDismiss()}label:{

@@ -46,6 +46,8 @@ extension ProfileActionBarEnum {
 		"Change language"
 	 case .theme:
 		"Change theme"
+	 case .stamp:
+		"Check stamps"
 	 case .avatars:
 		"Change avatar"
 	 }
@@ -57,6 +59,8 @@ extension ProfileActionBarEnum {
 		"Opens language selection."
 	 case .theme:
 		"Opens theme selection."
+	 case .stamp:
+		"Opens Stamp collection"
 	 case .avatars:
 		"Opens avatar selection."
 	 }
