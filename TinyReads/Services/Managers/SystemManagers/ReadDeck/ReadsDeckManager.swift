@@ -209,7 +209,8 @@ extension ReadsDeckManager {
 		categoryId: card.categoryId,
 		subCategoryId: card.subCategoryId,
 		languageCode: card.languageCode,
-		sortIndex: card.sortIndex
+		sortIndex: card.sortIndex,
+		wordCount: card.wordCount
 	 )
 	 interaction.savedAt = Date.now
 	 interaction.isSaved = true
@@ -227,7 +228,8 @@ extension ReadsDeckManager {
 		categoryId: card.categoryId,
 		subCategoryId: card.subCategoryId,
 		languageCode: card.languageCode,
-		sortIndex: card.sortIndex
+		sortIndex: card.sortIndex,
+		wordCount: card.wordCount
 	 )
 	 interaction.isSkipped = true
 	 interaction.skippedAt = .now

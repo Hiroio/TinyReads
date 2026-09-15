@@ -11,6 +11,7 @@ struct NewProfileView: View {
   @Environment(ThemeManager.self) var themeManager
   @Environment(UserDefaultsManager.self) var userDefaultManager
   @State private var profileActionCard: ProfileActionBarEnum? = nil
+  @State private var vm: ProfileViewModel = ProfileViewModel()
     var body: some View {
 		VStack{
 		  if profileActionCard == .stamp{
@@ -20,29 +21,22 @@ struct NewProfileView: View {
 				}
 			 }
 		  }else{
-			 Text("Reader Card")
-				.font(.title.weight(.bold))
-			 
-			 Button{
-				withAnimation{
-				  profileActionCard = .avatars
+			 VStack{
+				Header
+				
+				VStack(spacing: 15){
+				  statisticOption(name: "Read", value: "\(vm.readedCardsCount)")
+				  statisticOption(name: "Saved", value: "\(vm.savedCardsCount)")
+				  statisticOption(name: "Dismissed", value: "\(vm.skippedCardsCount)")
+				  statisticOption(name: "Word read", value: "\(vm.wordsReadCount)")
+				  statisticOption(name: "Reading time", value: vm.readTime)
+				  
 				}
-			 }label:{
-				Image("ProfileIcon\(userDefaultManager.selectedAvatarIndex)\(themeManager.themeAssets.id)")
-				  .resizable()
-				  .scaledToFit()
-				  .overlay(alignment: .topTrailing) {
-					 Image(systemName: "pencil")
-						.font(.title3.weight(.black))
-				  }
-				  .containerRelativeFrame(.horizontal, count: 3, spacing: 0)
-				  .foregroundStyle(themeManager.themeAssets.accent)
+				.padding(.horizontal, 35)
+				Spacer()
+				ProfileActionBar(profileActionCard: $profileActionCard)
 			 }
-			 .tinyAccessibilityButton(ProfileActionBarEnum.avatars.accessibilityLabel, hint: ProfileActionBarEnum.avatars.accessibilityHint)
-			 
-			 
-			 Spacer()
-			 ProfileActionBar(profileActionCard: $profileActionCard)
+			 .frame(maxWidth: .infinity)
 		  }
 		}
 		.padding(.vertical, 40)
@@ -76,4 +70,47 @@ struct NewProfileView: View {
     NewProfileView()
 	 .environment(ThemeManager())
 	 .environment(UserDefaultsManager.shared)
+}
+
+
+extension NewProfileView{
+  func statisticOption(name: String, value: String) -> some View{
+	 HStack(alignment: .bottom){
+		Text(name)
+		  .headline()
+		StraightLine()
+		  .stroke(style: .init(lineWidth: 3, dash: [4, 10]))
+		  .frame(height: 1)
+		Text(value)
+		  .headline(weight: .bold)
+	 }
+  }
+  
+  private var Header: some View{
+	 HStack(alignment: .top){
+		Button{
+		  withAnimation{
+			 profileActionCard = .avatars
+		  }
+		}label:{
+		  Image("ProfileIcon\(userDefaultManager.selectedAvatarIndex)\(themeManager.themeAssets.id)")
+			 .resizable()
+			 .scaledToFit()
+			 .overlay(alignment: .topTrailing) {
+				Image(systemName: "pencil")
+				  .font(.title3.weight(.black))
+			 }
+			 .containerRelativeFrame(.horizontal, count: 3, spacing: 0)
+			 .foregroundStyle(themeManager.themeAssets.accent)
+		}
+		.tinyAccessibilityButton(ProfileActionBarEnum.avatars.accessibilityLabel, hint: ProfileActionBarEnum.avatars.accessibilityHint)
+		
+		
+		Text("Reader Card")
+		  .font(.title2.weight(.bold))
+		  .padding(.leading)
+		
+		
+	 }
+  }
 }

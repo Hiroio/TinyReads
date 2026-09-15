@@ -25,6 +25,18 @@ final class ProfileViewModel{
 	 interactionCards.count(where: { $0.isSaved })
   }
   
+  var wordsReadCount: Int {
+	 interactionCards.filter({ $0.isRead }).map({$0.wordCount}).reduce(0, +)
+  }
+  var readTime: String{
+	 let time = wordsReadCount / 150
+	 let hours = time / 60
+	 if hours == 0{
+		return "\(time) min"
+	 }
+	 return "\(hours)h \(time % 60)m"
+  }
+  
   init() {
 	 self.fetchCards()
 	 self.favoriteCategory = self.getFavoriteCategory()

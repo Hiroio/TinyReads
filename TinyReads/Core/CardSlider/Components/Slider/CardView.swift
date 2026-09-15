@@ -23,6 +23,7 @@ struct CardView: View {
   
   var body: some View {
 		VStack(spacing: 10){
+		  
 		  VStack(spacing: 15){
 			 VStack{
 				if let category = ReadCategories(rawValue: card.categoryId){
@@ -66,12 +67,14 @@ struct CardView: View {
 				.allowsHitTesting(false)
 		  }
 		  
+		  
 		  if displayCard.status != .fresh {
 			 Text(displayCard.status.title)
-				.font(.caption.weight(.semibold))
+				.font(.headline.weight(.semibold))
 				.foregroundStyle(themeManager.themeAssets.accent)
 				.padding(.top, 4)
 		  }
+		  
 		}
 		.padding()
 		.frame(maxWidth: .infinity, maxHeight: .infinity)

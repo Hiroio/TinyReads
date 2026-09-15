@@ -11,6 +11,7 @@ extension ReadsEntity{
   func update(from read: ReadInteractionModel){
 	 self.id = read.id
 	 self.categoryId = read.categoryId
+	 self.subCategoryId = read.subCategoryId
 	 self.languageCode = read.languageCode
 	 self.sortIndex = Int32(clamping: read.sortIndex)
 	 
@@ -24,5 +25,6 @@ extension ReadsEntity{
 	 
 	 self.skippedAt = read.skippedAt
 	 self.skipCount = Int16(clamping: read.skipCount)
+	 self.wordCount = Int32(clamping: read.wordCount)
   }
 }

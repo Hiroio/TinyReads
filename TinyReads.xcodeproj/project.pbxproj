@@ -114,11 +114,6 @@
 				Core/Main/Components/UploaderView.swift,
 				Core/Main/MainViewModel.swift,
 				Info.plist,
-				Models/JSONtoUpload/English_Philosophy.json,
-				Models/JSONtoUpload/English_Psychology.json,
-				Models/JSONtoUpload/Ukraine_Philosophy.json,
-				Models/JSONtoUpload/Ukraine_Psychology.json,
-				Services/Managers/Firestore/JSONUploader.swift,
 			);
 			target = CED0D4032FC8789B0058C075 /* TinyReads */;
 		};
@@ -452,7 +447,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = TinyReadsWidgetsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = WU276H25JQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TinyReadsWidgets/Info.plist;
@@ -487,7 +482,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = TinyReadsWidgetsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = WU276H25JQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TinyReadsWidgets/Info.plist;
@@ -645,7 +640,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = TinyReads/TinyReads.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = WU276H25JQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -686,7 +681,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = TinyReads/TinyReads.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = WU276H25JQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

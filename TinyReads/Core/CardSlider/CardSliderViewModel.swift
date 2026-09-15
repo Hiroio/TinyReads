@@ -137,6 +137,7 @@ extension CardSliderViewModel {
 extension CardSliderViewModel{
   //  CHANGE MOD OF CARDS
   func changeDeckMode() {
+	 refreshActiveStatus()
 	 self.deckMode = deckMode == .freshOnly ? .repeatOld : .freshOnly
   }
   

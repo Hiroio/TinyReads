@@ -24,16 +24,17 @@ struct ReadInteractionModel: Identifiable, Codable {
   var savedAt: Date?
   var readAt: Date?
   var skippedAt: Date?
-  
+  var wordCount: Int
   var skipCount: Int
   
   
-  init(id: String, categoryId: String, subCategoryId: String?, languageCode: String, sortIndex: Int){
+  init(id: String, categoryId: String, subCategoryId: String?, languageCode: String, sortIndex: Int, wordCount: Int = 0){
 	 self.id = id
 	 self.categoryId = categoryId
 	 self.subCategoryId = subCategoryId
 	 self.languageCode = languageCode
 	 self.sortIndex = sortIndex
+	 self.wordCount = wordCount
 	 
 	 
 	 self.isSaved = false
@@ -79,6 +80,7 @@ extension ReadInteractionModel {
 	 
 	 self.savedAt = entity.savedAt
 	 self.readAt = entity.readAt
+	 self.wordCount = Int(entity.wordCount)
 	 self.skippedAt = entity.skippedAt
 	 
 	 self.skipCount = Int(entity.skipCount)
@@ -91,6 +93,7 @@ extension ReadInteractionModel {
 	 self.subCategoryId = readCard.subCategoryId
 	 self.languageCode = readCard.languageCode
 	 self.sortIndex = readCard.sortIndex
+	 self.wordCount = readCard.wordCount
 	 
 	 
 	 self.isSaved = false
