@@ -28,6 +28,7 @@ final class ProfileViewModel{
   var wordsReadCount: Int {
 	 interactionCards.filter({ $0.isRead }).map({$0.wordCount}).reduce(0, +)
   }
+  
   var readTime: String{
 	 let time = wordsReadCount / 150
 	 let hours = time / 60
@@ -35,6 +36,13 @@ final class ProfileViewModel{
 		return "\(time) min"
 	 }
 	 return "\(hours)h \(time % 60)m"
+  }
+  
+  var firstCardDate: Date{
+	 let dates = interactionCards.filter({ $0.readAt != nil || $0.savedAt != nil || $0.skippedAt != nil})
+	 
+	 
+	 return .now
   }
   
   init() {

@@ -28,9 +28,8 @@ final class NavigationManager {
 
   var warning: WarningPopUpEnum? = nil
   var confirmationAction: (() -> Void)? = nil
+  var stampPopUp: ReadCategories? = nil
 
-  //  Registered by HighlightView so the outer background tap (owned by MainNavigationView)
-  //  can go through the same unsaved-changes check as the in-view close button.
   var highlightExitAction: (() -> Void)? = nil
 }
 

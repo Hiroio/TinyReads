@@ -40,6 +40,10 @@ enum ReadCategories: String, CaseIterable, Identifiable{
 	 }
   }
   
+  var stamp: String{
+	 "Stamp"+self.rawValue.capitalized
+  }
+  
   
   func getSubCategory(_ id: String?) -> (any ReadSubCategory)?{
 	 return self.subCategories.first(where: { $0.id == id })
@@ -58,6 +62,10 @@ enum ReadCategories: String, CaseIterable, Identifiable{
 	 case .health: HealthSubCategory.allCases
 	 case .technology: TechnologySubCategory.allCases
 	 }
+  }
+  
+  static var universalCategories: [any ReadSubCategory]{
+	 [ScienceSubCategory.scienceUniversal, HistorySubCategory.historyUniversal, CultureSubCategory.cultureUniversal, PsychologySubCategory.psychologyUniversal, PhilosophySubCategory.philosophyUniversal, NatureSubCategory.natureUniversal, FinanceSubCategory.financeUniversal, HealthSubCategory.healthUniversal, TechnologySubCategory.technologyUniversal]
   }
 }
 

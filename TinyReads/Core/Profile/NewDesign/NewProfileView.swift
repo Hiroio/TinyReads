@@ -24,6 +24,7 @@ struct NewProfileView: View {
 			 VStack{
 				Header
 				
+				Spacer()
 				VStack(spacing: 15){
 				  statisticOption(name: "Read", value: "\(vm.readedCardsCount)")
 				  statisticOption(name: "Saved", value: "\(vm.savedCardsCount)")

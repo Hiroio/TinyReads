@@ -129,11 +129,25 @@ extension UserDefaultsManager{
   }
   /// setting number
   func setCategoryReadedCount(for subCategoryId: String, index: Int, language: LanguageEnum? = nil){
+	 
 	 guard let subCategory = TinyReads.subCategory(forId: subCategoryId) else { return }
 	 let language = language ?? selectedLanguage
 	 guard getCategoryReadedCount(for: subCategory, language: language) < index else { return }
-
+	 if index == 80 && ReadCategories.universalCategories.contains(where: {$0.id == subCategory.id}){
+		stampActivation(for: subCategory)
+	 }
+	 
 	 UserDefaults.standard.set(index, forKey: subCategory.userDefaultKey(language: language))
+  }
+  
+  
+  func stampActivation(for subCategory: any ReadSubCategory){
+	 if !UserDefaults.standard.bool(forKey: "Stamp\(subCategory.category)"){
+		if let category = ReadCategories(rawValue: subCategory.category){
+		  UserDefaults.standard.setValue(true, forKey: category.stamp)
+		  NavigationManager.shared.stampPopUp = category
+		}
+	 }
   }
 }
 
