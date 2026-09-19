@@ -46,6 +46,7 @@ struct StampView: View {
 			 }
 		  }
 		}
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
 		.overlay(alignment: .topTrailing){
 		  Button{
 			 onDismiss()
@@ -56,7 +57,6 @@ struct StampView: View {
 		  }
 		}
 		.foregroundStyle(themeManager.themeAssets.primary)
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
 		.fontDesign(.serif)
 		.rotation3DEffect(Angle(degrees: 180), axis: (x: 0, y: 1, z: 0))
     }

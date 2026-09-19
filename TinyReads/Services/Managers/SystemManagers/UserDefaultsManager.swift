@@ -133,7 +133,7 @@ extension UserDefaultsManager{
 	 guard let subCategory = TinyReads.subCategory(forId: subCategoryId) else { return }
 	 let language = language ?? selectedLanguage
 	 guard getCategoryReadedCount(for: subCategory, language: language) < index else { return }
-	 if index == 80 && ReadCategories.universalCategories.contains(where: {$0.id == subCategory.id}){
+	 if index >= 80 && ReadCategories.universalCategories.contains(where: {$0.id == subCategory.id}){
 		stampActivation(for: subCategory)
 	 }
 	 
@@ -142,12 +142,37 @@ extension UserDefaultsManager{
   
   
   func stampActivation(for subCategory: any ReadSubCategory){
-	 if !UserDefaults.standard.bool(forKey: "Stamp\(subCategory.category)"){
+	 if !UserDefaults.standard.bool(forKey: "Stamp\(subCategory.category.capitalized)"){
 		if let category = ReadCategories(rawValue: subCategory.category){
 		  UserDefaults.standard.setValue(true, forKey: category.stamp)
-		  NavigationManager.shared.stampPopUp = category
+		  NavigationManager.shared.stampPopUp.append(category)
 		}
 	 }
+  }
+  
+  /// Catches stamps the live check could have missed, in any language.
+  /// Safe to run on every launch — categories that already have their stamp are skipped.
+  func checkForCompletedStamps() {
+	 var activated: [ReadCategories] = []
+
+	 for category in ReadCategories.allCases{
+		guard !UserDefaults.standard.bool(forKey: category.stamp) else { continue }
+
+		//  goes through `code` and every language, so renaming a case or adding
+		//  a third language cannot quietly detach this from the real counters
+		let reachedInAnyLanguage = LanguageEnum.allCases.contains { language in
+		  UserDefaults.standard.integer(forKey: "\(language.code)_\(category.rawValue)_key") >= 80
+		}
+
+		if reachedInAnyLanguage{
+		  UserDefaults.standard.setValue(true, forKey: category.stamp)
+		  activated.append(category)
+		}
+	 }
+
+	 //  never assign an empty array: a repeated pass would wipe a popup that is already open
+	 guard !activated.isEmpty else { return }
+	 NavigationManager.shared.stampPopUp = activated
   }
 }
 

@@ -13,57 +13,67 @@ struct NewProfileView: View {
   @State private var profileActionCard: ProfileActionBarEnum? = nil
   @State private var vm: ProfileViewModel = ProfileViewModel()
     var body: some View {
-		VStack{
-		  if profileActionCard == .stamp{
-			 StampView(){
-				withAnimation{
-				  profileActionCard = nil
+		  VStack{
+			 if profileActionCard == .stamp{
+				StampView(){
+				  withAnimation{
+					 profileActionCard = nil
+				  }
 				}
-			 }
-		  }else{
-			 VStack{
-				Header
-				
-				Spacer()
-				VStack(spacing: 15){
-				  statisticOption(name: "Read", value: "\(vm.readedCardsCount)")
-				  statisticOption(name: "Saved", value: "\(vm.savedCardsCount)")
-				  statisticOption(name: "Dismissed", value: "\(vm.skippedCardsCount)")
-				  statisticOption(name: "Word read", value: "\(vm.wordsReadCount)")
-				  statisticOption(name: "Reading time", value: vm.readTime)
+			 }else{
+				VStack{
+				  Header
 				  
+				  Spacer()
+				  VStack(spacing: 15){
+					 statisticOption(name: "Read", value: "\(vm.readedCardsCount)")
+					 statisticOption(name: "Saved", value: "\(vm.savedCardsCount)")
+					 statisticOption(name: "Dismissed", value: "\(vm.skippedCardsCount)")
+					 statisticOption(name: "Word read", value: "\(vm.wordsReadCount)")
+					 statisticOption(name: "Reading time", value: vm.readTime)
+					 
+				  }
+				  .padding(.horizontal, 35)
+				  Spacer()
+				  ProfileActionBar(profileActionCard: $profileActionCard)
+				  ReferencesProfileView()
 				}
-				.padding(.horizontal, 35)
-				Spacer()
-				ProfileActionBar(profileActionCard: $profileActionCard)
+				.frame(maxWidth: .infinity)
 			 }
-			 .frame(maxWidth: .infinity)
 		  }
-		}
-		.padding(.vertical, 40)
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.aspectRatio(1/1.5, contentMode: .fit)
-		.background(
-		  PaperBackGround()
-			 .scaleEffect(x: 1.05)
-		)
-		.rotation3DEffect(Angle(degrees: profileActionCard == .stamp ? 180 : 0), axis: (x: 0, y: 1, z: 0))
-		.sheet(isPresented: Binding(get: {
-		  profileActionCard == .avatars
-		}, set: { _ in
-		  profileActionCard = nil
-		})) {
-		  ProfileAvatarSelectionView(){
+		  .padding(.vertical, 40)
+		  .frame(maxWidth: .infinity, maxHeight: .infinity)
+		  .aspectRatio(1/1.5, contentMode: .fit)
+		  .background(
+			 PaperBackGround()
+				.scaleEffect(x: 1.05)
+		  )
+		  .rotation3DEffect(Angle(degrees: profileActionCard == .stamp ? 180 : 0), axis: (x: 0, y: 1, z: 0))
+		  .sheet(isPresented: Binding(get: {
+			 profileActionCard == .language || profileActionCard == .theme || profileActionCard == .avatars
+		  }, set: { _ in
 			 profileActionCard = nil
-		  }
-		  .presentationDetents([.medium, .large])
+		  })) {
+			 ZStack{
+				switch profileActionCard {
+				case .language:
+				  ProfileLanguageView()
+				case .theme:
+				  ThemeSelectorView()
+				case .avatars:
+				  ProfileAvatarSelectionView()
+				default:
+				  EmptyView()
+				}
+			 }
+			 .presentationDetents([.medium, .large])
 			 .padding(.top)
 			 .presentationBackground{
 				PaperBackGround()
 				  .ignoresSafeArea()
 				  .scaleEffect(x: 1.1, y: 1.05)
 			 }
-		}
+		  }
     }
 }
 
@@ -94,7 +104,7 @@ extension NewProfileView{
 			 profileActionCard = .avatars
 		  }
 		}label:{
-		  Image("ProfileIcon\(userDefaultManager.selectedAvatarIndex)\(themeManager.themeAssets.id)")
+		  Image("ProfileIcon\(userDefaultManager.selectedAvatarIndex)\(themeManager.colorScheme == .light ? "Light" : "Dark")")
 			 .resizable()
 			 .scaledToFit()
 			 .overlay(alignment: .topTrailing) {
@@ -107,11 +117,29 @@ extension NewProfileView{
 		.tinyAccessibilityButton(ProfileActionBarEnum.avatars.accessibilityLabel, hint: ProfileActionBarEnum.avatars.accessibilityHint)
 		
 		
-		Text("Reader Card")
-		  .font(.title2.weight(.bold))
-		  .padding(.leading)
-		
-		
+		VStack(spacing: 15){
+		  Text("Reader Card")
+			 .font(.title2.weight(.bold))
+			 .padding(.leading)
+		  
+		  if let date = vm.firstCardDate{
+			 VStack{
+				Text("Verified")
+				  .font(.headline)
+				Text(date.formatted(.dateTime.day(.twoDigits).month(.twoDigits).year(.twoDigits)))
+				Text("First interaction")
+				  .font(.caption)
+			 }
+			 .foregroundStyle(themeManager.themeAssets.accent)
+			 .padding()
+			 .background(
+				RoundedRectangle(cornerRadius: 15)
+				  .stroke(themeManager.themeAssets.accent, lineWidth: 2)
+			 )
+			 .fontDesign(.serif)
+			 .rotationEffect(Angle(degrees: 5))
+		  }
+		}
 	 }
   }
 }

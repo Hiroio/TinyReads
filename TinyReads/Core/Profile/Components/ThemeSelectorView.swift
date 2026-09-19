@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ThemeSelectorView: View {
+  @Environment(\.dismiss) var dismiss
   @Environment(ThemeManager.self) var themeManager
-  let onDismiss: () -> ()
   var body: some View {
 	 VStack{
 		Text("Theme selection")
@@ -44,26 +44,11 @@ struct ThemeSelectorView: View {
 		  RoundedRectangle(cornerRadius: 10)
 			 .stroke(themeManager.themeAssets.border ,lineWidth: 1)
 		)
-		
-		Button{
-		  onDismiss()
-		}label:{
-		  Text("Close")
-			 .secondary()
-			 .padding()
-		}
-		.tinyAccessibilityButton("Close")
 	 }
-	 .padding(50)
-	 .background(
-		Image(themeManager.themeAssets.backSmallCard)
-		  .resizable()
-		  .scaledToFit()
-	 )
   }
 }
 
 #Preview {
-  ThemeSelectorView(){}
+  ThemeSelectorView()
 	 .environment(ThemeManager())
 }

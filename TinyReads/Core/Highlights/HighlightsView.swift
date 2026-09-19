@@ -17,12 +17,11 @@ struct HighlightsView: View {
 		  
 		  
 		  HighlightsGrid(vm: vm)
-		  
 		}
 		.overlay(alignment: .bottom){
 		  VStack{
 			 if vm.widgetState{
-				Text("Selection for Home Widget")
+				Text("Select highlights for your Home Widget")
 				  .accent()
 				  .padding()
 				  .padding(.horizontal, 10)

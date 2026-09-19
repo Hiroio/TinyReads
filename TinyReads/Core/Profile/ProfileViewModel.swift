@@ -12,6 +12,7 @@ final class ProfileViewModel{
   var interactionCards: [ReadInteractionModel] = []
   var favoriteCategory: String = "None"
   
+  
   private let coreDataManager = CoreDataService.shared
   
   var readedCardsCount: Int {
@@ -38,13 +39,13 @@ final class ProfileViewModel{
 	 return "\(hours)h \(time % 60)m"
   }
   
-  var firstCardDate: Date{
-	 let dates = interactionCards.filter({ $0.readAt != nil || $0.savedAt != nil || $0.skippedAt != nil})
-	 
-	 
-	 return .now
+  var firstCardDate: Date?{
+	 let dates = interactionCards.compactMap({ [$0.readAt, $0.savedAt, $0.skippedAt]}).flatMap({$0}).compactMap({$0})
+		.min()
+	 return dates
   }
   
+//  MARK: INIT
   init() {
 	 self.fetchCards()
 	 self.favoriteCategory = self.getFavoriteCategory()

@@ -64,6 +64,29 @@ enum ReadCategories: String, CaseIterable, Identifiable{
 	 }
   }
   
+  var universalCategory: any ReadSubCategory{
+	 switch self {
+	 case .science:
+		ScienceSubCategory.scienceUniversal
+	 case .history:
+		HistorySubCategory.historyUniversal
+	 case .culture:
+		CultureSubCategory.cultureUniversal
+	 case .psychology:
+		PsychologySubCategory.psychologyUniversal
+	 case .philosophy:
+		PhilosophySubCategory.philosophyUniversal
+	 case .nature:
+		NatureSubCategory.natureUniversal
+	 case .finance:
+		FinanceSubCategory.financeUniversal
+	 case .health:
+		HealthSubCategory.healthUniversal
+	 case .technology:
+		TechnologySubCategory.technologyUniversal
+	 }
+  }
+  
   static var universalCategories: [any ReadSubCategory]{
 	 [ScienceSubCategory.scienceUniversal, HistorySubCategory.historyUniversal, CultureSubCategory.cultureUniversal, PsychologySubCategory.psychologyUniversal, PhilosophySubCategory.philosophyUniversal, NatureSubCategory.natureUniversal, FinanceSubCategory.financeUniversal, HealthSubCategory.healthUniversal, TechnologySubCategory.technologyUniversal]
   }

@@ -28,7 +28,7 @@ final class NavigationManager {
 
   var warning: WarningPopUpEnum? = nil
   var confirmationAction: (() -> Void)? = nil
-  var stampPopUp: ReadCategories? = nil
+  var stampPopUp: [ReadCategories] = []
 
   var highlightExitAction: (() -> Void)? = nil
 }

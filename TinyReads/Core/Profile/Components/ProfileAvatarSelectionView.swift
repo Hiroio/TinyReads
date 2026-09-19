@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ProfileAvatarSelectionView: View {
+  @Environment(\.dismiss) var dismiss
   @Environment(ThemeManager.self) var themeManager
   @Environment(UserDefaultsManager.self) var userDefault
-  let onDismiss: () -> ()
     var body: some View {
 		ScrollView(showsIndicators: false){
 		  LazyVStack{
@@ -45,7 +45,7 @@ struct ProfileAvatarSelectionView: View {
 		  .ignoresSafeArea(edges: .bottom)
 		}
 		.overlay(alignment: .topTrailing) {
-		  Button{onDismiss()}label:{
+		  Button{dismiss()}label:{
 			 Image(systemName: "xmark")
 				.font(.headline.weight(.bold))
 				.padding(15)
@@ -64,7 +64,7 @@ struct ProfileAvatarSelectionView: View {
 }
 
 #Preview {
-  ProfileAvatarSelectionView(){}
+  ProfileAvatarSelectionView()
 	 .environment(ThemeManager())	
 	 .environment(UserDefaultsManager.shared)
 	 .environment(\.locale, Locale(identifier: "en"))

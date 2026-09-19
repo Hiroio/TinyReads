@@ -13,7 +13,7 @@ struct SecondaryView: View {
 		ZStack{
 		  switch navigationManager.secondary{
 		  case .profile:
-			 ProfileView()
+			 NewProfileView()
 		  case .category:
 			 CategoriesGrid()
 				.geometryGroup()

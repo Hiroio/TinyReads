@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ProfileLanguageView: View {
+  @Environment(\.dismiss) var dismiss
   @Environment(ThemeManager.self) var themeManager
   @Environment(UserDefaultsManager.self) var userDefault
-  let onDismiss: () -> ()
     var body: some View {
 		let assets = themeManager.themeAssets
 		VStack{
@@ -27,7 +27,7 @@ struct ProfileLanguageView: View {
 					 Circle()
 						.frame(width: 5)
 					 Text(item.title)
-					 .font(active ? .headline : .subheadline)
+					 .font(active ? .title2 : .subheadline)
 				  }
 				  .strikethrough(!active, color: assets.secondary)
 				  .foregroundStyle(active ? assets.accent : assets.secondary)
@@ -36,28 +36,12 @@ struct ProfileLanguageView: View {
 			 }
 		  }
 		  .padding(.vertical)
-		  
-		  Button{
-			 onDismiss()
-		  }label:{
-			 Text("Close")
-				.secondary()
-				.padding(.top)
-		  }
-		  .tinyAccessibilityButton("Close")
 		}
-		.padding()
-		.padding(.horizontal)
-		.padding()
-		.background(
-		  Image(assets.readerCard)
-			 .resizable()
-		)
     }
 }
 
 #Preview {
-  ProfileLanguageView(){}
+  ProfileLanguageView()
 	 .environment(ThemeManager())
 	 .environment(UserDefaultsManager.shared)
 }
