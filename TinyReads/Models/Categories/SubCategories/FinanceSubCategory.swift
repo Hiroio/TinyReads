@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum FinanceSubCategory: String, ReadSubCategory {
-  case financeUniversal, howMoneyWorks, financialCrashes
+  case financeUniversal, howMoneyWorks, financialCrashes, personalFinance
 
   var id: String { rawValue }
 
@@ -25,6 +25,7 @@ enum FinanceSubCategory: String, ReadSubCategory {
 	 case .financeUniversal: nil
 	 case .howMoneyWorks: "com.hiroio.tinyreads.subcategory.finance.howMoneyWorks"
 	 case .financialCrashes: "com.hiroio.tinyreads.subcategory.finance.financialCrashes"
+	 case .personalFinance: "com.hiroio.tinyreads.subcategory.finance.personalFinance"
 	 }
   }
 
@@ -33,6 +34,7 @@ enum FinanceSubCategory: String, ReadSubCategory {
 	 case .financeUniversal: "Universal"
 	 case .howMoneyWorks: "How Money Works"
 	 case .financialCrashes: "Financial Crashes"
+	 case .personalFinance: "Personal Finance"
 	 }
   }
 
@@ -41,6 +43,7 @@ enum FinanceSubCategory: String, ReadSubCategory {
 	 case .financeUniversal: "Finance"
 	 case  .howMoneyWorks: "MoneyWorks"
 	 case .financialCrashes: "FinancialCrashes"
+	 case .personalFinance: "PersonalFinance"
 	 }
   }
 

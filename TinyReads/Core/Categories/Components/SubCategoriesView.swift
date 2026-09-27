@@ -43,7 +43,7 @@ struct SubCategoriesView: View {
 }
 
 #Preview {
-  SubCategoriesView(category: .culture, vm: CategoriesViewModel())
+  SubCategoriesView(category: .philosophy	, vm: CategoriesViewModel())
 	 .environment(ThemeManager())
 	 .environment(UserDefaultsManager.shared)
 }

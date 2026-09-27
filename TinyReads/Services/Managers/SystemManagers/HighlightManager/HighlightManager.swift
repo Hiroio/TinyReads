@@ -27,7 +27,9 @@ final class HighlightManager{
 	 let storeLoaded = DispatchSemaphore(value: 0)
 	 container.loadPersistentStores { _, error in
 		if let error{
+#if DEBUG
 		  print("DEBUG: Failed to load container for Highlights: \(error.localizedDescription)")
+#endif
 		}
 		storeLoaded.signal()
 	 }

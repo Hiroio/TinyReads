@@ -129,7 +129,6 @@ extension UserDefaultsManager{
   }
   /// setting number
   func setCategoryReadedCount(for subCategoryId: String, index: Int, language: LanguageEnum? = nil){
-	 
 	 guard let subCategory = TinyReads.subCategory(forId: subCategoryId) else { return }
 	 let language = language ?? selectedLanguage
 	 guard getCategoryReadedCount(for: subCategory, language: language) < index else { return }

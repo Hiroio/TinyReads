@@ -29,7 +29,7 @@ struct NewProfileView: View {
 					 statisticOption(name: "Read", value: "\(vm.readedCardsCount)")
 					 statisticOption(name: "Saved", value: "\(vm.savedCardsCount)")
 					 statisticOption(name: "Dismissed", value: "\(vm.skippedCardsCount)")
-					 statisticOption(name: "Word read", value: "\(vm.wordsReadCount)")
+					 statisticOption(name: "Words read", value: "\(vm.wordsReadCount)")
 					 statisticOption(name: "Reading time", value: vm.readTime)
 					 
 				  }
@@ -85,7 +85,9 @@ struct NewProfileView: View {
 
 
 extension NewProfileView{
-  func statisticOption(name: String, value: String) -> some View{
+  //  LocalizedStringKey, а не String: Text(String) бере дослівний ініціалізатор
+  //  і взагалі не зазирає в каталог перекладів
+  func statisticOption(name: LocalizedStringKey, value: String) -> some View{
 	 HStack(alignment: .bottom){
 		Text(name)
 		  .headline()

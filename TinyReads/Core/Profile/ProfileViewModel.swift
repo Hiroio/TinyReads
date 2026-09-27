@@ -31,12 +31,14 @@ final class ProfileViewModel{
   }
   
   var readTime: String{
-	 let time = wordsReadCount / 150
-	 let hours = time / 60
-	 if hours == 0{
-		return "\(time) min"
-	 }
-	 return "\(hours)h \(time % 60)m"
+	 let minutes = wordsReadCount / 150
+
+	 //  "min"/"h" були захардкоджені англійською. Duration форматує одиниці сам,
+	 //  а locale береться з вибору в застосунку, а не з мови пристрою.
+	 let locale = Locale(identifier: UserDefaultsManager.shared.selectedLanguage.code)
+
+	 return Duration.seconds(minutes * 60)
+		.formatted(.units(allowed: [.hours, .minutes], width: .abbreviated).locale(locale))
   }
   
   var firstCardDate: Date?{

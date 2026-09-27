@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum PhilosophySubCategory: String, ReadSubCategory {
-  case philosophyUniversal, stoicism, existentialism
+  case philosophyUniversal, stoicism, existentialism, easternPhilosophy
 
   var id: String { rawValue }
 
@@ -25,6 +25,7 @@ enum PhilosophySubCategory: String, ReadSubCategory {
 	 case .philosophyUniversal: nil
 	 case .stoicism: "com.hiroio.tinyreads.subcategory.philosophy.stoicism"
 	 case .existentialism: "com.hiroio.tinyreads.subcategory.philosophy.existentialism"
+	 case .easternPhilosophy: "com.hiroio.tinyreads.subcategory.philosophy.easternPhilosophy"
 	 }
   }
 
@@ -33,6 +34,7 @@ enum PhilosophySubCategory: String, ReadSubCategory {
 	 case .philosophyUniversal: "Universal"
 	 case .stoicism: "Stoicism"
 	 case .existentialism: "Existentialism"
+	 case .easternPhilosophy: "Eastern Philosophy"
 	 }
   }
 
@@ -41,6 +43,7 @@ enum PhilosophySubCategory: String, ReadSubCategory {
 	 case .philosophyUniversal: "Philosophy"
 	 case .stoicism: "Stoicism"
 	 case .existentialism: "Existentialism"
+	 case .easternPhilosophy: "EasternPhilosophy"
 	 }
   }
 
@@ -49,6 +52,7 @@ enum PhilosophySubCategory: String, ReadSubCategory {
 	 case .philosophyUniversal: 200
 	 case .stoicism: 80
 	 case .existentialism: 80
+	 case .easternPhilosophy: 80
 	 }
   }
 }

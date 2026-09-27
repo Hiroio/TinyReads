@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum PsychologySubCategory: String, ReadSubCategory {
-  case psychologyUniversal, cognitiveBiases, trauma
+  case psychologyUniversal, cognitiveBiases, trauma, relationships
 
   var id: String { rawValue }
 
@@ -25,6 +25,7 @@ enum PsychologySubCategory: String, ReadSubCategory {
 	 case .psychologyUniversal: nil
 	 case .cognitiveBiases: "com.hiroio.tinyreads.subcategory.psychology.cognitiveBiases"
 	 case .trauma: "com.hiroio.tinyreads.subcategory.psychology.trauma"
+	 case .relationships: "com.hiroio.tinyreads.subcategory.psychology.relationships"
 	 }
   }
 
@@ -33,6 +34,7 @@ enum PsychologySubCategory: String, ReadSubCategory {
 	 case .psychologyUniversal: "Universal"
 	 case .cognitiveBiases: "Cognitive Biases"
 	 case .trauma: "Trauma"
+	 case .relationships: "Relationships"
 	 }
   }
 
@@ -41,6 +43,7 @@ enum PsychologySubCategory: String, ReadSubCategory {
 	 case .psychologyUniversal: "Psychology"
 	 case .cognitiveBiases: "Cognitive"
 	 case .trauma: "Trauma"
+	 case .relationships: "Relationships"
 	 }
   }
 
@@ -49,6 +52,7 @@ enum PsychologySubCategory: String, ReadSubCategory {
 	 case .psychologyUniversal: 200
 	 case .cognitiveBiases: 80
 	 case .trauma: 80
+	 case .relationships: 80
 	 }
   }
 }

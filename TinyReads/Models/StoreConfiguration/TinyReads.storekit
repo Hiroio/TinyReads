@@ -341,6 +341,51 @@
       "productID": "com.hiroio.tinyreads.subcategory.technology.internet",
       "referenceName": "SubCategory - Technology Internet",
       "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "4DF5E0A9",
+      "localizations": [
+        {
+          "description": "80 Personal Finance cards to explore",
+          "displayName": "Personal Finance",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.finance.personalFinance",
+      "referenceName": "SubCategory - Finance Personal Finance",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "414965B1",
+      "localizations": [
+        {
+          "description": "80 Eastern Philosophy cards to explore",
+          "displayName": "Eastern Philosophy",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.philosophy.easternPhilosophy",
+      "referenceName": "SubCategory - Philosophy Eastern Philosophy",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "4AF1E696",
+      "localizations": [
+        {
+          "description": "80 Relationships cards to explore",
+          "displayName": "Relationships",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.hiroio.tinyreads.subcategory.psychology.relationships",
+      "referenceName": "SubCategory - Psychology Relationships",
+      "type": "NonConsumable"
     }
   ],
   "settings": {
